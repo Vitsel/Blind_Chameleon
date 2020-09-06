@@ -35,10 +35,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -48,6 +47,12 @@
   <ItemGroup>
     <Compile Include="BlindNet.cs" />
     <Compile Include="Cryptography.cs" />
+    <Compile Include="Document_Center.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Document_Center.Designer.cs">
+      <DependentUpon>Document_Center.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileCenter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -57,6 +62,9 @@
     </Compile>
     <Compile Include="_Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Document_Center.resx">
+      <DependentUpon>Document_Center.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

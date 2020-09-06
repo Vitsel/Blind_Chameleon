@@ -45,8 +45,17 @@ namespace BlindNet
 
         ~BlindSocket()
         {
-            socket.Close();
+            Close();
             socket.Dispose();
+        }
+
+        public void Close()
+        {
+            if (socket.Connected)
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
         }
 
         public int CryptoSend(byte[] data, PacketType header)
@@ -62,7 +71,7 @@ namespace BlindNet
                     for (int i = 0; i < data.Length; i += BlindNetConst.DATASIZE)
                     {
                         int len = (i + BlindNetConst.DATASIZE < data.Length) ? BlindNetConst.DATASIZE : data.Length - i;
-                        pack.header = (len == data.Length) ? (byte)PacketType.EOF : (byte)PacketType.Sending;
+                        pack.header = (i + len == data.Length) ? PacketType.EOF : PacketType.Sending;
                         pack.data = new byte[BlindNetConst.DATASIZE];
                         Array.Copy(data, i, pack.data, 0, len);
                         encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
@@ -70,7 +79,7 @@ namespace BlindNet
                     }
                 else
                 {
-                    pack.header = (byte)header;
+                    pack.header = header;
                     pack.data = new byte[BlindNetConst.DATASIZE];
                     Array.Copy(data, 0, pack.data, 0, data.Length);
                     encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
@@ -87,7 +96,13 @@ namespace BlindNet
         public BlindPacket CryptoReceive()
         {
             byte[] data = new byte[BlindNetConst.PACKSIZE];
-            socket.Receive(data, BlindNetConst.PACKSIZE, SocketFlags.None);
+            int rcvNum = socket.Receive(data, BlindNetConst.PACKSIZE, SocketFlags.None);
+            if (rcvNum == 0)
+            {
+                BlindPacket end;
+                end.data = null;
+                end.header = PacketType.Disconnect;
+            }
             byte[] decrypted = aes.Decryption(data);
             return BlindNetUtil.ByteToStruct<BlindPacket>(decrypted);
         }
@@ -95,14 +110,15 @@ namespace BlindNet
         public byte[] CryptoReceiveMsg()
         {
             BlindPacket packet = new BlindPacket();
-            packet.header = (byte)PacketType.Sending;
             byte[] result = null;
-            while (packet.header == (byte)PacketType.Sending)
+            do
             {
                 packet = CryptoReceive();
+                if (packet.header == PacketType.Disconnect)
+                    return null;
                 result = BlindNetUtil.MergeArray<byte>(result, packet.data);
-                result = BlindNetUtil.ByteTrimEndNull(result);
-            }
+            } while (packet.header == PacketType.Sending);
+            result = BlindNetUtil.ByteTrimEndNull(result);
             return result;
         }
 
@@ -259,11 +275,13 @@ namespace BlindNet
         public static T ByteToStruct<T>(byte[] arr) where T : struct
         {
             int size = Marshal.SizeOf(typeof(T));
-            if (size > arr.Length)
+            if (size < arr.Length)
                 throw new Exception("Array's length is too long");
-
+            
             IntPtr buff = Marshal.AllocHGlobal(size);
-            Marshal.Copy(arr, 0, buff, size);
+            byte[] tmp = new byte[size];
+            Marshal.Copy(tmp, 0, buff, size);
+            Marshal.Copy(arr, 0, buff, arr.Length);
             T st = Marshal.PtrToStructure<T>(buff);
 
             return st;
@@ -317,14 +335,14 @@ namespace BlindNet
                 byte[] testTxt = blindSocket.CryptoReceiveMsg();
                 blindSocket.CryptoSend(testTxt, PacketType.Response);
                 var pack = blindSocket.CryptoReceive();
-                if (pack.header == (byte)PacketType.Retry)
+                if (pack.header == PacketType.Retry)
                     continue;
-                else if (pack.header == (byte)PacketType.Fail)
+                else if (pack.header == PacketType.Fail)
                 {
                     MessageBox.Show("Connection test with text is failed");
                     return null;
                 }
-                else if (pack.header == (byte)PacketType.OK)
+                else if (pack.header == PacketType.OK)
                     break;
             }
             return aes;
@@ -385,12 +403,12 @@ namespace BlindNet
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct BlindPacket
     {
-        public byte header;
+        public PacketType header;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = BlindNetConst.DATASIZE)]
         public byte[] data;
     }
 
-    public enum PacketType
+    public enum PacketType : byte
     {
         Response = 1,           //단순 응답
         OK = 2,                 //긍정적인 응답
@@ -398,13 +416,16 @@ namespace BlindNet
         Retry = 4,              //재전송 요청
         MSG = 5,                //Packet에 사용되지는 않으나 송수신 메소드에서 MSG일 경우 Sending, EOD를 유동적으로 적용
         EOF = 6,                //메시지의 마지막 패킷
-        Sending = 7             //마지막이 아닌 패킷
+        Sending = 7,            //마지막이 아닌 패킷
+        Disconnect = 8,         //연결 종료
+        DocRefresh = 9          //문서중앙화 새로고침
     }
 
     static class BlindNetConst
     {
         public const string ServerIP = "127.0.0.1";
         public const int MAINPORT = 55555;
+        public const int DocCenterPort = 55556;
         public const int MAXQ = 100;
         public const int PACKSIZE = 1040;
         public const int DATASIZE = 1024;

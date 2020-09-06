@@ -41,5 +41,10 @@ namespace Blind_Client
             fileCenter = new FileCenter();
             tFileCenter = Task.Factory.StartNew(() => fileCenter.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
         }
+
+        private void Button_DocCenter_Click(object sender, EventArgs e)
+        {
+            document_Center.BringToFront();
+        }
     }
 }

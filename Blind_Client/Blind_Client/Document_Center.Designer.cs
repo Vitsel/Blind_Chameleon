@@ -1,0 +1,168 @@
+﻿namespace Blind_Client
+{
+    partial class Document_Center
+    {
+        /// <summary> 
+        /// 필수 디자이너 변수입니다.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// 사용 중인 모든 리소스를 정리합니다.
+        /// </summary>
+        /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region 구성 요소 디자이너에서 생성한 코드
+
+        /// <summary> 
+        /// 디자이너 지원에 필요한 메서드입니다. 
+        /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.treeview_Dir = new System.Windows.Forms.TreeView();
+            this.listview_File = new System.Windows.Forms.ListView();
+            this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.modDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.botton_Upload = new System.Windows.Forms.Button();
+            this.button_Download = new System.Windows.Forms.Button();
+            this.button_Refresh = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tableLayoutPanel1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // treeview_Dir
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.treeview_Dir, 2);
+            this.treeview_Dir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeview_Dir.Location = new System.Drawing.Point(3, 43);
+            this.treeview_Dir.Name = "treeview_Dir";
+            this.treeview_Dir.Size = new System.Drawing.Size(215, 366);
+            this.treeview_Dir.TabIndex = 2;
+            // 
+            // listview_File
+            // 
+            this.listview_File.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.name,
+            this.modDate,
+            this.type,
+            this.size});
+            this.tableLayoutPanel1.SetColumnSpan(this.listview_File, 4);
+            this.listview_File.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listview_File.HideSelection = false;
+            this.listview_File.Location = new System.Drawing.Point(224, 43);
+            this.listview_File.Name = "listview_File";
+            this.listview_File.Size = new System.Drawing.Size(466, 366);
+            this.listview_File.TabIndex = 3;
+            this.listview_File.UseCompatibleStateImageBehavior = false;
+            this.listview_File.View = System.Windows.Forms.View.Details;
+            // 
+            // name
+            // 
+            this.name.Text = "이름";
+            this.name.Width = 183;
+            // 
+            // modDate
+            // 
+            this.modDate.Text = "수정한 날짜";
+            this.modDate.Width = 106;
+            // 
+            // type
+            // 
+            this.type.Text = "유형";
+            this.type.Width = 87;
+            // 
+            // botton_Upload
+            // 
+            this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.botton_Upload.Location = new System.Drawing.Point(424, 3);
+            this.botton_Upload.Name = "botton_Upload";
+            this.botton_Upload.Size = new System.Drawing.Size(75, 34);
+            this.botton_Upload.TabIndex = 4;
+            this.botton_Upload.Text = "Upload";
+            this.botton_Upload.UseVisualStyleBackColor = true;
+            // 
+            // button_Download
+            // 
+            this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_Download.Location = new System.Drawing.Point(505, 3);
+            this.button_Download.Name = "button_Download";
+            this.button_Download.Size = new System.Drawing.Size(96, 34);
+            this.button_Download.TabIndex = 5;
+            this.button_Download.Text = "Download";
+            this.button_Download.UseVisualStyleBackColor = true;
+            this.button_Download.Click += new System.EventHandler(this.button_Download_Click);
+            // 
+            // button_Refresh
+            // 
+            this.button_Refresh.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button_Refresh.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_Refresh.Location = new System.Drawing.Point(611, 3);
+            this.button_Refresh.Name = "button_Refresh";
+            this.button_Refresh.Size = new System.Drawing.Size(77, 34);
+            this.button_Refresh.TabIndex = 6;
+            this.button_Refresh.Text = "Refresh";
+            this.button_Refresh.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 6;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.23474F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.76526F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86F));
+            this.tableLayoutPanel1.Controls.Add(this.listview_File, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.treeview_Dir, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.button_Refresh, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.botton_Upload, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.button_Download, 4, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(693, 412);
+            this.tableLayoutPanel1.TabIndex = 7;
+            // 
+            // size
+            // 
+            this.size.Text = "크기";
+            this.size.Width = 92;
+            // 
+            // Document_Center
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Name = "Document_Center";
+            this.Size = new System.Drawing.Size(693, 412);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+        private System.Windows.Forms.TreeView treeview_Dir;
+        private System.Windows.Forms.ListView listview_File;
+        private System.Windows.Forms.ColumnHeader name;
+        private System.Windows.Forms.ColumnHeader modDate;
+        private System.Windows.Forms.ColumnHeader type;
+        private System.Windows.Forms.Button botton_Upload;
+        private System.Windows.Forms.Button button_Download;
+        private System.Windows.Forms.Button button_Refresh;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ColumnHeader size;
+    }
+}
