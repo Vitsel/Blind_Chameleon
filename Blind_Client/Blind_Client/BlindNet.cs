@@ -1,5 +1,4 @@
-﻿using Blind_Client;
-using BlindCryptography;
+﻿using BlindCryptography;
 using System;
 using System.Linq;
 using System.Net;
@@ -8,7 +7,6 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -131,7 +129,7 @@ namespace BlindNet
                 {
                     socket.Connect(iep);
                 }
-                catch (SocketException ex)
+                catch
                 {
                     continue;
                 }
@@ -142,7 +140,7 @@ namespace BlindNet
         public bool ConnectWithECDH(string ip = BlindNetConst.ServerIP, int port = BlindNetConst.MAINPORT)
         {
             Connect(ip, port);
-            aes = BlindNetUtil.ECDH_Client(socket);
+            aes = ECDH_Client();
             if (aes == null)
                 return false;
             return true;
@@ -151,10 +149,48 @@ namespace BlindNet
         public async Task<bool> ConnectWithECDHAsync(string ip = BlindNetConst.ServerIP, int port = BlindNetConst.MAINPORT)
         {
             await Task.Run(() => Connect(ip, port));
-            aes = BlindNetUtil.ECDH_Client(socket);
+            aes = ECDH_Client();
             if (aes == null)
                 return false;
             return true;
+        }
+
+        private Cryptography.AES256 ECDH_Client()
+        {
+            Cryptography.AES256 aes;
+            using (ECDiffieHellmanCng dh = new ECDiffieHellmanCng())
+            {
+                dh.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
+                dh.HashAlgorithm = CngAlgorithm.Sha256;
+                byte[] publicKey = dh.PublicKey.ToByteArray();
+                byte[] sharekey = new byte[publicKey.Length];
+                socket.Receive(sharekey, publicKey.Length, SocketFlags.None);
+                socket.Send(publicKey, publicKey.Length, SocketFlags.None);
+                byte[] key = dh.DeriveKeyMaterial(CngKey.Import(sharekey, CngKeyBlobFormat.EccPublicBlob));
+                aes = new Cryptography.AES256(key);
+            }
+
+            this.aes = aes;
+            while (true)
+            {
+                byte[] iv = CryptoReceiveMsg();
+                CryptoSend(iv, PacketType.Response);
+                var pack = CryptoReceive();
+                if (pack.header == PacketType.Retry)
+                    continue;
+                else if (pack.header == PacketType.Fail)
+                {
+                    MessageBox.Show("Connection test with text is failed");
+                    this.aes = null;
+                    return null;
+                }
+                else if (pack.header == PacketType.OK)
+                {
+                    aes.aes.IV = iv;
+                    break;
+                }
+            }
+            return aes;
         }
     }
 
@@ -176,13 +212,56 @@ namespace BlindNet
         public BlindSocket AcceptWithECDH()
         {
             Socket sock = socket.Accept();
-            return BlindNetUtil.ECDH_Server(sock);
+            return ECDH_Server(sock);
         }
 
         public async Task<BlindSocket> AcceptWithECDHAsync()
         {
             Socket sock = await Task<Socket>.Run(socket.Accept);
-            return BlindNetUtil.ECDH_Server(sock);
+            return ECDH_Server(sock);
+        }
+
+        private BlindSocket ECDH_Server(Socket socket)
+        {
+            if (socket == null)
+                return null;
+
+            Cryptography.AES256 aes;
+            BlindSocket clientSock;
+            using (ECDiffieHellmanCng dh = new ECDiffieHellmanCng())
+            {
+                dh.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
+                dh.HashAlgorithm = CngAlgorithm.Sha256;
+                byte[] publicKey = dh.PublicKey.ToByteArray();
+                socket.Send(publicKey, publicKey.Length, SocketFlags.None);
+                byte[] sharekey = new byte[publicKey.Length];
+                socket.Receive(sharekey, publicKey.Length, SocketFlags.None);
+                byte[] key = dh.DeriveKeyMaterial(CngKey.Import(sharekey, CngKeyBlobFormat.EccPublicBlob));
+                aes = new Cryptography.AES256(key);
+                clientSock = new BlindSocket(socket, aes);
+            }
+
+            for (int i = 1; ; i++)
+            {
+                string testTxt = BlindNetUtil.GetRandomString(BlindNetConst.MINRNDTXT, BlindNetConst.MAXRNDTXT);
+                clientSock.CryptoSend(Encoding.UTF8.GetBytes(testTxt), PacketType.MSG);
+                var pack = clientSock.CryptoReceive();
+                string recvTxt = Encoding.UTF8.GetString(pack.data).TrimEnd('\0');
+                if (recvTxt != testTxt)
+                {
+                    if (i < BlindNetConst.MAXRETRY)
+                        clientSock.CryptoSend(null, PacketType.Retry);
+                    else
+                    {
+                        clientSock.CryptoSend(null, PacketType.Fail);
+                        return null;
+                    }
+                }
+                else
+                    break;
+            }
+            clientSock.CryptoSend(null, PacketType.OK);
+            return clientSock;
         }
     }
 
@@ -300,9 +379,11 @@ namespace BlindNet
 
         public static byte[] ByteTrimEndNull(byte[] arr)
         {
-            string tmp = Encoding.UTF8.GetString(arr);
-            tmp = tmp.TrimEnd('\0');
-            return Encoding.UTF8.GetBytes(tmp);
+            int count = arr.Length;
+            while (arr[--count] == 0) ;
+            byte[] result = new byte[count+1];
+            Array.Copy(arr, 0, result, 0, result.Length);
+            return result;
         }
 
         public static string GetRandomString(int min, int max)
@@ -313,91 +394,6 @@ namespace BlindNet
             var chars = Enumerable.Range(0, len).Select(x => input[rand.Next(0, input.Length)]);
             return new string(chars.ToArray());
         }
-
-        static public Cryptography.AES256 ECDH_Client(Socket socket)
-        {
-            Cryptography.AES256 aes;
-            using (ECDiffieHellmanCng dh = new ECDiffieHellmanCng())
-            {
-                dh.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
-                dh.HashAlgorithm = CngAlgorithm.Sha256;
-                byte[] publicKey = dh.PublicKey.ToByteArray();
-                byte[] sharekey = new byte[publicKey.Length];
-                socket.Receive(sharekey, publicKey.Length, SocketFlags.None);
-                socket.Send(publicKey, publicKey.Length, SocketFlags.None);
-                byte[] key = dh.DeriveKeyMaterial(CngKey.Import(sharekey, CngKeyBlobFormat.EccPublicBlob));
-                aes = new Cryptography.AES256(key);
-            }
-
-            BlindSocket blindSocket = new BlindSocket(socket, aes);
-            while (true)
-            {
-                byte[] testTxt = blindSocket.CryptoReceiveMsg();
-                blindSocket.CryptoSend(testTxt, PacketType.Response);
-                var pack = blindSocket.CryptoReceive();
-                if (pack.header == PacketType.Retry)
-                    continue;
-                else if (pack.header == PacketType.Fail)
-                {
-                    MessageBox.Show("Connection test with text is failed");
-                    return null;
-                }
-                else if (pack.header == PacketType.OK)
-                    break;
-            }
-            return aes;
-        }
-
-        static public BlindSocket ECDH_Server(Socket socket)
-        {
-            if (socket == null)
-                return null;
-
-            Cryptography.AES256 aes;
-            BlindSocket clientSock;
-            using (ECDiffieHellmanCng dh = new ECDiffieHellmanCng())
-            {
-                dh.KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hash;
-                dh.HashAlgorithm = CngAlgorithm.Sha256;
-                byte[] publicKey = dh.PublicKey.ToByteArray();
-                socket.Send(publicKey, publicKey.Length, SocketFlags.None);
-                byte[] sharekey = new byte[publicKey.Length];
-                socket.Receive(sharekey, publicKey.Length, SocketFlags.None);
-                byte[] key = dh.DeriveKeyMaterial(CngKey.Import(sharekey, CngKeyBlobFormat.EccPublicBlob));
-                aes = new Cryptography.AES256(key);
-                clientSock = new BlindSocket(socket, aes);
-            }
-
-            for (int i = 1; ; i++)
-            {
-                string testTxt = BlindNetUtil.GetRandomString(BlindNetConst.MINRNDTXT, BlindNetConst.MAXRNDTXT);
-                clientSock.CryptoSend(Encoding.UTF8.GetBytes(testTxt), PacketType.MSG);
-                var pack = clientSock.CryptoReceive();
-                string recvTxt = Encoding.UTF8.GetString(pack.data).TrimEnd('\0');
-                if (recvTxt != testTxt)
-                {
-                    if (i < BlindNetConst.MAXRETRY)
-                        clientSock.CryptoSend(null, PacketType.Retry);
-                    else
-                    {
-                        clientSock.CryptoSend(null, PacketType.Fail);
-                        return null;
-                    }
-                }
-                else
-                    break;
-            }
-            clientSock.CryptoSend(null, PacketType.OK);
-            return clientSock;
-        }
-    }
-
-    class BlindClient
-    {
-        public BlindSocket socket;
-        public CancellationTokenSource token;
-        public FileCenter fileCenter; //기능 객체
-        public Task tFileCenter; //기능 객체 작동 Task
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -418,7 +414,11 @@ namespace BlindNet
         EOF = 6,                //메시지의 마지막 패킷
         Sending = 7,            //마지막이 아닌 패킷
         Disconnect = 8,         //연결 종료
-        DocRefresh = 9          //문서중앙화 새로고침
+        DocRefresh = 9,         //문서중앙화 새로고침
+        DocDirInfo = 10,        //문서중앙화 Directory 정보
+        DocAddDir = 11,         //문서중앙화 Directory 추가
+        DocRemoveDir = 12,      //문서중앙화 Directory 삭제
+        DocChngNameDir = 13     //문서중앙화 폴더 이름 변경
     }
 
     static class BlindNetConst

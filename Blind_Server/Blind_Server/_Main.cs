@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,29 +17,31 @@ namespace Blind_Server
         const int SW_HIDE = 0;
 
         public static List<BlindClient> Clients = new List<BlindClient>();
+        public static BlindServerScoket mainSocket;
+        public static BlindServerScoket socket_docCenter;
 
         static void Main(string[] args)
         {
             var handl = GetConsoleWindow();
             //ShowWindow(handl, SW_HIDE); //Console 창 숨기기
+            socket_docCenter = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
+            socket_docCenter.BindListen();
 
-            BlindServerScoket socket = new BlindServerScoket();
-            socket.BindListen();
+            mainSocket = new BlindServerScoket();
+            mainSocket.BindListen();
             while (true)
             {
-                Socket sock = socket.socket.Accept();
-                CertificateAsync(sock);
+                BlindSocket client = mainSocket.AcceptWithECDH();
+                AddConnectedUser(client);
             }
         }
 
-        static async void CertificateAsync(Socket socket)
+        static async void AddConnectedUser(BlindSocket socket)
         {
             if (socket == null)
                 return;
-            BlindSocket clientSock = await Task<BlindSocket>.Run(() => BlindNetUtil.ECDH_Server(socket));
-            if (clientSock == null)
-                return;
-            IPEndPoint iep = (IPEndPoint)socket.RemoteEndPoint;
+
+            IPEndPoint iep = (IPEndPoint)(socket.socket.RemoteEndPoint);
             Console.WriteLine("Accepted {0} : {1}", iep.Address, iep.Port);
 
             //로그인 인증 추가
@@ -48,11 +49,19 @@ namespace Blind_Server
             //Client 구조체 초기화 및 추가
             TaskScheduler scheduler = TaskScheduler.Default;
             BlindClient client = new BlindClient();
-            client.socket = clientSock;
+            client.socket = socket;
             client.token = new CancellationTokenSource();
-            client.fileCenter = new FileCenter(); //기능 객체 생성
-            client.tFileCenter = Task.Factory.StartNew(() => client.fileCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
+            //client.documentCenter = new Doc_Center(1, 10); //기능 객체 생성
+            //client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
             Clients.Add(client);
         }
+    }
+
+    class BlindClient
+    {
+        public BlindSocket socket;
+        public CancellationTokenSource token;
+        public Doc_Center documentCenter; //기능 객체
+        public Task tDocumentCenter; //기능 객체 작동 Task
     }
 }

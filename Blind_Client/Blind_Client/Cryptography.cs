@@ -9,7 +9,7 @@ namespace BlindCryptography
     {
         public class AES256
         {
-            private readonly RijndaelManaged aes;
+            public readonly RijndaelManaged aes;
 
             public AES256(int keySize = 256, CipherMode mode = CipherMode.CBC, PaddingMode pad = PaddingMode.PKCS7)
             {
@@ -23,18 +23,24 @@ namespace BlindCryptography
                 aes.GenerateIV();
             }
 
-            public AES256(byte[] key)
+            public AES256(byte[] key, byte[] iv = null)
             {
-                byte[] tmp = new byte[16];
-                Array.Copy(key, tmp, 16);
                 aes = new RijndaelManaged()
                 {
                     KeySize = 256,
                     Mode = CipherMode.CBC,
                     Padding = PaddingMode.PKCS7,
-                    Key = key,
-                    IV = tmp
+                    Key = key
                 };
+                if (iv == null)
+                {
+
+                    byte[] tmp = new byte[16];
+                    Array.Copy(key, tmp, 16);
+                    aes.IV = tmp;
+                }
+                else
+                    aes.IV = iv;
             }
 
             public byte[] Encryption(byte[] plain)
@@ -94,7 +100,7 @@ namespace BlindCryptography
 
         public class RSA
         {
-            private readonly RSACryptoServiceProvider rsa;
+            public readonly RSACryptoServiceProvider rsa;
 
             public string PrivateKeyXml
             {

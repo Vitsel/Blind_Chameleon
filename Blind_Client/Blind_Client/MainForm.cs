@@ -8,17 +8,22 @@ namespace Blind_Client
 {
     public partial class MainForm : Form
     {
-        BlindSocket mainSocket = new BlindSocket();
-        CancellationTokenSource token;
-        FileCenter fileCenter;
-        Task tFileCenter;
+        bool isInner;
+        public SynchronizationContext _uiSyncContext;
 
-        public MainForm()
+        BlindSocket mainSocket;
+        CancellationTokenSource token;
+        Doc_Center documentCenter;
+
+        public MainForm(bool isInner)
         {
             InitializeComponent();
+            this.isInner = isInner;
+            mainSocket = new BlindSocket();
+            _uiSyncContext = SynchronizationContext.Current;
         }
 
-        private async void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             if (!BlindNetUtil.IsConnectedInternet())
             {
@@ -38,8 +43,9 @@ namespace Blind_Client
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
-            fileCenter = new FileCenter();
-            tFileCenter = Task.Factory.StartNew(() => fileCenter.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
+            //documentCenter = new Doc_Center(document_Center);
+            //documentCenter.Run();
+            //document_Center.docCenter = documentCenter;
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)

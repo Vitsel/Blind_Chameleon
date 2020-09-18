@@ -91,9 +91,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlindDB.cs" />
     <Compile Include="BlindNet.cs" />
-    <Compile Include="FileCenter.cs" />
+    <Compile Include="Doc_Center.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="_Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
