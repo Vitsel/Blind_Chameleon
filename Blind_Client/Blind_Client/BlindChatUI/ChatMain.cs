@@ -22,6 +22,8 @@ namespace Blind_Client.BlindChatUI
         public Control_User _UserControl;
         public Control_Room _RoomControl;
         private Control_More _MoreControl;
+        private Panel buttonPanel;
+        private Button _selectedButton;
 
         public int UserID { get { return _UserID; } set { _UserID = value; } }
         public BlindChat BlindChat { set { _BlindChat = value; } }
@@ -35,6 +37,11 @@ namespace Blind_Client.BlindChatUI
 
             this.UserID = UserID;
 
+            buttonPanel = new Panel();
+            buttonPanel.Width = 4;
+            buttonPanel.Height = btn_Chat.Height;
+            buttonPanel.BackColor = Color.LightGreen;
+
             _UserControl = new Control_User(UserID);
             _UserControl.Dock = DockStyle.Fill;
             
@@ -47,6 +54,7 @@ namespace Blind_Client.BlindChatUI
             Function_LayoutPanel.Controls.Add(_UserControl);
             Function_LayoutPanel.Controls.Add(_RoomControl);
             Function_LayoutPanel.Controls.Add(_MoreControl);
+            Button_LayoutPanel.Controls.Add(buttonPanel);
         }
 
         public void ActivateControl(MainChatControl controlType)
@@ -54,19 +62,40 @@ namespace Blind_Client.BlindChatUI
             switch (controlType)
             {
                 case MainChatControl.User:
-                    _UserControl.BringToFront();
-                    //SetControl(_UserControl);
+                    {
+                        _UserControl.BringToFront();
+                        SetButton(btn_Member);
+                        //SetControl(_UserControl);
+                    }
                     break;
                 case MainChatControl.Room:
-                    _RoomControl.BringToFront();
-                    //SetControl(_RoomControl);
+                    {
+                        _RoomControl.BringToFront();
+                        SetButton(btn_Chat);
+                        //SetControl(_RoomControl);
+                    }
                     break;
                 case MainChatControl.More:
-                    //SetControl(_MoreControl);
+                    {
+                        SetButton(btn_More);
+                        //SetControl(_MoreControl);
+                    }
                     break;
             }
         }
+        private void SetButton(Button btn)
+        {
+            if(_selectedButton != null)
+            {
+                _selectedButton.BackColor = Color.DarkSeaGreen;
+            }
 
+            buttonPanel.Location = new Point(0, btn.Location.Y);
+            buttonPanel.BringToFront();
+
+            btn.BackColor = Color.SeaGreen;
+            _selectedButton = btn;
+        }
         private void ChatMain_Load(object sender, EventArgs e)
         {
 

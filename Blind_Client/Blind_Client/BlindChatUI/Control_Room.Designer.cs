@@ -49,33 +49,39 @@
             // 
             // lbl_room
             // 
+            this.lbl_room.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.lbl_room.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_room.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_room.Location = new System.Drawing.Point(0, 0);
             this.lbl_room.Name = "lbl_room";
-            this.lbl_room.Size = new System.Drawing.Size(350, 50);
+            this.lbl_room.Size = new System.Drawing.Size(336, 50);
             this.lbl_room.TabIndex = 0;
             this.lbl_room.Text = "채팅";
             this.lbl_room.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel2
             // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.panel2.Controls.Add(this.button1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(350, 0);
+            this.panel2.Location = new System.Drawing.Point(336, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(50, 50);
+            this.panel2.Size = new System.Drawing.Size(64, 50);
             this.panel2.TabIndex = 1;
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(0, 0);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 50);
+            this.button1.Size = new System.Drawing.Size(64, 50);
             this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Text = "방생성";
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // RoomItem_LayoutPanel

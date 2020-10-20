@@ -32,8 +32,8 @@
             this.UserItem_LayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.Search_LayoutPanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.lbl_user = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.UserInfo_LayoutPanel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -71,12 +71,24 @@
             // 
             // panel2
             // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.panel2.Controls.Add(this.lbl_user);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(400, 50);
             this.panel2.TabIndex = 2;
+            // 
+            // lbl_user
+            // 
+            this.lbl_user.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_user.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_user.Location = new System.Drawing.Point(0, 0);
+            this.lbl_user.Name = "lbl_user";
+            this.lbl_user.Size = new System.Drawing.Size(400, 50);
+            this.lbl_user.TabIndex = 0;
+            this.lbl_user.Text = "사용자";
+            this.lbl_user.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel3
             // 
@@ -87,16 +99,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(400, 350);
             this.panel3.TabIndex = 3;
-            // 
-            // lbl_user
-            // 
-            this.lbl_user.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_user.Location = new System.Drawing.Point(0, 0);
-            this.lbl_user.Name = "lbl_user";
-            this.lbl_user.Size = new System.Drawing.Size(400, 50);
-            this.lbl_user.TabIndex = 0;
-            this.lbl_user.Text = "사용자";
-            this.lbl_user.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // UserInfo_LayoutPanel
             // 

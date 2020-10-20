@@ -53,11 +53,11 @@ namespace Blind_Client
             //documentCenter.Run();
             //document_Center.docCenter = documentCenter;
 
-            //int _userID = 2;
-            //_ChatMain = new ChatMain(_userID);
-            //ChatControlPanel.Controls.Add(_ChatMain);
-            //chat = new BlindChat(_userID, ref _ChatMain, this);
-            //tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+            int _userID = 2;
+            _ChatMain = new ChatMain(_userID);
+            ChatControlPanel.Controls.Add(_ChatMain);
+            chat = new BlindChat(_userID, ref _ChatMain, this);
+            tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)

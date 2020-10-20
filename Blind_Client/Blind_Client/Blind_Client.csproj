@@ -167,6 +167,21 @@
     </Compile>
     <Compile Include="_Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BlindChatUI\ChatMain.resx">
+      <DependentUpon>ChatMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\Control_Room.resx">
+      <DependentUpon>Control_Room.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\Control_User.resx">
+      <DependentUpon>Control_User.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Control_MessageRoom.resx">
+      <DependentUpon>Control_MessageRoom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Message_Item.resx">
+      <DependentUpon>Message_Item.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Document_Center.resx">
       <DependentUpon>Document_Center.cs</DependentUpon>
     </EmbeddedResource>
