@@ -51,14 +51,15 @@ namespace Blind_Server
             BlindClient client = new BlindClient();
             client.socket = socket;
             client.token = new CancellationTokenSource();
-            //client.documentCenter = new Doc_Center(1, 10); //기능 객체 생성
-            //client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
+            client.documentCenter = new Doc_Center(1, 10); //기능 객체 생성
+            client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
             Clients.Add(client);
         }
     }
 
     class BlindClient
     {
+        public uint id;
         public BlindSocket socket;
         public CancellationTokenSource token;
         public Doc_Center documentCenter; //기능 객체

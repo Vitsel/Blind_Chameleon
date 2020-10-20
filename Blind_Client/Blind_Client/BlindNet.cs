@@ -380,7 +380,7 @@ namespace BlindNet
         public static byte[] ByteTrimEndNull(byte[] arr)
         {
             int count = arr.Length;
-            while (arr[--count] == 0) ;
+            while (count != 0 && arr[--count] == 0) ;
             byte[] result = new byte[count+1];
             Array.Copy(arr, 0, result, 0, result.Length);
             return result;
@@ -418,7 +418,10 @@ namespace BlindNet
         DocDirInfo = 10,        //문서중앙화 Directory 정보
         DocAddDir = 11,         //문서중앙화 Directory 추가
         DocRemoveDir = 12,      //문서중앙화 Directory 삭제
-        DocChngNameDir = 13     //문서중앙화 폴더 이름 변경
+        DocChngNameDir = 13,    //문서중앙화 폴더 이름 변경
+        DocFileUpload = 14,     //문서중앙화 파일 업로드
+        DocFileDownload = 15,   //문서중앙화 파일 다운로드
+        DocDirDownload = 16     //문서중앙화 폴더 다운로드
     }
 
     static class BlindNetConst

@@ -38,14 +38,13 @@ namespace Blind_Client
                 Close();
             }
 
-            //로그인 확인 추가
 
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
-            //documentCenter = new Doc_Center(document_Center);
-            //documentCenter.Run();
-            //document_Center.docCenter = documentCenter;
+            documentCenter = new Doc_Center(document_Center, isInner);
+            documentCenter.Run();
+            document_Center.docCenter = documentCenter;
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)

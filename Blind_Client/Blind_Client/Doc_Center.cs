@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BlindNet;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace Blind_Client
 {
@@ -9,10 +12,14 @@ namespace Blind_Client
     {
         BlindSocket socket;
         Document_Center form;
+        bool isInner;
+        readonly string dPath;
 
-        public Doc_Center(Document_Center form)
+        public Doc_Center(Document_Center form, bool isInner)
         {
             this.form = form;
+            this.isInner = isInner;
+            dPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\";
         }
 
         public async void Run()
@@ -20,7 +27,9 @@ namespace Blind_Client
             socket = new BlindSocket();
             await socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
 
+            socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.MSG);
             UpdateRoot();
+            form.treeview_Dir.SelectedNode = form.treeview_Dir.Nodes[0];
         }
 
         public void UpdateRoot()
@@ -67,6 +76,8 @@ namespace Blind_Client
 
                 ListViewItem item = new ListViewItem();
                 item.Text = dir.name;
+                item.SubItems.Add(dir.modDate);
+                item.SubItems.Add(string.Empty);
                 item.Tag = dir.id;
                 item.ImageIndex = 0;
                 form.listview_File.Items.Add(item);
@@ -110,7 +121,7 @@ namespace Blind_Client
             uint id = ((Directory_Info)(node.Tag)).id;
 
             socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocRemoveDir);
-            while(true)
+            while (true)
             {
                 BlindPacket packet = socket.CryptoReceive();
                 if (packet.header == PacketType.Retry)
@@ -143,6 +154,96 @@ namespace Blind_Client
                 return false;
             return true;
         }
+
+        public async Task UploadFileAsync(TreeNode node, FileInfo file)
+        {
+            Directory_Info dir = (Directory_Info)node.Tag;
+            socket.CryptoSend(BlindNetUtil.StructToByte(dir), PacketType.DocFileUpload);
+
+            File_Info fi = new File_Info();
+            fi.id = 0;
+            fi.name = file.Name;
+            fi.size = (uint)file.Length;
+            fi.modDate = file.LastWriteTime.ToString();
+            fi.type = Path.GetExtension(file.FullName).Replace(".", "");
+            socket.CryptoSend(BlindNetUtil.StructToByte(fi), PacketType.MSG);
+
+            FileStream fs = file.OpenRead();
+            byte[] buffer = new byte[fs.Length];
+            await fs.ReadAsync(buffer, 0, (int)fs.Length);
+            fs.Close();
+
+            socket.CryptoSend(buffer, PacketType.MSG);
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header == PacketType.Fail)
+            {
+                MessageBox.Show(file.Name + " 파일 업로드에 실패했습니다.");
+                return;
+            }
+        }
+
+        public async Task<TreeNode> UploadDirAsync(TreeNode node, string path)
+        {
+            Directory_Info dir = new Directory_Info();
+            dir.id = 0;
+            dir.parent_id = ((Directory_Info)node.Tag).id;
+            dir.name = Path.GetFileName(path);
+            socket.CryptoSend(BlindNetUtil.StructToByte(dir), PacketType.DocAddDir);
+
+            BlindPacket packet = await Task.Run(() => socket.CryptoReceive());
+            if (packet.header == PacketType.Fail)
+                return null;
+
+            Directory_Info newDir = BlindNetUtil.ByteToStruct<Directory_Info>(BlindNetUtil.ByteTrimEndNull(packet.data));
+            TreeNode newNode = new TreeNode();
+            newNode.Tag = newDir;
+            newNode.Text = newDir.name;
+            newNode.ImageIndex = 0;
+            newNode.SelectedImageIndex = 0;
+            return newNode;
+        }
+
+        public async Task<bool> DownloadFile(ListViewItem item)
+        {
+            uint id = (uint)item.Tag;
+            socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocFileDownload);
+
+            BlindPacket packet = await Task.Run(socket.CryptoReceive);
+            if (packet.header == PacketType.Fail)
+                return false;
+
+            byte[] data = socket.CryptoReceiveMsg();
+            string fileName = Encoding.UTF8.GetString(BlindNetUtil.ByteTrimEndNull(packet.data));
+            FileInfo file = new FileInfo(dPath + fileName);
+            int tmp = 1;
+            while (file.Exists)
+                file = new FileInfo(file.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(fileName) + "(" + tmp++ + ")" + file.Extension);
+            FileStream fs = file.OpenWrite();
+            fs.Write(data, 0, data.Length);
+            fs.Close();
+            return true;
+        }
+
+        public async Task<bool> DownloadDir(ListViewItem item)
+        {
+            uint id = (uint)item.Tag;
+            socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocDirDownload);
+
+            BlindPacket packet = await Task.Run(socket.CryptoReceive);
+            if (packet.header == PacketType.Fail)
+                return false;
+
+            string fileName = dPath + item.Text + ".zip";
+            byte[] data = socket.CryptoReceiveMsg();
+            FileInfo file = new FileInfo(fileName);
+            int tmp = 1;
+            while (file.Exists)
+                file = new FileInfo(file.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(fileName) + "(" + tmp++ + ")" + file.Extension);
+            FileStream fs = file.OpenWrite();
+            fs.Write(data, 0, data.Length);
+            fs.Close();
+            return true;
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -152,6 +253,8 @@ namespace Blind_Client
         public uint parent_id;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string name;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 30)]
+        public string modDate;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

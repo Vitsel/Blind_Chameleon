@@ -40,6 +40,8 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.treeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.uploadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.listMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.treeMenu.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +52,7 @@
             this.treeview_Dir.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeview_Dir.Location = new System.Drawing.Point(3, 43);
             this.treeview_Dir.Name = "treeview_Dir";
-            this.treeview_Dir.Size = new System.Drawing.Size(215, 366);
+            this.treeview_Dir.Size = new System.Drawing.Size(213, 366);
             this.treeview_Dir.TabIndex = 2;
             this.treeview_Dir.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeview_Dir_AfterLabelEdit);
             this.treeview_Dir.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeview_Dir_AfterSelect);
@@ -58,6 +60,7 @@
             // 
             // listview_File
             // 
+            this.listview_File.CheckBoxes = true;
             this.listview_File.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name,
             this.modDate,
@@ -66,12 +69,13 @@
             this.tableLayoutPanel1.SetColumnSpan(this.listview_File, 4);
             this.listview_File.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listview_File.HideSelection = false;
-            this.listview_File.Location = new System.Drawing.Point(224, 43);
+            this.listview_File.Location = new System.Drawing.Point(222, 43);
             this.listview_File.Name = "listview_File";
-            this.listview_File.Size = new System.Drawing.Size(466, 366);
+            this.listview_File.Size = new System.Drawing.Size(468, 366);
             this.listview_File.TabIndex = 3;
             this.listview_File.UseCompatibleStateImageBehavior = false;
             this.listview_File.View = System.Windows.Forms.View.Details;
+            this.listview_File.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listview_File_MouseDown);
             // 
             // name
             // 
@@ -97,20 +101,21 @@
             // 
             this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.botton_Upload.Location = new System.Drawing.Point(504, 3);
+            this.botton_Upload.Location = new System.Drawing.Point(501, 3);
             this.botton_Upload.Name = "botton_Upload";
             this.botton_Upload.Size = new System.Drawing.Size(89, 34);
             this.botton_Upload.TabIndex = 4;
-            this.botton_Upload.Text = "Upload";
+            this.botton_Upload.Text = "Upload ▼";
             this.botton_Upload.UseVisualStyleBackColor = true;
+            this.botton_Upload.Click += new System.EventHandler(this.botton_Upload_Click);
             // 
             // button_Download
             // 
             this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_Download.Location = new System.Drawing.Point(599, 3);
+            this.button_Download.Location = new System.Drawing.Point(596, 3);
             this.button_Download.Name = "button_Download";
-            this.button_Download.Size = new System.Drawing.Size(91, 34);
+            this.button_Download.Size = new System.Drawing.Size(94, 34);
             this.button_Download.TabIndex = 5;
             this.button_Download.Text = "Download";
             this.button_Download.UseVisualStyleBackColor = true;
@@ -124,7 +129,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.87531F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 96F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
             this.tableLayoutPanel1.Controls.Add(this.listview_File, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.treeview_Dir, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.button_Download, 5, 0);
@@ -134,6 +139,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(693, 412);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
@@ -150,6 +156,18 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(214, 24);
             this.toolStripMenuItem1.Text = "toolStripMenuItem1";
+            // 
+            // uploadMenu
+            // 
+            this.uploadMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.uploadMenu.Name = "uploadMenu";
+            this.uploadMenu.Size = new System.Drawing.Size(61, 4);
+            // 
+            // listMenu
+            // 
+            this.listMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.listMenu.Name = "listMenu";
+            this.listMenu.Size = new System.Drawing.Size(211, 32);
             // 
             // Document_Center
             // 
@@ -176,5 +194,7 @@
         public System.Windows.Forms.Button botton_Upload;
         private System.Windows.Forms.ContextMenuStrip treeMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ContextMenuStrip uploadMenu;
+        private System.Windows.Forms.ContextMenuStrip listMenu;
     }
 }
