@@ -363,11 +363,13 @@ namespace BlindNet
         public static T ByteToStruct<T>(byte[] arr) where T : struct
         {
             int size = Marshal.SizeOf(typeof(T));
-            if (size > arr.Length)
+            if (size < arr.Length)
                 throw new Exception("Array's length is too long");
 
             IntPtr buff = Marshal.AllocHGlobal(size);
-            Marshal.Copy(arr, 0, buff, size);
+            byte[] tmp = new byte[size];
+            Marshal.Copy(tmp, 0, buff, size);
+            Marshal.Copy(arr, 0, buff, arr.Length);
             T st = Marshal.PtrToStructure<T>(buff);
 
             return st;
@@ -439,5 +441,7 @@ namespace BlindNet
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;
+
+        public const int CHATPORT = 22222;
     }
 }
