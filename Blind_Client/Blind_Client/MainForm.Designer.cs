@@ -29,46 +29,78 @@
         private void InitializeComponent()
         {
             this.Button_DocCenter = new System.Windows.Forms.Button();
-            this.document_Center = new Blind_Client.Document_Center();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.MainControlPanel = new System.Windows.Forms.Panel();
+            this.document_Center = new Blind_Client.Document_Center();
+            this.btn_ActivateChat = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
+            this.MainControlPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // Button_DocCenter
             // 
             this.Button_DocCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Button_DocCenter.Location = new System.Drawing.Point(3, 3);
+            this.Button_DocCenter.Location = new System.Drawing.Point(3, 2);
+            this.Button_DocCenter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Button_DocCenter.Name = "Button_DocCenter";
-            this.Button_DocCenter.Size = new System.Drawing.Size(100, 54);
+            this.Button_DocCenter.Size = new System.Drawing.Size(100, 58);
             this.Button_DocCenter.TabIndex = 0;
             this.Button_DocCenter.Text = "문서중앙화";
             this.Button_DocCenter.UseVisualStyleBackColor = true;
             this.Button_DocCenter.Click += new System.EventHandler(this.Button_DocCenter_Click);
             // 
-            // document_Center
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.document_Center, 2);
-            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.document_Center.Location = new System.Drawing.Point(109, 63);
-            this.document_Center.Name = "document_Center";
-            this.document_Center.Size = new System.Drawing.Size(691, 385);
-            this.document_Center.TabIndex = 1;
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 492F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 205F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.Button_DocCenter, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.document_Center, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.MainControlPanel, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.btn_ActivateChat, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(-3, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.30377F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 86.69623F));
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(803, 451);
             this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // MainControlPanel
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 2);
+            this.MainControlPanel.Controls.Add(this.document_Center);
+            this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainControlPanel.Location = new System.Drawing.Point(109, 66);
+            this.MainControlPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MainControlPanel.Name = "MainControlPanel";
+            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
+            this.MainControlPanel.Size = new System.Drawing.Size(691, 381);
+            this.MainControlPanel.TabIndex = 3;
+            // 
+            // document_Center
+            // 
+            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.document_Center.Location = new System.Drawing.Point(0, 0);
+            this.document_Center.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.document_Center.Name = "document_Center";
+            this.document_Center.Size = new System.Drawing.Size(691, 381);
+            this.document_Center.TabIndex = 1;
+            // 
+            // btn_ActivateChat
+            // 
+            this.btn_ActivateChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_ActivateChat.Location = new System.Drawing.Point(3, 66);
+            this.btn_ActivateChat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_ActivateChat.Name = "btn_ActivateChat";
+            this.btn_ActivateChat.Size = new System.Drawing.Size(100, 54);
+            this.btn_ActivateChat.TabIndex = 0;
+            this.btn_ActivateChat.Text = "채팅";
+            this.btn_ActivateChat.UseVisualStyleBackColor = true;
+            this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
             // 
             // MainForm
             // 
@@ -76,10 +108,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.MainControlPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -87,8 +122,10 @@
         #endregion
 
         private System.Windows.Forms.Button Button_DocCenter;
-        public Document_Center document_Center;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btn_ActivateChat;
+        private System.Windows.Forms.Panel MainControlPanel;
+        public Document_Center document_Center;
     }
 }
 

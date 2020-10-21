@@ -42,8 +42,10 @@ namespace Blind_Server
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR : [UID : " + uid + "] " + ex.Message);
+                socket.CryptoSend(null, PacketType.Fail);
                 return;
             }
+            socket.CryptoSend(null, PacketType.OK);
 
             while (true)
             {

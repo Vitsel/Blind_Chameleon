@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,9 +42,25 @@
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.113.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.113.1\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.113.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.113.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.113.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.113.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Deployment" />
@@ -51,6 +70,92 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlindChatCode\BlindChat.cs" />
+    <Compile Include="BlindChatCode\BlindChatDB.cs" />
+    <Compile Include="BlindChatCode\BlindChatDef.cs" />
+    <Compile Include="BlindChatCode\BlindChatUI.cs" />
+    <Compile Include="BlindChatCode\BlindChatUtil.cs" />
+    <Compile Include="BlindChatUI\ChatMain.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\ChatMain.Designer.cs">
+      <DependentUpon>ChatMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\Control_More.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\Control_More.Designer.cs">
+      <DependentUpon>Control_More.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\Control_Room.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\Control_Room.Designer.cs">
+      <DependentUpon>Control_Room.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\Control_User.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\Control_User.Designer.cs">
+      <DependentUpon>Control_User.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Control_MessageRoom.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Control_MessageRoom.Designer.cs">
+      <DependentUpon>Control_MessageRoom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\CreateRoomForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\CreateRoomForm.Designer.cs">
+      <DependentUpon>CreateRoomForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\CreateRoom_Item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\CreateRoom_Item.Designer.cs">
+      <DependentUpon>CreateRoom_Item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\MessageRoom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\MessageRoom.Designer.cs">
+      <DependentUpon>MessageRoom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Message_Item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Message_Item.Designer.cs">
+      <DependentUpon>Message_Item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Room_Item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Room_Item.Designer.cs">
+      <DependentUpon>Room_Item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\TextBoxNoCaret.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\UserUI\User_Category.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\UserUI\User_Category.Designer.cs">
+      <DependentUpon>User_Category.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\UserUI\User_Info.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\UserUI\User_Info.Designer.cs">
+      <DependentUpon>User_Info.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\UserUI\User_Item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\UserUI\User_Item.Designer.cs">
+      <DependentUpon>User_Item.cs</DependentUpon>
+    </Compile>
     <Compile Include="BlindNet.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="Document_Center.cs">
@@ -68,6 +173,21 @@
     </Compile>
     <Compile Include="_Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BlindChatUI\ChatMain.resx">
+      <DependentUpon>ChatMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\Control_Room.resx">
+      <DependentUpon>Control_Room.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\Control_User.resx">
+      <DependentUpon>Control_User.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Control_MessageRoom.resx">
+      <DependentUpon>Control_MessageRoom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Message_Item.resx">
+      <DependentUpon>Message_Item.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Document_Center.resx">
       <DependentUpon>Document_Center.cs</DependentUpon>
     </EmbeddedResource>
@@ -102,4 +222,14 @@
     <None Include="Resources\opened-folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>이 프로젝트는 이 컴퓨터에 없는 NuGet 패키지를 참조합니다. 해당 패키지를 다운로드하려면 NuGet 패키지 복원을 사용하십시오. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkID=322105를 참조하십시오. 누락된 파일은 {0}입니다.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" />
 </Project>
