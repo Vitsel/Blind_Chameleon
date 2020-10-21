@@ -435,5 +435,7 @@ namespace BlindNet
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;
+
+        public const int CHATPORT = 22222;
     }
 }

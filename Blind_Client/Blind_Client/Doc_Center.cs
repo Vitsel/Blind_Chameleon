@@ -28,6 +28,13 @@ namespace Blind_Client
             await socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
 
             socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.MSG);
+            BlindPacket packet = socket.CryptoReceive();
+            if(packet.header == PacketType.Fail)
+            {
+                MessageBox.Show("데이터베이스 연결에 실패했습니다.");
+                return;
+            }
+
             UpdateRoot();
             form.treeview_Dir.SelectedNode = form.treeview_Dir.Nodes[0];
         }
