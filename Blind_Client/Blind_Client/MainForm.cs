@@ -12,20 +12,20 @@ namespace Blind_Client
 {
     public partial class MainForm : Form
     {
-        internal struct LASTINPUTINFO
-        {
-            public uint cbSize;
-            public uint dwTime;
-        }
-        [DllImport("user32.dll")]
-        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii); 
-        [DllImport("kernel32.dll")]
-        private static extern uint GetLastError();
-        [DllImport("user32.dll")]
-        private static extern int RegisterHotKey(IntPtr hwnd, int id, KeyModifiers fsModifiers, Keys vk);
-        [DllImport("user32.dll")]
-        private static extern int UnregisterHotKey(IntPtr hwnd, int id);
-        const int WM_HOTKEY = 0x0312;
+        //internal struct LASTINPUTINFO
+        //{
+        //    public uint cbSize;
+        //    public uint dwTime;
+        //}
+        //[DllImport("user32.dll")]
+        //private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii); 
+        //[DllImport("kernel32.dll")]
+        //private static extern uint GetLastError();
+        //[DllImport("user32.dll")]
+        //private static extern int RegisterHotKey(IntPtr hwnd, int id, KeyModifiers fsModifiers, Keys vk);
+        //[DllImport("user32.dll")]
+        //private static extern int UnregisterHotKey(IntPtr hwnd, int id);
+        //const int WM_HOTKEY = 0x0312;
 
 
         bool isInner;
