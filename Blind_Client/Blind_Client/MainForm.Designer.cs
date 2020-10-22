@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Button_DocCenter = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -110,7 +112,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btn_ActivateChat;
         private System.Windows.Forms.Panel MainControlPanel;
-        //public Document_Center document_Center;
+
+        public Document_Center document_Center;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

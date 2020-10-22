@@ -14,16 +14,17 @@ namespace Blind_Client
 
     class VPN_Class
     {
-        private Vpn_Login VpnLogin_Dialog = new Vpn_Login(); // 자식폼 생성
+        private Vpn_Login VpnLogin_Dialog;
         public VpnConnectionEventHandler VpnConnectionEvent;
-        private bool VpnConnectionEventResult=false;
 
+        public bool ClientExitChecking = false; 
+        private bool VpnConnectionChecking=false;
         private string VPN_Name = "Blind_VPN"; // 만들 이름
         private string Child_VPN_ID = ""; // 자식폼에서 받아올 아이디
         private string Child_VPN_PW = "";// 자식폼에서 받아올 비밀번호
         private string VPN_Connection_IP = ""; // 인터넷 위치에따라 아이피 설정
         public bool Network_Position = true; //true = 내부 false = 외부
-        public bool ClientExitChecking = false;
+        
         
        
 
@@ -45,7 +46,8 @@ namespace Blind_Client
 
             if (Type == "VPN")
             {
-                string instruction_DisConnect = "rasphone -h Blind_VPN";
+                //string instruction_DisConnect = "rasphone -h Blind_VPN";
+                string instruction_DisConnect = "rasdial \"Blind VPN\" /disconnect";
                 string instruction_Remove = "rasphone -r Blind_VPN";
                 pro.StandardInput.Write(instruction_DisConnect + Environment.NewLine); //지정한 명령어 + \r\n
                 Thread.Sleep(2000); //바로삭제하면 완전히 제거가안됨 일정간격 줘야함.
@@ -98,13 +100,12 @@ namespace Blind_Client
 
         private void Dialer_DialCompleted(object sender, DialCompletedEventArgs e)
         {
-            VpnConnectionEventResult = false;
             this.VpnConnectionEvent += new VpnConnectionEventHandler(VpnLogin_Dialog.ConnectionEventChecking);
 
             if (e.Connected)
             {
-                VpnConnectionEventResult = true;
-                VpnConnectionEvent(VpnConnectionEventResult);//(보내면 Connection State에서 값을 확인후 폼 꺼짐.)
+                VpnConnectionChecking = true;
+                VpnConnectionEvent(true);//(보내면 Vpn_Login 폼꺼짐)
                 return;
             }
             else if (e.Cancelled)
@@ -120,7 +121,7 @@ namespace Blind_Client
                 MessageBox.Show("UnKnown Error");
                 MessageBox.Show(e.Error.ToString());
             }
-            VpnConnectionEvent(VpnConnectionEventResult);
+            VpnConnectionEvent(true);
         }
 
         private bool VPN_Connection()
@@ -147,6 +148,8 @@ namespace Blind_Client
                 VpnLogin_Dialog.panel_Connection.Show();
                 VpnLogin_Dialog.ShowDialog();
                 if (ClientExitChecking == true)
+                    return false;
+                else if (VpnConnectionChecking == false)
                     return false;
 
                 return true;
@@ -233,15 +236,16 @@ namespace Blind_Client
 
         public bool VPN_Start()
         {
+            VpnLogin_Dialog = new Vpn_Login();
             VpnLogin_Dialog.VpnSendEvent += new VpnUserDataEventHandler(this.VpnLogin_Data);
             VpnLogin_Dialog.VpnClientExitEvent += new VpnClientExitEventHandler(this.VpnLogin_ClientExitCheck);
-            this.VpnConnectionEvent+= new VpnConnectionEventHandler(this.ConnectionEventChecking);
+            this.VpnConnectionEvent+= new VpnConnectionEventHandler(VpnLogin_Dialog.ConnectionEventChecking);
             bool result = false;
             if (!VPN_RegCheck())
                 return result;
 
             CMD_VPN_Instruction("VPN");
-
+            
             if (VPN_First_Check())
            {
                 if (Network_Position == true && VPN_Connection_IP == "127.0.0.1")

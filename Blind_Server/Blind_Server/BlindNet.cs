@@ -445,6 +445,7 @@ namespace BlindNet
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;
 
-        public const int CHATPORT = 22222;
+        public const int CHATPORT = 55557;
+        public const int LOCKPORT = 55559;
     }
 }

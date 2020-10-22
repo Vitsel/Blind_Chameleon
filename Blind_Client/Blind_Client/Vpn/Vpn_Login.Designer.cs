@@ -34,11 +34,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.VPN_ID = new System.Windows.Forms.TextBox();
             this.VPN_PW = new System.Windows.Forms.TextBox();
-            this.GroupBox_VPN_LOGIN = new System.Windows.Forms.GroupBox();
-            this.GroupBox_VPN_State = new System.Windows.Forms.GroupBox();
             this.progressBar_VPNState = new System.Windows.Forms.ProgressBar();
             this.label3 = new System.Windows.Forms.Label();
-            this.VPN_EVENT = new System.Windows.Forms.Timer(this.components);
+            this.Vpn_Event = new System.Windows.Forms.Timer(this.components);
             this.panel_Connection = new System.Windows.Forms.Panel();
             this.panel_Login = new System.Windows.Forms.Panel();
             this.panel_Connection.SuspendLayout();
@@ -87,31 +85,6 @@
             this.VPN_PW.Size = new System.Drawing.Size(160, 21);
             this.VPN_PW.TabIndex = 4;
             // 
-            // GroupBox_VPN_LOGIN
-            // 
-            this.GroupBox_VPN_LOGIN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.GroupBox_VPN_LOGIN.CausesValidation = false;
-            this.GroupBox_VPN_LOGIN.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.GroupBox_VPN_LOGIN.Location = new System.Drawing.Point(558, 323);
-            this.GroupBox_VPN_LOGIN.Name = "GroupBox_VPN_LOGIN";
-            this.GroupBox_VPN_LOGIN.Size = new System.Drawing.Size(329, 112);
-            this.GroupBox_VPN_LOGIN.TabIndex = 5;
-            this.GroupBox_VPN_LOGIN.TabStop = false;
-            this.GroupBox_VPN_LOGIN.Text = "Login";
-            // 
-            // GroupBox_VPN_State
-            // 
-            this.GroupBox_VPN_State.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.GroupBox_VPN_State.CausesValidation = false;
-            this.GroupBox_VPN_State.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.GroupBox_VPN_State.Location = new System.Drawing.Point(558, 29);
-            this.GroupBox_VPN_State.Name = "GroupBox_VPN_State";
-            this.GroupBox_VPN_State.Size = new System.Drawing.Size(359, 127);
-            this.GroupBox_VPN_State.TabIndex = 6;
-            this.GroupBox_VPN_State.TabStop = false;
-            this.GroupBox_VPN_State.Text = "VPN 연결 현황";
-            this.GroupBox_VPN_State.UseCompatibleTextRendering = true;
-            // 
             // progressBar_VPNState
             // 
             this.progressBar_VPNState.Location = new System.Drawing.Point(16, 52);
@@ -128,10 +101,10 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "연결 시도중(최대 30초)";
             // 
-            // VPN_EVENT
+            // Vpn_Event
             // 
-            this.VPN_EVENT.Interval = 1000;
-            this.VPN_EVENT.Tick += new System.EventHandler(this.VPN_EVENT_Tick);
+            this.Vpn_Event.Interval = 1000;
+            this.Vpn_Event.Tick += new System.EventHandler(this.Vpn_Event_Tick);
             // 
             // panel_Connection
             // 
@@ -151,20 +124,18 @@
             this.panel_Login.Controls.Add(this.Vpn_Login_Button);
             this.panel_Login.Location = new System.Drawing.Point(3, 12);
             this.panel_Login.Name = "panel_Login";
-            this.panel_Login.Size = new System.Drawing.Size(352, 120);
+            this.panel_Login.Size = new System.Drawing.Size(341, 120);
             this.panel_Login.TabIndex = 8;
             // 
             // Vpn_Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(983, 507);
+            this.ClientSize = new System.Drawing.Size(347, 109);
             this.Controls.Add(this.panel_Login);
-            this.Controls.Add(this.GroupBox_VPN_LOGIN);
-            this.Controls.Add(this.GroupBox_VPN_State);
             this.Controls.Add(this.panel_Connection);
             this.Name = "Vpn_Login";
-            this.Text = "Form1";
+            this.Text = "BlindClient";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel_Connection.ResumeLayout(false);
             this.panel_Connection.PerformLayout();
@@ -183,9 +154,7 @@
         private System.Windows.Forms.TextBox VPN_PW;
         private System.Windows.Forms.ProgressBar progressBar_VPNState;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Timer VPN_EVENT;
-        public System.Windows.Forms.GroupBox GroupBox_VPN_LOGIN;
-        public System.Windows.Forms.GroupBox GroupBox_VPN_State;
+        private System.Windows.Forms.Timer Vpn_Event;
         public System.Windows.Forms.Panel panel_Connection;
         public System.Windows.Forms.Panel panel_Login;
     }

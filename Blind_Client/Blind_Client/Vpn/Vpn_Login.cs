@@ -16,9 +16,9 @@ namespace Blind_Client
     public partial class Vpn_Login : Form
     {
         public VpnUserDataEventHandler VpnSendEvent; //자식 -> 클라
-        public VpnClientExitEventHandler VpnClientExitEvent; //자식 -> 클라\
+        public VpnClientExitEventHandler VpnClientExitEvent; //자식 -> 클라
         bool VpnLoginCheck=false;
-        bool ConnectionResult = false;
+        bool ConnectionEventCheck= false;
 
         public Vpn_Login()
         {
@@ -34,6 +34,8 @@ namespace Blind_Client
             progressBar_VPNState.Value = 0;
             panel_Connection.Hide();
             this.FormClosed += Vpn_Login_FormClosing;
+            if (VpnLoginCheck == true)
+                Vpn_Event.Start();
         }
 
         private void Vpn_Login_FormClosing(object sender, FormClosedEventArgs e)
@@ -67,12 +69,17 @@ namespace Blind_Client
 
         public void ConnectionEventChecking(bool result)
         {
-            ConnectionResult = result;
+            ConnectionEventCheck = result;
         }
 
-        private void VPN_EVENT_Tick(object sender, EventArgs e)
+        private void Vpn_Event_Tick(object sender, EventArgs e)
         {
-
+            if (ConnectionEventCheck == true)
+            {
+                Vpn_Event.Stop();
+                Close();
+            }
         }
+
     }
 }
