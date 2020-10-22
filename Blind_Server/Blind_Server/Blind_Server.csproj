@@ -48,7 +48,7 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-      <!-- df6995a179c13177ed9e3ad50a4e8bed3ff180d8
+    <!-- df6995a179c13177ed9e3ad50a4e8bed3ff180d8
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="BlindChat\BlindChat.cs" />
     <Compile Include="BlindChat\BlindChatDef.cs" />
+    <Compile Include="BlindLock.cs" />
     <Compile Include="BlindNet.cs" />
     <Compile Include="Doc_Center.cs" />
     <Compile Include="Cryptography.cs" />

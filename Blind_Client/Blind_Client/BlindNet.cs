@@ -426,7 +426,7 @@ namespace BlindNet
 
     static class BlindNetConst
     {
-        public const string ServerIP = "127.0.0.1";
+        public const string ServerIP = "192.168.0.5";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int MAXQ = 100;
@@ -436,6 +436,7 @@ namespace BlindNet
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;
 
-        public const int CHATPORT = 22222;
+        public const int CHATPORT = 55557;
+        public const int LOCKPORT = 55559;
     }
 }

@@ -22,6 +22,7 @@ namespace Blind_Server
         public static BlindServerScoket socket_docCenter;
 
         public static BlindServerScoket chatPortSock;
+        public static BlindServerScoket lockPortSock;
         //public static MySqlConnection hDB = new MySqlConnection("Server=localhost;Database=BlindChat;Uid=root;Pwd=sungsu430;");
 
         static void Main(string[] args)
@@ -36,6 +37,9 @@ namespace Blind_Server
 
             chatPortSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
             chatPortSock.BindListen();
+
+            lockPortSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.LOCKPORT);
+            lockPortSock.BindListen();
 
             mainSocket = new BlindServerScoket();
             mainSocket.BindListen();
@@ -62,12 +66,15 @@ namespace Blind_Server
             client.socket = socket;
             client.token = new CancellationTokenSource();
 
-            client.documentCenter = new Doc_Center(1, 10); //기능 객체 생성
-            client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
+            //client.documentCenter = new Doc_Center(1, 10); //기능 객체 생성
+            //client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
 
             //client.chat = new BlindChat(hDB);
-            //client.chat = new BlindChat();
-            //client.tChat = Task.Factory.StartNew(() => client.chat.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
+            client.chat = new BlindChat();
+            client.tChat = Task.Factory.StartNew(() => client.chat.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
+
+            client.blindLock = new BlindLock();
+            client.tBlindLock = Task.Factory.StartNew(() => client.blindLock.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             Clients.Add(client);
         }
@@ -83,5 +90,7 @@ namespace Blind_Server
 
         public BlindChat chat;
         public Task tChat;
+        public BlindLock blindLock;
+        public Task tBlindLock;
     }
 }

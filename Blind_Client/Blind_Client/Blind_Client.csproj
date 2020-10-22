@@ -35,6 +35,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -156,6 +165,21 @@
     <Compile Include="BlindChatUI\UserUI\User_Item.Designer.cs">
       <DependentUpon>User_Item.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlindLock\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindLock\DoubleBufferPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindLock\DoubleBufferTableLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindLock\LockForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindLock\LockForm.Designer.cs">
+      <DependentUpon>LockForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BlindNet.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="Document_Center.cs">
@@ -188,6 +212,9 @@
     <EmbeddedResource Include="BlindChatUI\RoomUI\Message_Item.resx">
       <DependentUpon>Message_Item.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BlindLock\LockForm.resx">
+      <DependentUpon>LockForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Document_Center.resx">
       <DependentUpon>Document_Center.cs</DependentUpon>
     </EmbeddedResource>
@@ -205,6 +232,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
