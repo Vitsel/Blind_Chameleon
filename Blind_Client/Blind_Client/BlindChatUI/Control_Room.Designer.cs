@@ -13,6 +13,11 @@
         /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
         protected override void Dispose(bool disposing)
         {
+            while(RoomItem_LayoutPanel.Controls.Count > 0)
+            {
+                RoomItem_LayoutPanel.Controls[0].Dispose();
+            }
+
             if (disposing && (components != null))
             {
                 components.Dispose();

@@ -1,4 +1,6 @@
-﻿using Blind_Client.BlindChatCode;
+﻿
+
+using Blind_Client.BlindChatCode;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

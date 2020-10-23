@@ -78,6 +78,7 @@ namespace Blind_Client.BlindLock
                 packet = BlindNetUtil.ByteToStruct<LockPacket>(data);
                 if (packet.Type == lockType.SUCCESS)
                 {
+                    textBox1.Text = "";
                     Hide();
 
                     UnHook();
@@ -111,6 +112,9 @@ namespace Blind_Client.BlindLock
                 {
                     textBox1.Text = "";
                     Hide();
+
+                    UnHook();
+                    EnableTask();
                 }
                 else
                 {

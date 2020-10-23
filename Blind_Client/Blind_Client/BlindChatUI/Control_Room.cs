@@ -29,8 +29,13 @@ namespace Blind_Client.BlindChatUI
         {
             _BlindChat = chat;
         }
+
         public void LoadRooms()
         {
+            while (RoomItem_LayoutPanel.Controls.Count > 0)
+            {
+                RoomItem_LayoutPanel.Controls[0].Dispose();
+            }
             RoomItem_LayoutPanel.Controls.Clear();
             List<ChatRoom> roomListOrder = BlindChat.roomList.OrderByDescending(x => x.LastMessageTime).ToList();
 

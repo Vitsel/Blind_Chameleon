@@ -144,6 +144,12 @@
     <Compile Include="BlindChatUI\RoomUI\Room_Item.Designer.cs">
       <DependentUpon>Room_Item.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Room_Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Room_Menu.Designer.cs">
+      <DependentUpon>Room_Menu.cs</DependentUpon>
+    </Compile>
     <Compile Include="BlindChatUI\RoomUI\TextBoxNoCaret.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -209,8 +215,14 @@
     <EmbeddedResource Include="BlindChatUI\RoomUI\Control_MessageRoom.resx">
       <DependentUpon>Control_MessageRoom.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\MessageRoom.resx">
+      <DependentUpon>MessageRoom.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BlindChatUI\RoomUI\Message_Item.resx">
       <DependentUpon>Message_Item.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Room_Menu.resx">
+      <DependentUpon>Room_Menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BlindLock\LockForm.resx">
       <DependentUpon>LockForm.cs</DependentUpon>
