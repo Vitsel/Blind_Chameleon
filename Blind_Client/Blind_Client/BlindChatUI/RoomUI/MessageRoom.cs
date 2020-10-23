@@ -28,6 +28,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
             this.Name = room.ID.ToString();
             this.lbl_ID.Text = "#" + room.ID.ToString();
             this.Text = this.lbl_Title.Text = _room.Name;
+            this.StartPosition = FormStartPosition.CenterParent;
 
         }
         public void AddMessage(ChatMessage message)
@@ -102,6 +103,11 @@ namespace Blind_Client.BlindChatUI.RoomUI
             {
                 tb_Message.Text = "";
             }
+        }
+
+        private void btn_menu_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

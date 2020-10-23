@@ -5,11 +5,29 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using Blind_Client.BlindChatUI;
+using Blind_Client.BlindLock;
+using System.Runtime.InteropServices;
 
 namespace Blind_Client
 {
     public partial class MainForm : Form
     {
+        internal struct LASTINPUTINFO
+        {
+            public uint cbSize;
+            public uint dwTime;
+        }
+        [DllImport("user32.dll")]
+        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+        [DllImport("kernel32.dll")]
+        private static extern uint GetLastError();
+        [DllImport("user32.dll")]
+        private static extern int RegisterHotKey(IntPtr hwnd, int id, KeyModifiers fsModifiers, Keys vk);
+        [DllImport("user32.dll")]
+        private static extern int UnregisterHotKey(IntPtr hwnd, int id);
+        const int WM_HOTKEY = 0x0312;
+        const uint WAITTIMESEC = 10;
+
         bool isInner;
         public SynchronizationContext _uiSyncContext;
 
@@ -19,11 +37,13 @@ namespace Blind_Client
         
         ChatMain _ChatMain;
         BlindChat chat;
-        Task tChat;
+        Task tChat; 
+        LockForm lockForm;
 
         public MainForm(bool isInner)
         {
             InitializeComponent();
+
             this.isInner = isInner;
             mainSocket = new BlindSocket();
             _uiSyncContext = SynchronizationContext.Current;
@@ -43,6 +63,11 @@ namespace Blind_Client
                 MessageBox.Show("Main socket connection failed.", "확인", MessageBoxButtons.OK);
                 Close();
             }
+
+            timer1.Enabled = true;
+
+            RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
+            RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -55,11 +80,13 @@ namespace Blind_Client
             documentCenter.Run();
             document_Center.docCenter = documentCenter;
 
-            int _userID = 2;
+            int _userID = 3;
             _ChatMain = new ChatMain(_userID);
             MainControlPanel.Controls.Add(_ChatMain);
-            //chat = new BlindChat(_userID, ref _ChatMain, this);
-            //tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+            chat = new BlindChat(_userID, ref _ChatMain, this);
+            tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+
+            lockForm = new LockForm(isInner);
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
@@ -70,6 +97,97 @@ namespace Blind_Client
         private void btn_ActivateChat_Click(object sender, EventArgs e)
         {
             _ChatMain.BringToFront();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            timer1.Enabled = false;
+            UnregisterHotKey(this.Handle, 0);
+            UnregisterHotKey(this.Handle, 1);
+        }
+
+
+
+
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (GetIdleTime() > WAITTIMESEC * 1000) // 10초
+            {
+                timer1.Enabled = false;
+                lockForm.SetHook();
+                lockForm.DisableTask();
+
+                lockForm.ShowDialog();
+
+                timer1.Enabled = true;
+            }
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            switch (m.Msg)
+            {
+                case WM_HOTKEY:
+                    {
+                        if (m.WParam == (IntPtr)0x0)
+                        {
+                            timer1.Enabled = false;
+                            lockForm.SetHook();
+                            lockForm.DisableTask();
+
+                            lockForm.ShowDialog();
+
+                            timer1.Enabled = true;
+                        }
+                        else if (m.WParam == (IntPtr)0x1)
+                        {
+
+                            timer1.Enabled = false;
+                            lockForm.SetHook();
+                            lockForm.DisableTask();
+
+                            lockForm.ShowDialog();
+
+                            timer1.Enabled = true;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        public enum KeyModifiers
+        {
+            None = 0,
+            Alt = 1,
+            Control = 2,
+            Shift = 4,
+            Windows = 8
+        };
+        public static uint GetIdleTime()
+        {
+            LASTINPUTINFO LastInPut = new LASTINPUTINFO();
+            LastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(LastInPut);
+            GetLastInputInfo(ref LastInPut);
+
+            return ((uint)Environment.TickCount - LastInPut.dwTime);
+        }
+
+        public static long GetTickCount()
+        {
+            return Environment.TickCount;
+        }
+
+        public static long GetLastInputTime()
+        {
+            LASTINPUTINFO lastInPut = new LASTINPUTINFO();
+            lastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(lastInPut);
+            if (!GetLastInputInfo(ref lastInPut))
+            {
+                throw new Exception(GetLastError().ToString());
+            }
+            return lastInPut.dwTime;
         }
     }
 }

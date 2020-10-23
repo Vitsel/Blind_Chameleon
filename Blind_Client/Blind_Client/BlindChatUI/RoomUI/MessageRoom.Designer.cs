@@ -36,6 +36,7 @@
             this.btn_Send = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.message_LayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.btn_menu = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -43,6 +44,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btn_menu);
             this.panel1.Controls.Add(this.lbl_ID);
             this.panel1.Controls.Add(this.lbl_Title);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -66,6 +68,7 @@
             // lbl_Title
             // 
             this.lbl_Title.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lbl_Title.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Title.Location = new System.Drawing.Point(0, 0);
             this.lbl_Title.Margin = new System.Windows.Forms.Padding(0);
             this.lbl_Title.Name = "lbl_Title";
@@ -130,6 +133,18 @@
             this.message_LayoutPanel.Size = new System.Drawing.Size(284, 301);
             this.message_LayoutPanel.TabIndex = 0;
             // 
+            // btn_menu
+            // 
+            this.btn_menu.FlatAppearance.BorderSize = 0;
+            this.btn_menu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_menu.Location = new System.Drawing.Point(218, 3);
+            this.btn_menu.Name = "btn_menu";
+            this.btn_menu.Size = new System.Drawing.Size(63, 47);
+            this.btn_menu.TabIndex = 2;
+            this.btn_menu.Text = "=";
+            this.btn_menu.UseVisualStyleBackColor = true;
+            this.btn_menu.Click += new System.EventHandler(this.btn_menu_Click);
+            // 
             // MessageRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -139,6 +154,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "MessageRoom";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MessageRoom";
             this.Load += new System.EventHandler(this.MessageRoom_Load);
             this.panel1.ResumeLayout(false);
@@ -159,5 +175,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.FlowLayoutPanel message_LayoutPanel;
         private System.Windows.Forms.Label lbl_ID;
+        private System.Windows.Forms.Button btn_menu;
     }
 }

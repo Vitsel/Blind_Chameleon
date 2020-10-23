@@ -119,6 +119,7 @@
     <Compile Include="BlindChat\BlindChat.cs" />
     <Compile Include="BlindChat\BlindChatDef.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="BlindLock.cs" />
     <Compile Include="BlindNet.cs" />
     <Compile Include="Doc_Center.cs" />
     <Compile Include="Cryptography.cs" />

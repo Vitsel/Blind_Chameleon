@@ -108,6 +108,7 @@ namespace Blind_Client.BlindChatCode
                     {
                         LoadList();
                         LoadUI();
+                        MessageBox.Show("데이터 로드 완료");
                     }
                     Start = true;
                 }

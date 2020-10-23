@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Button_DocCenter = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
             this.document_Center = new Blind_Client.Document_Center();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.MainControlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -102,6 +104,10 @@
             this.btn_ActivateChat.UseVisualStyleBackColor = true;
             this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -111,6 +117,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -126,6 +133,7 @@
         private System.Windows.Forms.Button btn_ActivateChat;
         private System.Windows.Forms.Panel MainControlPanel;
         public Document_Center document_Center;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

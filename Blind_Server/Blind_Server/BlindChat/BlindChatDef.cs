@@ -462,7 +462,7 @@ namespace Blind_Server
         {
             string sql =
                 $"select * from ChatMessage " +
-                $"where RoomID in (select roomID from chatroomjoined where userID = {UserID}) " +
+                $"where RoomID in (select roomID from ChatRoomJoined where userID = {UserID}) " +
                 $"and Time > \'{Time}\' order by Time asc";
 
             MySqlDataReader rdr = ExecuteSelect(sql);

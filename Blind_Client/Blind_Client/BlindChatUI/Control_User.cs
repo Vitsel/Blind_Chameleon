@@ -34,6 +34,10 @@ namespace Blind_Client.BlindChatUI
         }
         public void LoadUsers()
         {
+            while (UserItem_LayoutPanel.Controls.Count > 0)
+            {
+                UserItem_LayoutPanel.Controls[0].Dispose();
+            }
             UserItem_LayoutPanel.Controls.Clear();
             string depart = BlindChat.userList[0].Department;
             AddCategory(depart);

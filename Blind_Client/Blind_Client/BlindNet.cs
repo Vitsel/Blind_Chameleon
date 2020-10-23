@@ -433,7 +433,7 @@ namespace BlindNet
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
         public const int DEVICECTLPORT = 55558;
-        public const int SCREENLOCK = 55559;
+        public const int LOCKPORT = 55559;
         public const int MAXQ = 100;
         public const int PACKSIZE = 1040;
         public const int DATASIZE = 1024;

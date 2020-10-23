@@ -35,6 +35,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -135,6 +144,12 @@
     <Compile Include="BlindChatUI\RoomUI\Room_Item.Designer.cs">
       <DependentUpon>Room_Item.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Room_Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Room_Menu.Designer.cs">
+      <DependentUpon>Room_Menu.cs</DependentUpon>
+    </Compile>
     <Compile Include="BlindChatUI\RoomUI\TextBoxNoCaret.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -155,6 +170,21 @@
     </Compile>
     <Compile Include="BlindChatUI\UserUI\User_Item.Designer.cs">
       <DependentUpon>User_Item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindLock\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindLock\DoubleBufferPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindLock\DoubleBufferTableLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BlindLock\LockForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindLock\LockForm.Designer.cs">
+      <DependentUpon>LockForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BlindNet.cs" />
     <Compile Include="Cryptography.cs" />
@@ -185,8 +215,17 @@
     <EmbeddedResource Include="BlindChatUI\RoomUI\Control_MessageRoom.resx">
       <DependentUpon>Control_MessageRoom.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\MessageRoom.resx">
+      <DependentUpon>MessageRoom.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BlindChatUI\RoomUI\Message_Item.resx">
       <DependentUpon>Message_Item.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Room_Menu.resx">
+      <DependentUpon>Room_Menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindLock\LockForm.resx">
+      <DependentUpon>LockForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Document_Center.resx">
       <DependentUpon>Document_Center.cs</DependentUpon>
@@ -205,6 +244,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -219,7 +259,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\opened-folder.png" />
+    <EmbeddedResource Include="Resources\opened-folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BlindLockBack.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\BlindLockBack.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

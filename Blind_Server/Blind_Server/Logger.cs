@@ -38,7 +38,7 @@ namespace BlindLogger
                     break;
                 case LogService.ScreenLock:
                     this.service = "ScreenLock";
-                    port = BlindNetConst.SCREENLOCK;
+                    port = BlindNetConst.LOCKPORT;
                     break;
             }
             connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = BlindWeb; Uid = logger; Pwd = kit2020");
