@@ -48,7 +48,7 @@ namespace Blind_Client
                     MessageBox.Show("'" + item.Text + "' 다운로드에 실패했습니다.");
             }
         }
-        
+
         private TreeNode FindSameNode(uint id)
         {
             foreach (TreeNode node in treeview_Dir.Nodes)
@@ -71,7 +71,7 @@ namespace Blind_Client
 
         private void treeview_Dir_MouseDown(object sender, MouseEventArgs e)
         {
-            selected = treeview_Dir.GetNodeAt(e.Location);
+            selected = treeview_Dir.GetNodeAt(e.Location) ?? selected;
 
             if (e.Button == MouseButtons.Right)
             {
@@ -276,7 +276,7 @@ namespace Blind_Client
             for (int i = 0; i < selectFiles.Length; i++)
             {
                 if (IsInSameFile(Path.GetFileName(selectFiles[i])) != null)
-                    if (MessageBox.Show("이미 " + selectFiles[i] + " 파일이 존재합니다.\n덮어 쓰시겠습니까?", "파일 업로드", MessageBoxButtons.YesNo) == DialogResult.No)
+                    if (MessageBox.Show("이미 " + Path.GetFileName(selectFiles[i]) + " 파일이 존재합니다.\n덮어 쓰시겠습니까?", "파일 업로드", MessageBoxButtons.YesNo) == DialogResult.No)
                         selectFiles[i] = null;
             }
 
@@ -368,20 +368,61 @@ namespace Blind_Client
                 listMenu.Items.Clear();
                 if (selectItem != null)
                 {
-                    if (selectItem.SubItems[1].Text == "DIR")
-                        if (selected.Parent != null)
-                        {
-                            treeMenu.Items.Add("폴더 삭제", null, new EventHandler(treeMenu_RemoveDir));
-                            treeMenu.Items.Add("이름 변경", null, new EventHandler(treeMenu_ChangeName));
-                        }
-                    treeMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
+                    if (!selectItem.Checked)
+                    {
+                        foreach (ListViewItem item in listview_File.Items)
+                            item.Checked = false;
+                        selectItem.Checked = true;
+                    }
+                    listMenu.Items.Add("삭제", null, new EventHandler(listMenu_Remove));
+                    //listMenu.Items.Add("이동", null, new EventHandler(treeMenu_ChangeName));
+
+                    if (listview_File.CheckedItems.Count == 1)
+                        listMenu.Items.Add("이름 변경", null, new EventHandler(treeMenu_ChangeName));
                 }
                 else
                 {
+                    listview_File.SelectedItems.Clear();
                     listMenu.Items.Add("폴더 추가", null, new EventHandler(treeMenu_AddDir));
-                    treeMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
+                    listMenu.Items.Add("파일 업로드", null, new EventHandler(UploadFile));
+                    listMenu.Items.Add("폴더 업로드", null, new EventHandler(UploadDir));
+                    listMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
                 }
-                treeMenu.Show(treeview_Dir, e.Location);
+                listMenu.Show(treeview_Dir, e.Location);
+            }
+        }
+
+        private void listMenu_Remove(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in listview_File.CheckedItems)
+            {
+                bool result = false;
+                if (item.SubItems[2].Text == string.Empty)
+                {
+                    foreach (TreeNode node in selected.Nodes)
+                        if (node.Text == item.Text)
+                            result = docCenter.RemoveDir(node);
+                }
+                else
+                    result = docCenter.RemoveFile((uint)item.Tag);
+                item.Remove();
+                if (!result)
+                    MessageBox.Show("오류가 발생했습니다.");
+            }
+            docCenter.UpdateDir(selected);
+        }
+
+        private void listview_File_DoubleClick(object sender, EventArgs e)
+        {
+            string text = listview_File.FocusedItem.Text;
+            foreach (TreeNode node in selected.Nodes)
+            {
+                if (node.Text == text)
+                {
+                    selected = node;
+                    treeview_Dir.SelectedNode = node;
+                    return;
+                }
             }
         }
     }

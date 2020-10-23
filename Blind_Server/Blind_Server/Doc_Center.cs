@@ -29,12 +29,18 @@ namespace Blind_Server
             isInner = false;
         }
 
+        ~Doc_Center()
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+
         public void Run()
         {
             socket = _Main.socket_docCenter.AcceptWithECDH();
             isInner = BitConverter.ToBoolean(socket.CryptoReceiveMsg(), 0);
 
-            connection = new MySqlConnection("Server = 192.168.35.149; Port = 3306; Database = document_center; Uid = root; Pwd = kit2020");
+            connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = document_center; Uid = root; Pwd = kit2020");
             try
             {
                 connection.Open();
@@ -77,6 +83,14 @@ namespace Blind_Server
                             byte[] tmp = new byte[4];
                             Array.Copy(data, 0, tmp, 0, data.Length);
                             RemoveDir(BitConverter.ToUInt32(tmp, 0));
+                            break;
+                        }
+                    case PacketType.DocRemoveFile:
+                        {
+                            byte[] data = BlindNetUtil.ByteTrimEndNull(packet.data);
+                            byte[] tmp = new byte[4];
+                            Array.Copy(data, 0, tmp, 0, data.Length);
+                            RemoveFile(BitConverter.ToUInt32(tmp, 0));
                             break;
                         }
                     case PacketType.DocChngNameDir:
@@ -122,6 +136,11 @@ namespace Blind_Server
             }
 
             SetAccessibleDirs();
+            if (accessibleDirs.Length < 1)
+            {
+                socket.CryptoSend(null, PacketType.EOF);
+                return;
+            }
 
             string command = "SELECT id, parent_id, name FROM directorys_info WHERE id IN (" + UintArrToString(accessibleDirs) + ");";
             MySqlCommand commander = new MySqlCommand(command, connection);
@@ -250,11 +269,48 @@ namespace Blind_Server
                             return;
                     }
                 }
-                else
-                    throw new Exception();
+                //else
+                //    throw new Exception();
 
                 RemoveDirTree(id);
                 UpdateModDate(pid);
+                socket.CryptoSend(null, PacketType.OK);
+            }
+            catch (Exception ex)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+            }
+        }
+
+        private void RemoveFile(uint id)
+        {
+            try
+            {
+                string command = "SELECT path, dir_id FROM files_info WHERE id = " + id + ";";
+                MySqlCommand commander = new MySqlCommand(command, connection);
+                MySqlDataReader reader = commander.ExecuteReader();
+                string path = null;
+                uint? dir_id = 0;
+                if (reader.Read())
+                {
+                    path = (string)reader["path"];
+                    dir_id = (uint)reader["dir_id"];
+                }
+                reader.Close();
+
+                if (path == null || dir_id == null)
+                    throw new Exception();
+
+                FileInfo file = new FileInfo(path);
+                if (!file.Exists)
+                    throw new Exception();
+                file.Delete();
+
+                commander.CommandText = "DELETE FROM files_info WHERE id = " + id + ";";
+                if (commander.ExecuteNonQuery() != 1)
+                    throw new Exception();
+
+                UpdateModDate(dir_id.Value);
                 socket.CryptoSend(null, PacketType.OK);
             }
             catch (Exception ex)

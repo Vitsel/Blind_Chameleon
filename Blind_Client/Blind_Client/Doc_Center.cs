@@ -29,7 +29,7 @@ namespace Blind_Client
 
             socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.MSG);
             BlindPacket packet = socket.CryptoReceive();
-            if(packet.header == PacketType.Fail)
+            if (packet.header == PacketType.Fail)
             {
                 MessageBox.Show("데이터베이스 연결에 실패했습니다.");
                 return;
@@ -150,6 +150,15 @@ namespace Blind_Client
             return true;
         }
 
+        public bool RemoveFile(uint id)
+        {
+            socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocRemoveFile);
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header != PacketType.OK)
+                return false;
+            return true;
+        }
+
         public bool UpdateNameDir(TreeNode node, string name)
         {
             Directory_Info dir = (Directory_Info)(node.Tag);
@@ -180,7 +189,7 @@ namespace Blind_Client
             await fs.ReadAsync(buffer, 0, (int)fs.Length);
             fs.Close();
 
-            socket.CryptoSend(buffer, PacketType.MSG);
+            await Task.Run(() => socket.CryptoSend(buffer, PacketType.MSG));
             BlindPacket packet = socket.CryptoReceive();
             if (packet.header == PacketType.Fail)
             {
@@ -218,9 +227,9 @@ namespace Blind_Client
             BlindPacket packet = await Task.Run(socket.CryptoReceive);
             if (packet.header == PacketType.Fail)
                 return false;
+            string fileName = Encoding.UTF8.GetString(BlindNetUtil.ByteTrimEndNull(packet.data));
 
             byte[] data = socket.CryptoReceiveMsg();
-            string fileName = Encoding.UTF8.GetString(BlindNetUtil.ByteTrimEndNull(packet.data));
             FileInfo file = new FileInfo(dPath + fileName);
             int tmp = 1;
             while (file.Exists)

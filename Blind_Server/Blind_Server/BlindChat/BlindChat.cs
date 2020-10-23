@@ -29,7 +29,7 @@ namespace Blind_Server
 
         public void Run()
         {
-            this.hDB = new MySqlConnection("Server=localhost;Database=BlindChat;Uid=root;Pwd=sungsu430;");
+            this.hDB = new MySqlConnection("Server=" + BlindNetConst.DatabaseIP + ";Database=BlindChat;Uid=root;Pwd=sungsu430;");
             this.hDB.Open();
 
             chatSock = GetChatPortSocket();

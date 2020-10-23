@@ -5,7 +5,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using BlindLogger;
 
 namespace Blind_Server
 {
@@ -62,7 +62,7 @@ namespace Blind_Server
             client.socket = socket;
             client.token = new CancellationTokenSource();
 
-            client.documentCenter = new Doc_Center(1, 10); //기능 객체 생성
+            client.documentCenter = new Doc_Center(1, 3, 4); //기능 객체 생성
             client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
 
             //client.chat = new BlindChat(hDB);

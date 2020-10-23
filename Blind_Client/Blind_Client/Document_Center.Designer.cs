@@ -52,7 +52,7 @@
             this.treeview_Dir.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeview_Dir.Location = new System.Drawing.Point(3, 43);
             this.treeview_Dir.Name = "treeview_Dir";
-            this.treeview_Dir.Size = new System.Drawing.Size(213, 366);
+            this.treeview_Dir.Size = new System.Drawing.Size(212, 366);
             this.treeview_Dir.TabIndex = 2;
             this.treeview_Dir.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeview_Dir_AfterLabelEdit);
             this.treeview_Dir.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeview_Dir_AfterSelect);
@@ -69,12 +69,13 @@
             this.tableLayoutPanel1.SetColumnSpan(this.listview_File, 4);
             this.listview_File.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listview_File.HideSelection = false;
-            this.listview_File.Location = new System.Drawing.Point(222, 43);
+            this.listview_File.Location = new System.Drawing.Point(221, 43);
             this.listview_File.Name = "listview_File";
-            this.listview_File.Size = new System.Drawing.Size(468, 366);
+            this.listview_File.Size = new System.Drawing.Size(469, 366);
             this.listview_File.TabIndex = 3;
             this.listview_File.UseCompatibleStateImageBehavior = false;
             this.listview_File.View = System.Windows.Forms.View.Details;
+            this.listview_File.DoubleClick += new System.EventHandler(this.listview_File_DoubleClick);
             this.listview_File.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listview_File_MouseDown);
             // 
             // name
@@ -101,7 +102,7 @@
             // 
             this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.botton_Upload.Location = new System.Drawing.Point(501, 3);
+            this.botton_Upload.Location = new System.Drawing.Point(500, 3);
             this.botton_Upload.Name = "botton_Upload";
             this.botton_Upload.Size = new System.Drawing.Size(89, 34);
             this.botton_Upload.TabIndex = 4;
@@ -113,9 +114,9 @@
             // 
             this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_Download.Location = new System.Drawing.Point(596, 3);
+            this.button_Download.Location = new System.Drawing.Point(595, 3);
             this.button_Download.Name = "button_Download";
-            this.button_Download.Size = new System.Drawing.Size(94, 34);
+            this.button_Download.Size = new System.Drawing.Size(95, 34);
             this.button_Download.TabIndex = 5;
             this.button_Download.Text = "Download";
             this.button_Download.UseVisualStyleBackColor = true;
@@ -129,7 +130,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.87531F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.Controls.Add(this.listview_File, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.treeview_Dir, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.button_Download, 5, 0);
@@ -167,7 +168,7 @@
             // 
             this.listMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.listMenu.Name = "listMenu";
-            this.listMenu.Size = new System.Drawing.Size(211, 32);
+            this.listMenu.Size = new System.Drawing.Size(61, 4);
             // 
             // Document_Center
             // 

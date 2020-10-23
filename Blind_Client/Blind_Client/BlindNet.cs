@@ -129,7 +129,7 @@ namespace BlindNet
                 {
                     socket.Connect(iep);
                 }
-                catch
+                catch (Exception ex)
                 {
                     continue;
                 }
@@ -418,24 +418,27 @@ namespace BlindNet
         DocDirInfo = 10,        //문서중앙화 Directory 정보
         DocAddDir = 11,         //문서중앙화 Directory 추가
         DocRemoveDir = 12,      //문서중앙화 Directory 삭제
-        DocChngNameDir = 13,    //문서중앙화 폴더 이름 변경
-        DocFileUpload = 14,     //문서중앙화 파일 업로드
-        DocFileDownload = 15,   //문서중앙화 파일 다운로드
-        DocDirDownload = 16     //문서중앙화 폴더 다운로드
+        DocRemoveFile = 13,      //문서중앙화 File 삭제
+        DocChngNameDir = 14,    //문서중앙화 폴더 이름 변경
+        DocFileUpload = 15,     //문서중앙화 파일 업로드
+        DocFileDownload = 16,   //문서중앙화 파일 다운로드
+        DocDirDownload = 17     //문서중앙화 폴더 다운로드
     }
 
     static class BlindNetConst
     {
-        public const string ServerIP = "127.0.0.1";
+        //public const string ServerIP = "127.0.0.1";
+        public const string ServerIP = "3.92.252.3";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
+        public const int CHATPORT = 55557;
+        public const int DEVICECTLPORT = 55558;
+        public const int SCREENLOCK = 55559;
         public const int MAXQ = 100;
         public const int PACKSIZE = 1040;
         public const int DATASIZE = 1024;
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;
-
-        public const int CHATPORT = 22222;
     }
 }
