@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -62,7 +63,7 @@ namespace Blind_Client.BlindChatCode
         }
         public void AddRoom(ChatRoom room)
         {
-            string sql = $"INSERT INTO ChatRoom (ID, Name, Time) VALUES ({room.ID},\'{room.Name}\',\'{room.Time}\')";
+            string sql = $"INSERT INTO ChatRoom (ID, Name, Time, LastMessageTime) VALUES ({room.ID},\'{room.Name}\',\'{room.Time}\', \'{room.LastMessageTime}\')";
             DB.ExecuteNonQuery(sql);
             roomList.Add(room);
 
@@ -80,6 +81,21 @@ namespace Blind_Client.BlindChatCode
             string sql = $"insert into ChatRoomJoined (ID, roomID, userID, time) values ({roomJoined.ID}, {roomJoined.RoomID}, {roomJoined.UserID}, \'{roomJoined.Time}\');";
             DB.ExecuteNonQuery(sql);
 
+            ChatMessage message = new ChatMessage();
+            message.RoomID = roomJoined.RoomID;
+            message.UserID = 0;
+            message.Time = roomJoined.Time;
+
+            User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
+            message.Message = $"{user.Name}님이 접속하셨습니다.";
+
+            AddMessage(message);
+
+            ExecuteWithInvoke(form, delegate
+            {
+                UI._RoomControl.LoadRooms();
+            });
+
             //UI.AddMember(roomJoined);
         }
         public void AddMessage(ChatMessage message)
@@ -89,6 +105,7 @@ namespace Blind_Client.BlindChatCode
 
             sql = $"update ChatRoom set LastMessageTime = \'{message.Time}\' where ID={message.RoomID}";
             DB.ExecuteNonQuery(sql);
+
             foreach (ChatRoom a in BlindChat.roomList)
             {
                 if (a.ID == message.RoomID)
@@ -102,6 +119,18 @@ namespace Blind_Client.BlindChatCode
             ExecuteWithInvoke(this.form, delegate
             {
                 UI._RoomControl.LoadRooms();
+                
+                    foreach(Room_Item item in UI._RoomControl.RoomItem_LayoutPanel.Controls)
+                    {
+                        if(item.ID == message.ID)
+                        {
+                            if (GetFormWithName(message.ID.ToString()) == null)
+                                item.NewMessage();
+                            else
+                                item.OpenedMessage();
+                        }
+                    }
+                
             });
 
 
@@ -141,6 +170,10 @@ namespace Blind_Client.BlindChatCode
                 });
                 tMessageRoom.Start();
             }
+        }
+        public void OpenMessageMenu()
+        {
+
         }
         public Form GetFormWithName(string formName)
         {

@@ -79,6 +79,7 @@ namespace Blind_Client.BlindChatCode
             room.ID = int.Parse(rdr["ID"].ToString());
             room.Name = rdr["Name"].ToString();
             room.Time = rdr["Time"].ToString();
+            room.LastMessageTime = rdr["LastMessageTime"].ToString();
 
             return room;
         }

@@ -126,6 +126,18 @@
     <Compile Include="BlindChatUI\RoomUI\CreateRoom_Item.Designer.cs">
       <DependentUpon>CreateRoom_Item.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Invitation_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Invitation_Form.Designer.cs">
+      <DependentUpon>Invitation_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Invitation_Item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Invitation_Item.Designer.cs">
+      <DependentUpon>Invitation_Item.cs</DependentUpon>
+    </Compile>
     <Compile Include="BlindChatUI\RoomUI\MessageRoom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,14 +227,38 @@
     <EmbeddedResource Include="BlindChatUI\RoomUI\Control_MessageRoom.resx">
       <DependentUpon>Control_MessageRoom.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\CreateRoomForm.resx">
+      <DependentUpon>CreateRoomForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\CreateRoom_Item.resx">
+      <DependentUpon>CreateRoom_Item.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Invitation_Form.resx">
+      <DependentUpon>Invitation_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Invitation_Item.resx">
+      <DependentUpon>Invitation_Item.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BlindChatUI\RoomUI\MessageRoom.resx">
       <DependentUpon>MessageRoom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BlindChatUI\RoomUI\Message_Item.resx">
       <DependentUpon>Message_Item.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Room_Item.resx">
+      <DependentUpon>Room_Item.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BlindChatUI\RoomUI\Room_Menu.resx">
       <DependentUpon>Room_Menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\UserUI\User_Category.resx">
+      <DependentUpon>User_Category.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\UserUI\User_Info.resx">
+      <DependentUpon>User_Info.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\UserUI\User_Item.resx">
+      <DependentUpon>User_Item.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BlindLock\LockForm.resx">
       <DependentUpon>LockForm.cs</DependentUpon>

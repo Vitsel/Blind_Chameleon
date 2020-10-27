@@ -46,9 +46,11 @@
             // btn_Check
             // 
             this.btn_Check.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btn_Check.Location = new System.Drawing.Point(225, 0);
+            this.btn_Check.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Check.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Check.Location = new System.Drawing.Point(245, 0);
             this.btn_Check.Name = "btn_Check";
-            this.btn_Check.Size = new System.Drawing.Size(75, 50);
+            this.btn_Check.Size = new System.Drawing.Size(55, 50);
             this.btn_Check.TabIndex = 1;
             this.btn_Check.Text = "X";
             this.btn_Check.UseVisualStyleBackColor = true;

@@ -32,8 +32,8 @@
             this.btn_More = new System.Windows.Forms.Button();
             this.btn_Chat = new System.Windows.Forms.Button();
             this.btn_Member = new System.Windows.Forms.Button();
-            this.Function_LayoutPanel = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Function_LayoutPanel = new System.Windows.Forms.Panel();
             this.Button_LayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,15 +94,6 @@
             this.btn_Member.UseVisualStyleBackColor = false;
             this.btn_Member.Click += new System.EventHandler(this.btn_Member_Click);
             // 
-            // Function_LayoutPanel
-            // 
-            this.Function_LayoutPanel.BackColor = System.Drawing.Color.SeaGreen;
-            this.Function_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Function_LayoutPanel.Location = new System.Drawing.Point(150, 0);
-            this.Function_LayoutPanel.Name = "Function_LayoutPanel";
-            this.Function_LayoutPanel.Size = new System.Drawing.Size(550, 500);
-            this.Function_LayoutPanel.TabIndex = 1;
-            // 
             // panel1
             // 
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -111,10 +102,20 @@
             this.panel1.Size = new System.Drawing.Size(150, 50);
             this.panel1.TabIndex = 4;
             // 
+            // Function_LayoutPanel
+            // 
+            this.Function_LayoutPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.Function_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Function_LayoutPanel.Location = new System.Drawing.Point(150, 0);
+            this.Function_LayoutPanel.Name = "Function_LayoutPanel";
+            this.Function_LayoutPanel.Size = new System.Drawing.Size(550, 500);
+            this.Function_LayoutPanel.TabIndex = 1;
+            // 
             // ChatMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.Controls.Add(this.Function_LayoutPanel);
             this.Controls.Add(this.Button_LayoutPanel);
             this.DoubleBuffered = true;

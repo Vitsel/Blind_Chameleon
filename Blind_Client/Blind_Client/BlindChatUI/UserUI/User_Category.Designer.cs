@@ -33,6 +33,7 @@
             // 
             // Lbl_Category
             // 
+            this.Lbl_Category.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.Lbl_Category.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Lbl_Category.Location = new System.Drawing.Point(0, 0);
             this.Lbl_Category.Margin = new System.Windows.Forms.Padding(0);

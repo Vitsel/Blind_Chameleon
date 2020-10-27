@@ -64,10 +64,10 @@ namespace Blind_Client
                 Close();
             }
 
-            timer1.Enabled = true;
-
-            RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
-            RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
+            //단축키&타이머 등록
+            //BlindLockTimer.Enabled = true;
+            //RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
+            //RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -76,17 +76,21 @@ namespace Blind_Client
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
 
-            documentCenter = new Doc_Center(document_Center, isInner);
-            documentCenter.Run();
-            document_Center.docCenter = documentCenter;
+            //documentCenter = new Doc_Center(document_Center, isInner);
+            //documentCenter.Run();
+            //document_Center.docCenter = documentCenter;
 
-            int _userID = 3;
+            int _userID = 4;
+            //UI
             _ChatMain = new ChatMain(_userID);
+            _ChatMain.Dock = DockStyle.Fill;
             MainControlPanel.Controls.Add(_ChatMain);
+            //Func
             chat = new BlindChat(_userID, ref _ChatMain, this);
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            lockForm = new LockForm(isInner);
+            //ScreenLocking
+            //lockForm = new LockForm(isInner);
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
@@ -101,60 +105,61 @@ namespace Blind_Client
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            timer1.Enabled = false;
-            UnregisterHotKey(this.Handle, 0);
-            UnregisterHotKey(this.Handle, 1);
+            //프로그램 종료시 단축키&타이머 해제
+            //BlindLockTimer.Enabled = false;
+            //UnregisterHotKey(this.Handle, 0);
+            //UnregisterHotKey(this.Handle, 1);
         }
 
 
 
 
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void BlindChatTimer_Tick(object sender, EventArgs e)
         {
-            if (GetIdleTime() > WAITTIMESEC * 1000) // 10초
-            {
-                timer1.Enabled = false;
-                lockForm.SetHook();
-                lockForm.DisableTask();
+            //if (GetIdleTime() > WAITTIMESEC * 1000) // 10초
+            //{
+            //    BlindLockTimer.Enabled = false;
+            //    lockForm.SetHook();
+            //    lockForm.DisableTask();
 
-                lockForm.ShowDialog();
+            //    lockForm.ShowDialog();
 
-                timer1.Enabled = true;
-            }
+            //    BlindLockTimer.Enabled = true;
+            //}
         }
 
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-            switch (m.Msg)
-            {
-                case WM_HOTKEY:
-                    {
-                        if (m.WParam == (IntPtr)0x0)
-                        {
-                            timer1.Enabled = false;
-                            lockForm.SetHook();
-                            lockForm.DisableTask();
+            //switch (m.Msg)
+            //{
+            //    case WM_HOTKEY:
+            //        {
+            //            if (m.WParam == (IntPtr)0x0)
+            //            {
+            //                BlindLockTimer.Enabled = false;
+            //                lockForm.SetHook();
+            //                lockForm.DisableTask();
 
-                            lockForm.ShowDialog();
+            //                lockForm.ShowDialog();
 
-                            timer1.Enabled = true;
-                        }
-                        else if (m.WParam == (IntPtr)0x1)
-                        {
+            //                BlindLockTimer.Enabled = true;
+            //            }
+            //            else if (m.WParam == (IntPtr)0x1)
+            //            {
 
-                            timer1.Enabled = false;
-                            lockForm.SetHook();
-                            lockForm.DisableTask();
+            //                BlindLockTimer.Enabled = false;
+            //                lockForm.SetHook();
+            //                lockForm.DisableTask();
 
-                            lockForm.ShowDialog();
+            //                lockForm.ShowDialog();
 
-                            timer1.Enabled = true;
-                        }
-                    }
-                    break;
-            }
+            //                BlindLockTimer.Enabled = true;
+            //            }
+            //        }
+            //        break;
+            //}
         }
 
         public enum KeyModifiers
