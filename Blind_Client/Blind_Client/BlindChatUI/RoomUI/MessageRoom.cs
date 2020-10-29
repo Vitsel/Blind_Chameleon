@@ -38,6 +38,10 @@ namespace Blind_Client.BlindChatUI.RoomUI
             {
                 msgItem = new Message_Item(message, MessageDirection.right);
             }
+            else if (message.UserID == 0)
+            {
+                msgItem = new Message_Item(message, MessageDirection.middle);
+            }
             else
             {
                 msgItem = new Message_Item(message, MessageDirection.left);
@@ -107,7 +111,8 @@ namespace Blind_Client.BlindChatUI.RoomUI
 
         private void btn_menu_Click(object sender, EventArgs e)
         {
-
+            Room_Menu menu = new Room_Menu(_room);
+            menu.Show();
         }
     }
 }

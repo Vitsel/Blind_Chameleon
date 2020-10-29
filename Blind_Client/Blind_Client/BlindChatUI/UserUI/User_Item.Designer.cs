@@ -48,9 +48,12 @@
             // Lbl_UserDepartment
             // 
             this.Lbl_UserDepartment.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Lbl_UserDepartment.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Lbl_UserDepartment.ForeColor = System.Drawing.Color.DimGray;
             this.Lbl_UserDepartment.Location = new System.Drawing.Point(0, 23);
             this.Lbl_UserDepartment.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_UserDepartment.Name = "Lbl_UserDepartment";
+            this.Lbl_UserDepartment.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.Lbl_UserDepartment.Size = new System.Drawing.Size(200, 17);
             this.Lbl_UserDepartment.TabIndex = 1;
             this.Lbl_UserDepartment.Text = "label1";
@@ -61,6 +64,7 @@
             // Lbl_UserName
             // 
             this.Lbl_UserName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Lbl_UserName.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Lbl_UserName.Location = new System.Drawing.Point(0, 0);
             this.Lbl_UserName.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_UserName.Name = "Lbl_UserName";

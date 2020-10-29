@@ -17,6 +17,8 @@ namespace Blind_Client.BlindChatUI.RoomUI
     {
         private int _UserID;
         private int _UserCount;
+        private bool isMove;
+        private Point fPt;
         public delegate void MyFunc(string text, int[] array);
         public MyFunc CreateRoom;
 
@@ -97,6 +99,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
                     item.AddUserCount = AddUserCount;
                     item.SubUserCount = SubUserCount;
                     item.LoadUserCount = LoadUserCount;
+                    item.Width = CreateRoomIItem_LayoutPanel.Width-6;
 
                     CreateRoomIItem_LayoutPanel.Controls.Add(item);
 
@@ -105,5 +108,28 @@ namespace Blind_Client.BlindChatUI.RoomUI
             LoadUserCount();
         }
 
+        private void lbl_FormName_MouseDown(object sender, MouseEventArgs e)
+        {
+            isMove = true;
+            fPt = new Point(e.X, e.Y);
+        }
+
+        private void lbl_FormName_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(isMove && (e.Button&MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (fPt.X - e.X), this.Top - (fPt.Y - e.Y));
+            }
+        }
+
+        private void lbl_FormName_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMove = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

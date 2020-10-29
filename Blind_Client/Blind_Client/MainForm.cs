@@ -64,8 +64,8 @@ namespace Blind_Client
                 Close();
             }
 
-            timer1.Enabled = true;
-
+            //단축키&타이머 등록
+            BlindLockTimer.Enabled = true;
             RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
             RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
         }
@@ -80,12 +80,15 @@ namespace Blind_Client
             documentCenter.Run();
             document_Center.docCenter = documentCenter;
             
-            int _userID = 3;
+            int _userID = 4;
             _ChatMain = new ChatMain(_userID);
+            _ChatMain.Dock = DockStyle.Fill;
             MainControlPanel.Controls.Add(_ChatMain);
+            //Func
             chat = new BlindChat(_userID, ref _ChatMain, this);
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
+            //ScreenLocking
             lockForm = new LockForm(isInner);
         }
 
@@ -101,26 +104,23 @@ namespace Blind_Client
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            timer1.Enabled = false;
+            //프로그램 종료시 단축키&타이머 해제
+            BlindLockTimer.Enabled = false;
             UnregisterHotKey(this.Handle, 0);
             UnregisterHotKey(this.Handle, 1);
         }
 
-
-
-
-
-        private void timer1_Tick(object sender, EventArgs e)
+        private void BlindChatTimer_Tick(object sender, EventArgs e)
         {
-            if (GetIdleTime() > WAITTIMESEC * 1000) // 10초
+            if (GetIdleTime() > WAITTIMESEC * 1000) 
             {
-                timer1.Enabled = false;
+                BlindLockTimer.Enabled = false;
                 lockForm.SetHook();
                 lockForm.DisableTask();
 
                 lockForm.ShowDialog();
 
-                timer1.Enabled = true;
+                BlindLockTimer.Enabled = true;
             }
         }
 
@@ -133,24 +133,24 @@ namespace Blind_Client
                     {
                         if (m.WParam == (IntPtr)0x0)
                         {
-                            timer1.Enabled = false;
+                            BlindLockTimer.Enabled = false;
                             lockForm.SetHook();
                             lockForm.DisableTask();
 
                             lockForm.ShowDialog();
 
-                            timer1.Enabled = true;
+                            BlindLockTimer.Enabled = true;
                         }
                         else if (m.WParam == (IntPtr)0x1)
                         {
 
-                            timer1.Enabled = false;
+                            BlindLockTimer.Enabled = false;
                             lockForm.SetHook();
                             lockForm.DisableTask();
 
                             lockForm.ShowDialog();
 
-                            timer1.Enabled = true;
+                            BlindLockTimer.Enabled = true;
                         }
                     }
                     break;

@@ -24,8 +24,9 @@ namespace Blind_Client.BlindLock
         public LockForm(bool isInner)
         {
             InitializeComponent();
+
             this.isInner = isInner;
-            pictureBox1.Image = Properties.Resources.BlindLockBack;
+            BlindLockPic.Image = Properties.Resources.BlindLockBack;
             
 
             int scrW = SystemInformation.VirtualScreen.Width;
@@ -33,37 +34,49 @@ namespace Blind_Client.BlindLock
             this.Size = new Size(scrW, scrH);
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0, 0);
+            this.TopMost = true;
 
-            lockSock = new BlindSocket();
-            lockSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.LOCKPORT);
+            if (!isInner)
+            {
+                lockSock = new BlindSocket();
+                lockSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.LOCKPORT);
+            }
         }
         ~LockForm()
         {
-            UnHook();
+            ActivateWhenUnlock();
             lockSock.Close();
         }
-
-        private void screenLock_Control1_Load(object sender, EventArgs e)
+        private void ActivateWhenLock()
         {
-            textBox1.Focus();
+
         }
-
-
-        private void button1_Click(object sender, EventArgs e)
+        private void ActivateWhenUnlock()
         {
             Hide();
-
             UnHook();
             EnableTask();
         }
 
+
+        private void screenLock_Control1_Load(object sender, EventArgs e)
+        {
+            tb_Password.Focus();
+        }
+
+        private void btn_Escape_Click(object sender, EventArgs e)
+        {
+            ActivateWhenUnlock();
+        }
+
         private void btn_Unlock_Click(object sender, EventArgs e)
         {
-            if (!isInner)
+            if (!isInner)//vpn으로 연결되어 있는 경우
             {
+                //서버로 정보 전송
                 LockInfo info = new LockInfo();
                 info.userName = Environment.UserName;
-                info.password = textBox1.Text;
+                info.password = tb_Password.Text;
 
                 byte[] data = BlindNetUtil.StructToByte(info);
                 LockPacket packet = new LockPacket();
@@ -73,52 +86,42 @@ namespace Blind_Client.BlindLock
                 byte[] packetData = BlindNetUtil.StructToByte(packet);
                 lockSock.CryptoSend(packetData, PacketType.MSG);
 
-
+                //서버로부터 받은 성공여부로 스크린락 해제
                 data = lockSock.CryptoReceiveMsg();
                 packet = BlindNetUtil.ByteToStruct<LockPacket>(data);
                 if (packet.Type == lockType.SUCCESS)
                 {
-                    textBox1.Text = "";
-                    Hide();
-
-                    UnHook();
-                    EnableTask();
+                    tb_Password.Text = "";
+                    ActivateWhenUnlock();
                 }
                 else
                 {
-                    MessageBox.Show("인증 실패하셨습니다.");
-                    textBox1.Text = "";
-                    textBox1.Focus();
+                    MessageBox.Show("서버로부터의 인증에 실패하셨습니다.");
+                    tb_Password.Text = "";
+                    tb_Password.Focus();
 
                     return;
                 }
             }
-            else
+            else//로컬에서 인증하는 경우
             {
                 int token;
                 bool result;
 
-                if(textBox1.Text == "unlock")
-                {
+                if(tb_Password.Text == "unlock")
                     result = true;
-                }
                 else
-                {
-                    result = LogonUser(Environment.UserName, ".", textBox1.Text, 8, 0, out token);
-                }
+                    result = LogonUser(Environment.UserName, ".", tb_Password.Text, 8, 0, out token);
 
 
                 if (result)
                 {
-                    textBox1.Text = "";
-                    Hide();
-
-                    UnHook();
-                    EnableTask();
+                    tb_Password.Text = "";
+                    ActivateWhenUnlock();
                 }
                 else
                 {
-                    MessageBox.Show("인증 실패하셨습니다.");
+                    MessageBox.Show("로컬에서 인증을 실패하셨습니다.");
                     return;
                 }
             }
@@ -282,7 +285,7 @@ namespace Blind_Client.BlindLock
             INFO = 3
         }
 
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private void tb_Password_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

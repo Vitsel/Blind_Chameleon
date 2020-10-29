@@ -343,10 +343,16 @@ namespace Blind_Client
                 progressBar.Maximum = size;
                 progressBar.Value = 0;
                 label_funcType.Text = "업로드 : ";
+#if DEBUG
+                label_funcType.Text = size.ToString();
+#endif
+                label_funcType.Update();
                 label_percent.Text = "0%";
+                label_percent.Update();
                 label_fName.Text = fi.FullName;
+                label_fName.Update();
 
-                if(!await docCenter.UploadFileAsync(treeview_Dir.SelectedNode, fi))
+                if (!await docCenter.UploadFileAsync(treeview_Dir.SelectedNode, fi))
                     MessageBox.Show(fi.Name + " 파일 업로드에 실패했습니다.");
             }
             SetVisibleDoing(false);
@@ -392,21 +398,26 @@ namespace Blind_Client
 
             foreach (string path in selectDirs)
             {
+                if (path == null)
+                    continue;
+
                 DirectoryInfo dir = new DirectoryInfo(path);
-                long tmp = 0;
+                int size = 0;
                 foreach (FileInfo fi in dir.GetFiles("*", SearchOption.AllDirectories))
-                    tmp += fi.Length;
-                int size = (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / tmp)) + 1;
+                    size += (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / fi.Length)) + 1;
                 size += dir.GetDirectories("*", SearchOption.AllDirectories).Length;
                 SetVisibleDoing(true);
                 progressBar.Maximum = size;
                 progressBar.Value = 0;
                 label_funcType.Text = "업로드 : ";
 #if DEBUG
-                label_funcType.Text = string.Format("{0}:{1}", tmp, size);
+                label_funcType.Text = size.ToString();
 #endif
+                label_funcType.Update();
                 label_percent.Text = "0%";
+                label_percent.Update();
                 label_fName.Text = dir.FullName;
+                label_fName.Update();
 
                 TreeNode newNode = await docCenter.UploadDirAsync(treeview_Dir.SelectedNode, path);
                 if (newNode == null)
@@ -420,6 +431,10 @@ namespace Blind_Client
             }
 
             docCenter.UpdateDir(treeview_Dir.SelectedNode);
+#if DEBUG
+            label_fName.Text = "완료";
+            label_fName.Update();
+#endif
             SetVisibleDoing(false);
         }
 

@@ -49,6 +49,19 @@ namespace Blind_Client.BlindChatCode
             }
             return messageList;
         }
+        static public List<User> GetUserList(int roomID)
+        {
+            List<User> userList = new List<User>();
+            string sql = $"select * from User where ID in (select userID from ChatRoomJoined where RoomID = {roomID})";
+            SQLiteDataReader rdr = DB.ExecuteSelect(sql);
+
+            while (rdr.Read())
+            {
+                User user = DB.GetUser(rdr);
+                userList.Add(user);
+            }
+            return userList;
+        }
 
         public void LoadList()
         {
@@ -58,14 +71,20 @@ namespace Blind_Client.BlindChatCode
 
 
 
-        public void InviteUser(int userID, int roomID, string roomName)
+        public static void InviteUser(int userID, int roomID)
         {
-            Invitation inv = new Invitation();
-            inv.Name = roomName;
-            inv.RoomID = roomID;
-            inv.UserID = userID;
+            ChatRoomJoined roomJoined = new ChatRoomJoined();
+            roomJoined.UserID = userID;
+            roomJoined.RoomID = roomID;
+            
+            ChatPacketSend(BlindChatUtil.StructToChatPacket(roomJoined));
 
-            ChatPacketSend(BlindChatUtil.StructToChatPacket(inv));
+            //Invitation inv = new Invitation();
+            //inv.Name = roomName;
+            //inv.RoomID = roomID;
+            //inv.UserID = userID;
+
+            //ChatPacketSend(BlindChatUtil.StructToChatPacket(inv));
         }
         public void CreateRoom(string text, int[] users)
         {
@@ -90,7 +109,7 @@ namespace Blind_Client.BlindChatCode
 
 
 
-        public void ChatPacketSend(ChatPacket chatPack)
+        public static void ChatPacketSend(ChatPacket chatPack)
         {
             if (chatPack.Data.Length > BlindChatConst.CHATDATASIZE)
             {

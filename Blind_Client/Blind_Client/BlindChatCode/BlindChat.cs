@@ -15,8 +15,8 @@ namespace Blind_Client.BlindChatCode
     {
         private int _UserID;
         public int UserID { get { return _UserID; } }
-        private BlindChatDB DB;
-        private BlindSocket chatSock;
+        static private BlindChatDB DB;
+        private static BlindSocket chatSock;
         private MainForm form;
         private ChatMain UI;
         public static List<User> userList = new List<User>();
@@ -99,8 +99,6 @@ namespace Blind_Client.BlindChatCode
                     AddMessage(message);
 
 
-
-
                 }
                 else if(packet.Type == ChatType.Reset)
                 {
@@ -115,6 +113,7 @@ namespace Blind_Client.BlindChatCode
                 else if(packet.Type == ChatType.Invitation)
                 {
 
+                    //UI._RoomControl.RoomItem_LayoutPanel.Controls.Add();
                 }
                 else
                 {

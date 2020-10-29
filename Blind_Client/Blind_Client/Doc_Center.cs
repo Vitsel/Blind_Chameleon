@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using BlindNet;
 using System.Threading.Tasks;
 using System.Text;
+using System.Diagnostics;
 
 namespace Blind_Client
 {
@@ -27,7 +28,7 @@ namespace Blind_Client
             socket = new BlindSocket();
             await socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
 
-            socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.MSG);
+            socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.Info);
             BlindPacket packet = socket.CryptoReceive();
             if (packet.header == PacketType.Fail)
             {
@@ -182,7 +183,7 @@ namespace Blind_Client
             fi.size = (uint)file.Length;
             fi.modDate = file.LastWriteTime.ToString();
             fi.type = Path.GetExtension(file.FullName).Replace(".", "");
-            socket.CryptoSend(BlindNetUtil.StructToByte(fi), PacketType.MSG);
+            socket.CryptoSend(BlindNetUtil.StructToByte(fi), PacketType.Info);
 
             FileStream fs = file.OpenRead();
             byte[] buffer = new byte[fs.Length];
@@ -203,13 +204,17 @@ namespace Blind_Client
                 data = new byte[BlindNetConst.DATASIZE];
             try
             {
+                socket.CryptoSendMiniPacket(null, PacketType.MSG);
+
                 for (int i = 0; i < data.Length; i += BlindNetConst.DATASIZE)
                 {
                     int len = (i + BlindNetConst.DATASIZE < data.Length) ? BlindNetConst.DATASIZE : data.Length - i;
                     byte[] tmp = new byte[len];
                     Array.Copy(data, i, tmp, 0, len);
-                    socket.CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
-
+                    int sendBytes = socket.CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
+                    Debug.WriteLine("[FileUpload] Send bytes {0}/{1}", i + len, data.Length);
+                    if (form.progressBar.Value == 146)
+                        MessageBox.Show("test");
                     form.progressBar.PerformStep();
                     form.progressBar.Update();
                     form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
@@ -261,7 +266,7 @@ namespace Blind_Client
             uint id = (uint)item.Tag;
             socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocFileDownload);
 
-            BlindPacket packet = await Task.Run(socket.CryptoReceive);
+            BlindPacket packet = await Task.Run(() => { return socket.CryptoReceive(); });
             if (packet.header == PacketType.Fail)
                 return false;
             string fileName = Encoding.UTF8.GetString(BlindNetUtil.ByteTrimEndNull(packet.data));
@@ -298,7 +303,7 @@ namespace Blind_Client
             uint id = (uint)item.Tag;
             socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocDirDownload);
 
-            BlindPacket packet = await Task.Run(socket.CryptoReceive);
+            BlindPacket packet = await Task.Run(() => { return socket.CryptoReceive(); });
             if (packet.header == PacketType.Fail)
                 return false;
 

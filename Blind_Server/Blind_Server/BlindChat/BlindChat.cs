@@ -68,6 +68,10 @@ namespace Blind_Server
                 {
                     ExecuteInvitation(chatPacket);
                 }
+                else if(chatPacket.Type == ChatType.Invitation)
+                {
+
+                }
 
             }
         }

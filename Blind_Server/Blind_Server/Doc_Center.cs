@@ -8,7 +8,7 @@ using System.IO;
 using BlindCryptography;
 using System.IO.Compression;
 using System.Collections.Generic;
-using Org.BouncyCastle.Crypto.Agreement.JPake;
+using System.Diagnostics;
 
 namespace Blind_Server
 {
@@ -140,7 +140,7 @@ namespace Blind_Server
                 //    Console.WriteLine("ERROR : [UID : " + uid + "] " + ex.Message);
                 //    return;
                 //}
-            }
+             }
         }
 
         void UpdateRoot()
@@ -368,7 +368,7 @@ namespace Blind_Server
         private void FileUpload(Directory_Info dir)
         {
             File_Info file = BlindNetUtil.ByteToStruct<File_Info>(socket.CryptoReceiveMsg());
-
+            Debug.WriteLine("Start FileUpload \"{0}\"", file.name);
             try
             {
                 string command = "SELECT path FROM files_info WHERE dir_id = " + dir.id + " AND name = '" + file.name + "';";
@@ -396,7 +396,9 @@ namespace Blind_Server
                         throw new Exception();
                 }
 
+                Debug.WriteLine("[FileUpload] Start leceiving");
                 byte[] data = socket.CryptoReceiveMsg();
+                Debug.WriteLine("[FileUpload] End leceiving {0} bytes", data.Length);
 
                 if (path == null)
                 {
@@ -453,7 +455,7 @@ namespace Blind_Server
             string fileName = (string)dataset.Tables[0].Rows[0]["name"];
             if (!isInner)
                 fileName = Path.GetFileNameWithoutExtension(fileName) + ".blind";
-            socket.CryptoSend(Encoding.UTF8.GetBytes(fileName), PacketType.MSG);
+            socket.CryptoSend(Encoding.UTF8.GetBytes(fileName), PacketType.Info);
 
             FileInfo file = new FileInfo((string)dataset.Tables[0].Rows[0]["path"]);
             if (!file.Exists)

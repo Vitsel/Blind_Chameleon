@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace BlindNet
 {
@@ -58,30 +59,24 @@ namespace BlindNet
         public int CryptoSend(byte[] data, PacketType header)
         {
             int realSendBytes = 0;
-            BlindPacket pack = new BlindPacket();
-            byte[] encrypted;
             if (data == null)
-                data = new byte[BlindNetConst.DATASIZE];
+                data = new byte[BlindNetConst.MINIDATASIZE];
             try
             {
                 if (header == PacketType.MSG)
+                {
+                    CryptoSendMiniPacket(null, PacketType.MSG);
+
                     for (int i = 0; i < data.Length; i += BlindNetConst.DATASIZE)
                     {
                         int len = (i + BlindNetConst.DATASIZE < data.Length) ? BlindNetConst.DATASIZE : data.Length - i;
-                        pack.header = (i + len == data.Length) ? PacketType.EOF : PacketType.Sending;
-                        pack.data = new byte[BlindNetConst.DATASIZE];
-                        Array.Copy(data, i, pack.data, 0, len);
-                        encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
-                        realSendBytes += socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
+                        byte[] tmp = new byte[len];
+                        Array.Copy(data, i, tmp, 0, len);
+                        CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
                     }
-                else
-                {
-                    pack.header = header;
-                    pack.data = new byte[BlindNetConst.DATASIZE];
-                    Array.Copy(data, 0, pack.data, 0, data.Length);
-                    encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
-                    realSendBytes = socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
                 }
+                else
+                    CryptoSendMiniPacket(data, header);
             }
             catch (Exception ex)
             {
@@ -91,42 +86,91 @@ namespace BlindNet
             return realSendBytes;
         }
 
-        public BlindPacket CryptoReceive()
+        public int CryptoSendPacket(byte[] data, PacketType header)
         {
-            byte[] data = null;
+            int realSendBytes = 0;
+            BlindPacket pack = new BlindPacket();
+            pack.header = header;
+            pack.data = new byte[BlindNetConst.DATASIZE];
+            Array.Copy(data, 0, pack.data, 0, data.Length);
+            byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
+            realSendBytes = socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
+            return realSendBytes;
+        }
+
+        public int CryptoSendMiniPacket(byte[] data, PacketType header)
+        {
+            if (data == null)
+                data = new byte[BlindNetConst.MINIDATASIZE];
+
+            int realSendBytes = 0;
+            BlindMiniPacket pack = new BlindMiniPacket();
+            pack.header = header;
+            pack.data = new byte[BlindNetConst.MINIDATASIZE];
+            Array.Copy(data, 0, pack.data, 0, data.Length);
+            byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
+            realSendBytes = socket.Send(encrypted, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+            return realSendBytes;
+        }
+
+        public BlindPacket CryptoReceive(bool isRecieving = false)
+        {
+            byte[] data = new byte[BlindNetConst.MINIPACKSIZE];
             int rcvNum = 0;
-            while (true)
+            byte[] decrypted = null;
+            BlindMiniPacket miniPacket = new BlindMiniPacket();
+            if (!isRecieving)
             {
-                byte[] tmp = new byte[BlindNetConst.PACKSIZE];
-                rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
-                if (rcvNum == 0) break;
+                rcvNum = socket.Receive(data, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                if (rcvNum == 0)
+                {
+                    BlindPacket end;
+                    end.data = null;
+                    end.header = PacketType.Disconnect;
+                    return end;
+                }
 
-                data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
-                if (data.Length == BlindNetConst.PACKSIZE)
-                    break;
+                decrypted = aes.Decryption(data);
+                miniPacket = BlindNetUtil.ByteToStruct<BlindMiniPacket>(decrypted);
+            }
+            if (isRecieving || miniPacket.header == PacketType.MSG)
+            {
+                data = null;
+                while (true)
+                {
+                    byte[] tmp = new byte[BlindNetConst.PACKSIZE];
+                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
+                    if (rcvNum == 0)
+                    {
+                        BlindPacket end;
+                        end.data = null;
+                        end.header = PacketType.Disconnect;
+                        return end;
+                    }
+
+                    data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
+                    if (data.Length == BlindNetConst.PACKSIZE)
+                        break;
+                }
+                decrypted = aes.Decryption(data);
             }
 
-            if (rcvNum == 0)
-            {
-                BlindPacket end;
-                end.data = null;
-                end.header = PacketType.Disconnect;
-                return end;
-            }
-            byte[] decrypted = aes.Decryption(data);
             return BlindNetUtil.ByteToStruct<BlindPacket>(decrypted);
         }
 
         public byte[] CryptoReceiveMsg()
         {
+            bool recvMode = false;
             BlindPacket packet = new BlindPacket();
             byte[] result = null;
             do
             {
-                packet = CryptoReceive();
+                packet = CryptoReceive(recvMode);
                 if (packet.header == PacketType.Disconnect)
                     return null;
                 result = BlindNetUtil.MergeArray<byte>(result, packet.data);
+                Debug.WriteLine("Receive {0}/{1} bytes", packet.data.Length, result.Length);
+                recvMode = true;
             } while (packet.header == PacketType.Sending);
             result = BlindNetUtil.ByteTrimEndNull(result);
             return result;
@@ -424,33 +468,42 @@ namespace BlindNet
         public byte[] data;
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    struct BlindMiniPacket
+    {
+        public PacketType header;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = BlindNetConst.MINIDATASIZE)]
+        public byte[] data;
+    }
+
     public enum PacketType : byte
     {
         Response = 1,           //단순 응답
         OK = 2,                 //긍정적인 응답
         Fail = 3,               //부정적인 응답
         Retry = 4,              //재전송 요청
-        MSG = 5,                //Packet에 사용되지는 않으나 송수신 메소드에서 MSG일 경우 Sending, EOD를 유동적으로 적용
-        EOF = 6,                //메시지의 마지막 패킷
-        Sending = 7,            //마지막이 아닌 패킷
-        Disconnect = 8,         //연결 종료
-        DocRefresh = 9,         //문서중앙화 새로고침
-        DocDirInfo = 10,        //문서중앙화 Directory 정보
-        DocAddDir = 11,         //문서중앙화 Directory 추가
-        DocRemoveDir = 12,      //문서중앙화 Directory 삭제
-        DocRemoveFile = 13,      //문서중앙화 File 삭제
-        DocChngNameDir = 14,    //문서중앙화 폴더 이름 변경
-        DocFileUpload = 15,     //문서중앙화 파일 업로드
-        DocFileDownload = 16,   //문서중앙화 파일 다운로드
-        DocDirDownload = 17,     //문서중앙화 폴더 다운로드
-        DocGetFileSize = 18,    //문서중앙화 파일 사이즈 가져오기
-        DocGetDirSize = 19     //문서중앙화 폴더 사이즈 가져오기
+        Info = 5,       //단순 정보
+        MSG = 6,                //Packet에 사용되지는 않으나 송수신 메소드에서 MSG일 경우 Sending, EOD를 유동적으로 적용
+        EOF = 7,                //메시지의 마지막 패킷
+        Sending = 8,            //마지막이 아닌 패킷
+        Disconnect = 9,         //연결 종료
+        DocRefresh = 10,         //문서중앙화 새로고침
+        DocDirInfo = 11,        //문서중앙화 Directory 정보
+        DocAddDir = 12,         //문서중앙화 Directory 추가
+        DocRemoveDir = 13,      //문서중앙화 Directory 삭제
+        DocRemoveFile = 14,      //문서중앙화 File 삭제
+        DocChngNameDir = 15,    //문서중앙화 폴더 이름 변경
+        DocFileUpload = 16,     //문서중앙화 파일 업로드
+        DocFileDownload = 17,   //문서중앙화 파일 다운로드
+        DocDirDownload = 18,     //문서중앙화 폴더 다운로드
+        DocGetFileSize = 19,    //문서중앙화 파일 사이즈 가져오기
+        DocGetDirSize = 20     //문서중앙화 폴더 사이즈 가져오기
     }
 
     static class BlindNetConst
     {
-        public const string ServerIP = "127.0.0.1";
-        //public const string ServerIP = "10.0.1.6";
+        //public const string ServerIP = "127.0.0.1";
+        public const string ServerIP = "10.0.1.6";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
@@ -458,6 +511,8 @@ namespace BlindNet
         public const int DEVICECTLPORT = 55558;
         public const int LOCKPORT = 55559;
         public const int MAXQ = 100;
+        public const int MINIPACKSIZE = 528;
+        public const int MINIDATASIZE = 512;
         //public const int PACKSIZE = 1048592;
         public const int PACKSIZE = 524304;
         //public const int DATASIZE = 1048576;

@@ -30,11 +30,14 @@
         {
             this.lbl_Name = new System.Windows.Forms.Label();
             this.lbl_Info = new System.Windows.Forms.Label();
+            this.btn_NewMessage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbl_Name
             // 
+            this.lbl_Name.BackColor = System.Drawing.SystemColors.Control;
             this.lbl_Name.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lbl_Name.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Name.Location = new System.Drawing.Point(0, 0);
             this.lbl_Name.Name = "lbl_Name";
             this.lbl_Name.Size = new System.Drawing.Size(400, 25);
@@ -47,6 +50,8 @@
             // lbl_Info
             // 
             this.lbl_Info.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lbl_Info.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Info.ForeColor = System.Drawing.Color.DimGray;
             this.lbl_Info.Location = new System.Drawing.Point(0, 25);
             this.lbl_Info.Name = "lbl_Info";
             this.lbl_Info.Size = new System.Drawing.Size(400, 15);
@@ -56,10 +61,20 @@
             this.lbl_Info.Click += new System.EventHandler(this.lbl_Name_Click);
             this.lbl_Info.DoubleClick += new System.EventHandler(this.lbl_Name_DoubleClick);
             // 
+            // btn_NewMessage
+            // 
+            this.btn_NewMessage.BackColor = System.Drawing.Color.Transparent;
+            this.btn_NewMessage.Location = new System.Drawing.Point(377, 5);
+            this.btn_NewMessage.Name = "btn_NewMessage";
+            this.btn_NewMessage.Size = new System.Drawing.Size(20, 20);
+            this.btn_NewMessage.TabIndex = 2;
+            this.btn_NewMessage.UseVisualStyleBackColor = false;
+            // 
             // Room_Item
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn_NewMessage);
             this.Controls.Add(this.lbl_Info);
             this.Controls.Add(this.lbl_Name);
             this.Margin = new System.Windows.Forms.Padding(0);
@@ -74,5 +89,6 @@
 
         private System.Windows.Forms.Label lbl_Name;
         private System.Windows.Forms.Label lbl_Info;
+        private System.Windows.Forms.Button btn_NewMessage;
     }
 }

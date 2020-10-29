@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.BlindLockPic = new System.Windows.Forms.PictureBox();
+            this.tbl_InfoLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.btn_Escape = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tb_Password = new System.Windows.Forms.TextBox();
             this.btn_Unlock = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BlindLockPic)).BeginInit();
+            this.tbl_InfoLayout.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,8 +46,8 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BlindLockPic, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tbl_InfoLayout, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
@@ -58,50 +58,50 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // pictureBox1
+            // BlindLockPic
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(600, 450);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.BlindLockPic.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BlindLockPic.Location = new System.Drawing.Point(0, 0);
+            this.BlindLockPic.Margin = new System.Windows.Forms.Padding(0);
+            this.BlindLockPic.Name = "BlindLockPic";
+            this.BlindLockPic.Size = new System.Drawing.Size(600, 450);
+            this.BlindLockPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.BlindLockPic.TabIndex = 0;
+            this.BlindLockPic.TabStop = false;
             // 
-            // tableLayoutPanel2
+            // tbl_InfoLayout
             // 
-            this.tableLayoutPanel2.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Controls.Add(this.button1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.panel1, 0, 1);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(603, 0);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(197, 450);
-            this.tableLayoutPanel2.TabIndex = 1;
+            this.tbl_InfoLayout.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.tbl_InfoLayout.ColumnCount = 1;
+            this.tbl_InfoLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tbl_InfoLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tbl_InfoLayout.Controls.Add(this.btn_Escape, 0, 0);
+            this.tbl_InfoLayout.Controls.Add(this.panel1, 0, 1);
+            this.tbl_InfoLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbl_InfoLayout.Location = new System.Drawing.Point(603, 0);
+            this.tbl_InfoLayout.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.tbl_InfoLayout.Name = "tbl_InfoLayout";
+            this.tbl_InfoLayout.RowCount = 3;
+            this.tbl_InfoLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tbl_InfoLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tbl_InfoLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tbl_InfoLayout.Size = new System.Drawing.Size(197, 450);
+            this.tbl_InfoLayout.TabIndex = 1;
             // 
-            // button1
+            // btn_Escape
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(119, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 42);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "비상버튼";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_Escape.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Escape.Location = new System.Drawing.Point(119, 3);
+            this.btn_Escape.Name = "btn_Escape";
+            this.btn_Escape.Size = new System.Drawing.Size(75, 42);
+            this.btn_Escape.TabIndex = 1;
+            this.btn_Escape.Text = "비상버튼";
+            this.btn_Escape.UseVisualStyleBackColor = true;
+            this.btn_Escape.Click += new System.EventHandler(this.btn_Escape_Click);
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.tb_Password);
             this.panel1.Controls.Add(this.btn_Unlock);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 125);
@@ -110,17 +110,17 @@
             this.panel1.Size = new System.Drawing.Size(197, 200);
             this.panel1.TabIndex = 0;
             // 
-            // textBox1
+            // tb_Password
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBox1.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(0, 138);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.PasswordChar = '⬤';
-            this.textBox1.Size = new System.Drawing.Size(197, 30);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.tb_Password.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tb_Password.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tb_Password.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_Password.Location = new System.Drawing.Point(0, 138);
+            this.tb_Password.Name = "tb_Password";
+            this.tb_Password.PasswordChar = '⬤';
+            this.tb_Password.Size = new System.Drawing.Size(197, 30);
+            this.tb_Password.TabIndex = 2;
+            this.tb_Password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_Password_KeyDown);
             // 
             // btn_Unlock
             // 
@@ -149,8 +149,8 @@
             this.Text = "LockForm";
             this.Load += new System.EventHandler(this.screenLock_Control1_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.tableLayoutPanel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.BlindLockPic)).EndInit();
+            this.tbl_InfoLayout.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -160,11 +160,11 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox BlindLockPic;
+        private System.Windows.Forms.TableLayoutPanel tbl_InfoLayout;
+        private System.Windows.Forms.Button btn_Escape;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tb_Password;
         private System.Windows.Forms.Button btn_Unlock;
     }
 }

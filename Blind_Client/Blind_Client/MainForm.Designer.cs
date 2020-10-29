@@ -33,8 +33,8 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.document_Center = new Blind_Client.Document_Center();
+            this.BlindLockTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.MainControlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -45,7 +45,7 @@
             this.Button_DocCenter.Location = new System.Drawing.Point(3, 2);
             this.Button_DocCenter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Button_DocCenter.Name = "Button_DocCenter";
-            this.Button_DocCenter.Size = new System.Drawing.Size(100, 58);
+            this.Button_DocCenter.Size = new System.Drawing.Size(87, 46);
             this.Button_DocCenter.TabIndex = 0;
             this.Button_DocCenter.Text = "문서중앙화";
             this.Button_DocCenter.UseVisualStyleBackColor = true;
@@ -54,7 +54,7 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 93F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.Button_DocCenter, 0, 0);
@@ -65,10 +65,11 @@
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(700, 360);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // MainControlPanel
@@ -77,28 +78,26 @@
             this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 2);
             this.MainControlPanel.Controls.Add(this.document_Center);
             this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainControlPanel.Location = new System.Drawing.Point(109, 66);
-            this.MainControlPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MainControlPanel.Location = new System.Drawing.Point(96, 53);
             this.MainControlPanel.Name = "MainControlPanel";
-            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
-            this.MainControlPanel.Size = new System.Drawing.Size(688, 380);
+            this.MainControlPanel.Size = new System.Drawing.Size(601, 304);
             this.MainControlPanel.TabIndex = 3;
+            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
             // 
             // btn_ActivateChat
             // 
             this.btn_ActivateChat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_ActivateChat.Location = new System.Drawing.Point(3, 66);
-            this.btn_ActivateChat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_ActivateChat.Location = new System.Drawing.Point(3, 53);
             this.btn_ActivateChat.Name = "btn_ActivateChat";
-            this.btn_ActivateChat.Size = new System.Drawing.Size(100, 54);
+            this.btn_ActivateChat.Size = new System.Drawing.Size(87, 44);
             this.btn_ActivateChat.TabIndex = 0;
             this.btn_ActivateChat.Text = "채팅";
             this.btn_ActivateChat.UseVisualStyleBackColor = true;
             this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
             // 
-            // timer1
+            // BlindLockTimer
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.BlindLockTimer.Tick += new System.EventHandler(this.BlindChatTimer_Tick);
             // 
             // document_Center
             // 
@@ -111,9 +110,9 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(700, 360);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
@@ -135,7 +134,7 @@
         private System.Windows.Forms.Button btn_ActivateChat;
         private System.Windows.Forms.Panel MainControlPanel;
         public Document_Center document_Center;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer BlindLockTimer;
     }
 }
 
