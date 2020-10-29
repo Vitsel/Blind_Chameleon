@@ -171,7 +171,7 @@ namespace Blind_Client
             return true;
         }
 
-        public async Task UploadFileAsync(TreeNode node, FileInfo file)
+        public async Task<bool> UploadFileAsync(TreeNode node, FileInfo file)
         {
             Directory_Info dir = (Directory_Info)node.Tag;
             socket.CryptoSend(BlindNetUtil.StructToByte(dir), PacketType.DocFileUpload);
@@ -189,13 +189,41 @@ namespace Blind_Client
             await fs.ReadAsync(buffer, 0, (int)fs.Length);
             fs.Close();
 
-            await Task.Run(() => socket.CryptoSend(buffer, PacketType.MSG));
+            SendFile(buffer);
             BlindPacket packet = socket.CryptoReceive();
             if (packet.header == PacketType.Fail)
+                return false;
+
+            return true;
+        }
+
+        private bool SendFile(byte[] data)
+        {
+            if (data == null)
+                data = new byte[BlindNetConst.DATASIZE];
+            try
             {
-                MessageBox.Show(file.Name + " 파일 업로드에 실패했습니다.");
-                return;
+                for (int i = 0; i < data.Length; i += BlindNetConst.DATASIZE)
+                {
+                    int len = (i + BlindNetConst.DATASIZE < data.Length) ? BlindNetConst.DATASIZE : data.Length - i;
+                    byte[] tmp = new byte[len];
+                    Array.Copy(data, i, tmp, 0, len);
+                    socket.CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
+
+                    form.progressBar.PerformStep();
+                    form.progressBar.Update();
+                    form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
+#if DEBUG
+                    form.label_percent.Text = form.progressBar.Value.ToString();
+#endif
+                    form.label_percent.Update();
+                }
             }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<TreeNode> UploadDirAsync(TreeNode node, string path)
@@ -216,6 +244,15 @@ namespace Blind_Client
             newNode.Text = newDir.name;
             newNode.ImageIndex = 0;
             newNode.SelectedImageIndex = 0;
+
+            form.progressBar.PerformStep();
+            form.progressBar.Update();
+            form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
+#if DEBUG
+            form.label_percent.Text = form.progressBar.Value.ToString();
+#endif
+            form.label_percent.Update();
+
             return newNode;
         }
 
@@ -229,7 +266,20 @@ namespace Blind_Client
                 return false;
             string fileName = Encoding.UTF8.GetString(BlindNetUtil.ByteTrimEndNull(packet.data));
 
-            byte[] data = socket.CryptoReceiveMsg();
+            byte[] data = null;
+            do
+            {
+                packet = socket.CryptoReceive();
+                if (packet.header == PacketType.Disconnect)
+                    return false;
+                data = BlindNetUtil.MergeArray<byte>(data, packet.data);
+                form.progressBar.PerformStep();
+                form.progressBar.Update();
+                form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
+                form.label_percent.Update();
+            } while (packet.header == PacketType.Sending);
+            data = BlindNetUtil.ByteTrimEndNull(data);
+
             FileInfo file = new FileInfo(dPath + fileName);
             int tmp = 1;
             while (file.Exists)
@@ -242,6 +292,9 @@ namespace Blind_Client
 
         public async Task<bool> DownloadDir(ListViewItem item)
         {
+            form.label_fName.Text = "(압축중)" + form.selected.FullPath + "\\" + item.Text;
+            form.label_fName.Update();
+
             uint id = (uint)item.Tag;
             socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocDirDownload);
 
@@ -249,8 +302,24 @@ namespace Blind_Client
             if (packet.header == PacketType.Fail)
                 return false;
 
+            form.label_fName.Text = form.selected.FullPath + "\\" + item.Text;
+            form.label_fName.Update();
+
             string fileName = dPath + item.Text + ".zip";
-            byte[] data = socket.CryptoReceiveMsg();
+            byte[] data = null;
+            do
+            {
+                packet = socket.CryptoReceive();
+                if (packet.header == PacketType.Disconnect)
+                    return false;
+                data = BlindNetUtil.MergeArray<byte>(data, packet.data);
+                form.progressBar.PerformStep();
+                form.progressBar.Update();
+                form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
+                form.label_percent.Update();
+            } while (packet.header == PacketType.Sending);
+            data = BlindNetUtil.ByteTrimEndNull(data);
+
             FileInfo file = new FileInfo(fileName);
             int tmp = 1;
             while (file.Exists)
@@ -259,6 +328,26 @@ namespace Blind_Client
             fs.Write(data, 0, data.Length);
             fs.Close();
             return true;
+        }
+
+        public int GetFilesSize(ListViewItem item)
+        {
+            int result = 0;
+
+            if (item.SubItems[2].Text == string.Empty)
+                socket.CryptoSend(BitConverter.GetBytes((uint)item.Tag), PacketType.DocGetDirSize);
+            else
+                socket.CryptoSend(BitConverter.GetBytes((uint)item.Tag), PacketType.DocGetFileSize);
+
+            BlindPacket pack = socket.CryptoReceive();
+            if (pack.header != PacketType.Response)
+                return 0;
+            byte[] tmp = new byte[8];
+            Array.Copy(pack.data, 0, tmp, 0, tmp.Length);
+            long size = BitConverter.ToInt64(tmp, 0);
+            result = (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / size)) + 1;
+
+            return result;
         }
     }
 

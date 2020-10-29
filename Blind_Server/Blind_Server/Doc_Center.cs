@@ -115,6 +115,22 @@ namespace Blind_Server
                             DirDownload(BitConverter.ToUInt32(tmp, 0));
                             break;
                         }
+                    case PacketType.DocGetFileSize:
+                        {
+                            byte[] data = BlindNetUtil.ByteTrimEndNull(packet.data);
+                            byte[] tmp = new byte[4];
+                            Array.Copy(data, 0, tmp, 0, data.Length);
+                            GetFileSize(BitConverter.ToUInt32(tmp, 0));
+                            break;
+                        }
+                    case PacketType.DocGetDirSize:
+                        {
+                            byte[] data = BlindNetUtil.ByteTrimEndNull(packet.data);
+                            byte[] tmp = new byte[4];
+                            Array.Copy(data, 0, tmp, 0, data.Length);
+                            GetDirSize(BitConverter.ToUInt32(tmp, 0));
+                            break;
+                        }
                     case PacketType.Disconnect:
                         return;
                 }
@@ -475,7 +491,6 @@ namespace Blind_Server
                     return;
                 }
             }
-            socket.CryptoSend(null, PacketType.OK);
 
             string dirName = GetDirPath(id);
             for (int i = 0; i < fileList.Count; i++)
@@ -502,7 +517,60 @@ namespace Blind_Server
                             archive.CreateEntryFromFile(file["PATH"], file["NAME"]);
                     }
                 }
+                socket.CryptoSend(null, PacketType.OK);
                 socket.CryptoSend(ms.ToArray(), PacketType.MSG);
+            }
+        }
+
+        private void GetFileSize(uint id)
+        {
+            try
+            {
+                string command = "SELECT path FROM files_info WHERE id = " + id;
+                MySqlCommand commander = new MySqlCommand(command, connection);
+                MySqlDataReader reader = commander.ExecuteReader();
+                string path = null;
+                if (reader.Read())
+                    path = (string)reader["path"];
+                else
+                    throw new Exception();
+                reader.Close();
+
+                FileInfo file = new FileInfo(path);
+                if (!file.Exists)
+                    throw new Exception();
+
+                socket.CryptoSend(BitConverter.GetBytes(file.Length), PacketType.Response);
+            }
+            catch (Exception ex)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+            }
+        }
+
+        private void GetDirSize(uint id)
+        {
+            try
+            {
+                string command = "SELECT path FROM directorys_info WHERE id = " + id;
+                MySqlCommand commander = new MySqlCommand(command, connection);
+                MySqlDataReader reader = commander.ExecuteReader();
+                string path = null;
+                if (reader.Read())
+                    path = (string)reader["path"];
+                else
+                    throw new Exception();
+                reader.Close();
+
+                long size = 0;
+                DirectoryInfo dir = new DirectoryInfo(path);
+                foreach (FileInfo fi in dir.GetFiles("*", SearchOption.AllDirectories))
+                    size += fi.Length;
+                socket.CryptoSend(BitConverter.GetBytes(size), PacketType.Response);
+            }
+            catch (Exception ex)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
             }
         }
 

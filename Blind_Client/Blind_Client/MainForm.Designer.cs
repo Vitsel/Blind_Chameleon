@@ -32,9 +32,9 @@
             this.Button_DocCenter = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
-            this.document_Center = new Blind_Client.Document_Center();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.document_Center = new Blind_Client.Document_Center();
             this.tableLayoutPanel1.SuspendLayout();
             this.MainControlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -60,19 +60,20 @@
             this.tableLayoutPanel1.Controls.Add(this.Button_DocCenter, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.MainControlPanel, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.btn_ActivateChat, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(-3, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(803, 451);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // MainControlPanel
             // 
+            this.MainControlPanel.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 2);
             this.MainControlPanel.Controls.Add(this.document_Center);
             this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -80,17 +81,8 @@
             this.MainControlPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MainControlPanel.Name = "MainControlPanel";
             this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
-            this.MainControlPanel.Size = new System.Drawing.Size(691, 381);
+            this.MainControlPanel.Size = new System.Drawing.Size(688, 380);
             this.MainControlPanel.TabIndex = 3;
-            // 
-            // document_Center
-            // 
-            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.document_Center.Location = new System.Drawing.Point(0, 0);
-            this.document_Center.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.document_Center.Name = "document_Center";
-            this.document_Center.Size = new System.Drawing.Size(691, 381);
-            this.document_Center.TabIndex = 1;
             // 
             // btn_ActivateChat
             // 
@@ -108,6 +100,15 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // document_Center
+            // 
+            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.document_Center.Location = new System.Drawing.Point(0, 0);
+            this.document_Center.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.document_Center.Name = "document_Center";
+            this.document_Center.Size = new System.Drawing.Size(688, 380);
+            this.document_Center.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -121,6 +122,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.MainControlPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

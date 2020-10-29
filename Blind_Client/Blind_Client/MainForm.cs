@@ -26,7 +26,7 @@ namespace Blind_Client
         [DllImport("user32.dll")]
         private static extern int UnregisterHotKey(IntPtr hwnd, int id);
         const int WM_HOTKEY = 0x0312;
-        const uint WAITTIMESEC = 10;
+        const uint WAITTIMESEC = 60;
 
         bool isInner;
         public SynchronizationContext _uiSyncContext;
@@ -79,7 +79,7 @@ namespace Blind_Client
             documentCenter = new Doc_Center(document_Center, isInner);
             documentCenter.Run();
             document_Center.docCenter = documentCenter;
-
+            
             int _userID = 3;
             _ChatMain = new ChatMain(_userID);
             MainControlPanel.Controls.Add(_ChatMain);

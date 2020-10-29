@@ -59,47 +59,64 @@ namespace BlindNet
         public int CryptoSend(byte[] data, PacketType header)
         {
             int realSendBytes = 0;
-            BlindPacket pack = new BlindPacket();
-            byte[] encrypted;
             if (data == null)
                 data = new byte[BlindNetConst.DATASIZE];
             try
             {
                 if (header == PacketType.MSG)
+                {
                     for (int i = 0; i < data.Length; i += BlindNetConst.DATASIZE)
                     {
                         int len = (i + BlindNetConst.DATASIZE < data.Length) ? BlindNetConst.DATASIZE : data.Length - i;
-                        pack.header = (i + len == data.Length) ? PacketType.EOF : PacketType.Sending;
-                        pack.data = new byte[BlindNetConst.DATASIZE];
-                        Array.Copy(data, i, pack.data, 0, len);
-                        encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
-                        realSendBytes += socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
+                        byte[] tmp = new byte[len];
+                        Array.Copy(data, i, tmp, 0, len);
+                        CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
                     }
-                else
-                {
-                    pack.header = header;
-                    pack.data = new byte[BlindNetConst.DATASIZE];
-                    Array.Copy(data, 0, pack.data, 0, data.Length);
-                    encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
-                    realSendBytes = socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
                 }
+                else
+                    CryptoSendPacket(data, header);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                IPEndPoint iep = (IPEndPoint)(socket.RemoteEndPoint);
+                Console.WriteLine("ERROR : [Host : " + iep.Address + ":" + iep.Port + "] " + ex.Message);
             }
+            return realSendBytes;
+        }
+
+        public int CryptoSendPacket(byte[] data, PacketType header)
+        {
+            int realSendBytes = 0;
+            BlindPacket pack = new BlindPacket();
+            pack.header = header;
+            pack.data = new byte[BlindNetConst.DATASIZE];
+            Array.Copy(data, 0, pack.data, 0, data.Length);
+            byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
+            realSendBytes = socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
             return realSendBytes;
         }
 
         public BlindPacket CryptoReceive()
         {
-            byte[] data = new byte[BlindNetConst.PACKSIZE];
-            int rcvNum = socket.Receive(data, BlindNetConst.PACKSIZE, SocketFlags.None);
+            byte[] data = null;
+            int rcvNum = 0;
+            while (true)
+            {
+                byte[] tmp = new byte[BlindNetConst.PACKSIZE];
+                rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
+                if (rcvNum == 0) break;
+
+                data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
+                if (data.Length == BlindNetConst.PACKSIZE)
+                    break;
+            }
+
             if (rcvNum == 0)
             {
                 BlindPacket end;
                 end.data = null;
                 end.header = PacketType.Disconnect;
+                return end;
             }
             byte[] decrypted = aes.Decryption(data);
             return BlindNetUtil.ByteToStruct<BlindPacket>(decrypted);
@@ -422,21 +439,25 @@ namespace BlindNet
         DocChngNameDir = 14,    //문서중앙화 폴더 이름 변경
         DocFileUpload = 15,     //문서중앙화 파일 업로드
         DocFileDownload = 16,   //문서중앙화 파일 다운로드
-        DocDirDownload = 17     //문서중앙화 폴더 다운로드
+        DocDirDownload = 17,     //문서중앙화 폴더 다운로드
+        DocGetFileSize = 18,    //문서중앙화 파일 사이즈 가져오기
+        DocGetDirSize = 19     //문서중앙화 폴더 사이즈 가져오기
     }
 
     static class BlindNetConst
     {
-        //public const string ServerIP = "127.0.0.1";
-        public const string ServerIP = "3.92.252.3";
+        public const string ServerIP = "127.0.0.1";
+        //public const string ServerIP = "3.92.252.3";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
         public const int DEVICECTLPORT = 55558;
         public const int LOCKPORT = 55559;
         public const int MAXQ = 100;
-        public const int PACKSIZE = 1040;
-        public const int DATASIZE = 1024;
+        //public const int PACKSIZE = 1048592;
+        public const int PACKSIZE = 524304;
+        //public const int DATASIZE = 1048576;
+        public const int DATASIZE = 524288;
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;

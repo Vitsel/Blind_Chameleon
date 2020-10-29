@@ -262,9 +262,6 @@
     <EmbeddedResource Include="Resources\opened-folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BlindLockBack.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\BlindLockBack.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

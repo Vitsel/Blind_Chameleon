@@ -93,8 +93,19 @@ namespace BlindNet
 
         public BlindPacket CryptoReceive()
         {
-            byte[] data = new byte[BlindNetConst.PACKSIZE];
-            int rcvNum = socket.Receive(data, BlindNetConst.PACKSIZE, SocketFlags.None);
+            byte[] data = null;
+            int rcvNum = 0;
+            while (true)
+            {
+                byte[] tmp = new byte[BlindNetConst.PACKSIZE];
+                rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
+                if (rcvNum == 0) break;
+
+                data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
+                if (data.Length == BlindNetConst.PACKSIZE)
+                    break;
+            }
+
             if (rcvNum == 0)
             {
                 BlindPacket end;
@@ -390,7 +401,7 @@ namespace BlindNet
         {
             int count = arr.Length;
             while (count != 0 && arr[--count] == 0) ;
-            byte[] result = new byte[count+1];
+            byte[] result = new byte[count + 1];
             Array.Copy(arr, 0, result, 0, result.Length);
             return result;
         }
@@ -431,13 +442,15 @@ namespace BlindNet
         DocChngNameDir = 14,    //문서중앙화 폴더 이름 변경
         DocFileUpload = 15,     //문서중앙화 파일 업로드
         DocFileDownload = 16,   //문서중앙화 파일 다운로드
-        DocDirDownload = 17     //문서중앙화 폴더 다운로드
+        DocDirDownload = 17,     //문서중앙화 폴더 다운로드
+        DocGetFileSize = 18,    //문서중앙화 파일 사이즈 가져오기
+        DocGetDirSize = 19     //문서중앙화 폴더 사이즈 가져오기
     }
 
     static class BlindNetConst
     {
-        //public const string ServerIP = "127.0.0.1";
-        public const string ServerIP = "10.0.1.6";
+        public const string ServerIP = "127.0.0.1";
+        //public const string ServerIP = "10.0.1.6";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
@@ -445,8 +458,10 @@ namespace BlindNet
         public const int DEVICECTLPORT = 55558;
         public const int LOCKPORT = 55559;
         public const int MAXQ = 100;
-        public const int PACKSIZE = 1040;
-        public const int DATASIZE = 1024;
+        //public const int PACKSIZE = 1048592;
+        public const int PACKSIZE = 524304;
+        //public const int DATASIZE = 1048576;
+        public const int DATASIZE = 524288;
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;

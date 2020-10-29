@@ -9,16 +9,16 @@ namespace BlindCryptography
     {
         public class AES256
         {
-            public readonly RijndaelManaged aes;
+            public readonly AesManaged aes;
 
             public AES256(int keySize = 256, CipherMode mode = CipherMode.CBC, PaddingMode pad = PaddingMode.PKCS7)
             {
-                aes = new RijndaelManaged()
+                aes = new AesManaged()
                 {
-                    KeySize = keySize,
+                    //KeySize = keySize,
                     Mode = mode,
                     Padding = pad,
-                    BlockSize = 128
+                    //BlockSize = 128
                 };
                 aes.GenerateKey();
                 aes.GenerateIV();
@@ -26,17 +26,16 @@ namespace BlindCryptography
 
             public AES256(byte[] key, byte[] iv = null)
             {
-                aes = new RijndaelManaged()
+                aes = new AesManaged()
                 {
-                    KeySize = 256,
+                    //KeySize = 256,
                     Mode = CipherMode.CBC,
                     Padding = PaddingMode.PKCS7,
                     Key = key,
-                    BlockSize = 128
+                    //BlockSize = 128
                 };
                 if (iv == null)
                 {
-
                     byte[] tmp = new byte[16];
                     Array.Copy(key, tmp, 16);
                     aes.IV = tmp;
