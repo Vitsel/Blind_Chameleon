@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using Blind_Client.BlindChatUI;
 using Blind_Client.BlindLock;
+using Blind_Client.BlindWebDeviceClass;
 using System.Runtime.InteropServices;
 
 namespace Blind_Client
@@ -32,6 +33,7 @@ namespace Blind_Client
 
 
         bool isInner;
+        public string ClientID = "";
         private Socket socket;
         private Thread receiveThread;
 
@@ -40,24 +42,31 @@ namespace Blind_Client
         BlindSocket mainSocket;
         CancellationTokenSource token;
         Doc_Center documentCenter;
-        
+
+        BlindPacket blindClientCidPacket;
+
         ChatMain _ChatMain;
         BlindChat chat;
         Task tChat; 
         LockForm lockForm;
 
-        DeviceDriverHelper DDH;
+        BlindWebDevice WebDevice;
+        Task tWebDevice;
 
-        public MainForm(bool isInner)
+        
+        public MainForm(bool isInner,string ClientID)
         {
             InitializeComponent();
             this.isInner = isInner;
+            this.ClientID = ClientID;
+
             mainSocket = new BlindSocket();
             _uiSyncContext = SynchronizationContext.Current;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.FormClosing += MainForm_FormClosing; //폼 종료되는 것 연결
             if (!BlindNetUtil.IsConnectedInternet())
             {
                 MessageBox.Show("There is no internet connection", "확인", MessageBoxButtons.OK);
@@ -78,11 +87,23 @@ namespace Blind_Client
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            ClientID = "test1";
+            byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientID); // String -> bytes 변환
+            //Client Cid Get
+            mainSocket.CryptoSend(SendStringToByteGender,PacketType.Response);//서버로 클라이언트 id 보냄
+            blindClientCidPacket = mainSocket.CryptoReceive(); // 서버로부터 cid받아옴
+            byte[] data = BlindNetUtil.ByteTrimEndNull(blindClientCidPacket.data);
+            byte[] tmp = new byte[4];
+            Array.Copy(data, 0, tmp, 0, data.Length);
+            uint ClintCID = BitConverter.ToUInt32(tmp, 0);
+
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
 
-            DDH = new DeviceDriverHelper();
+            WebDevice = new BlindWebDevice();
+            tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+
 
             //documentCenter = new Doc_Center(document_Center, isInner);
             //documentCenter.Run();
@@ -101,40 +122,12 @@ namespace Blind_Client
             //tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler); 
 
             //lockForm = new LockForm(isInner);
-
-            //--------웹통신하면서 반환된 값에따라 usb,캠 차단하고 허용하고.-------------------
-            /*IPAddress ipaddress = IPAddress.Parse("127.0.0.1");
-            IPEndPoint endPoint = new IPEndPoint(ipaddress, 4444);
-
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(endPoint);
-
-            receiveThread = new Thread(new ThreadStart(Receive));
-            receiveThread.IsBackground = true;
-            receiveThread.Start();
-            */
         }
 
-        private void Receive_HWMessage()
+        private void MainForm_FormClosing(object sender,FormClosingEventArgs e)
         {
-            while (true)
-            {
-                byte[] recevieBuffer = new byte[512];
-                int length = socket.Receive(recevieBuffer, recevieBuffer.Length, SocketFlags.None);
-                string msg = Encoding.UTF8.GetString(recevieBuffer, 0, length);
-
-                if (msg == "UsbDeny")
-                    DDH.DeviceToggle("USB", true);
-                else if (msg == "UsbAllow")
-                    DDH.DeviceToggle("USB", false);
-
-                if (msg == "WebCamDeny")
-                    DDH.DeviceToggle("WebCam", true);
-                else if (msg == "WebCamAllow")
-                    DDH.DeviceToggle("WebCam", false);
-            }
-
-
+            WebDevice.MainFormClosingSocketClose();
+            Application.Exit();
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
