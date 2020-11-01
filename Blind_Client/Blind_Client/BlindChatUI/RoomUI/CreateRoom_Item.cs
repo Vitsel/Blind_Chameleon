@@ -18,7 +18,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
         public delegate void MyFunc();
         public MyFunc AddUserCount, SubUserCount, LoadUserCount;
 
-        public int UserID { get { return _User.ID; } }
+        public uint UserID { get { return _User.ID; } }
         public bool isClicked { get { return _isClicked; } }
 
         private void CreateRoom_Item_Load(object sender, EventArgs e)

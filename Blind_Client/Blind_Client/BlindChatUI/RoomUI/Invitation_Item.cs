@@ -8,15 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Blind_Client.BlindChatUI
+namespace Blind_Client.BlindChatUI.RoomUI
 {
-    public partial class Control_More : UserControl
+    public partial class Invitation_Item : UserControl
     {
-        private uint _UserID;
-        public Control_More(uint UserID)
+        public Invitation_Item()
         {
             InitializeComponent();
-            _UserID = UserID;
         }
     }
 }

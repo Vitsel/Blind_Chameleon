@@ -38,21 +38,26 @@
             this.botton_Upload = new System.Windows.Forms.Button();
             this.button_Download = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label_funcType = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.label_fName = new System.Windows.Forms.Label();
+            this.label_percent = new System.Windows.Forms.Label();
             this.treeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.treeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeview_Dir
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.treeview_Dir, 2);
             this.treeview_Dir.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeview_Dir.Location = new System.Drawing.Point(3, 43);
             this.treeview_Dir.Name = "treeview_Dir";
-            this.treeview_Dir.Size = new System.Drawing.Size(213, 366);
+            this.treeview_Dir.Size = new System.Drawing.Size(201, 366);
             this.treeview_Dir.TabIndex = 2;
             this.treeview_Dir.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeview_Dir_AfterLabelEdit);
             this.treeview_Dir.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeview_Dir_AfterSelect);
@@ -60,21 +65,22 @@
             // 
             // listview_File
             // 
+            this.listview_File.AllowColumnReorder = true;
             this.listview_File.CheckBoxes = true;
             this.listview_File.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name,
             this.modDate,
             this.type,
             this.size});
-            this.tableLayoutPanel1.SetColumnSpan(this.listview_File, 4);
             this.listview_File.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listview_File.HideSelection = false;
-            this.listview_File.Location = new System.Drawing.Point(222, 43);
+            this.listview_File.Location = new System.Drawing.Point(210, 43);
             this.listview_File.Name = "listview_File";
-            this.listview_File.Size = new System.Drawing.Size(468, 366);
+            this.listview_File.Size = new System.Drawing.Size(480, 366);
             this.listview_File.TabIndex = 3;
             this.listview_File.UseCompatibleStateImageBehavior = false;
             this.listview_File.View = System.Windows.Forms.View.Details;
+            this.listview_File.DoubleClick += new System.EventHandler(this.listview_File_DoubleClick);
             this.listview_File.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listview_File_MouseDown);
             // 
             // name
@@ -101,9 +107,9 @@
             // 
             this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.botton_Upload.Location = new System.Drawing.Point(501, 3);
+            this.botton_Upload.Location = new System.Drawing.Point(496, 3);
             this.botton_Upload.Name = "botton_Upload";
-            this.botton_Upload.Size = new System.Drawing.Size(89, 34);
+            this.botton_Upload.Size = new System.Drawing.Size(94, 34);
             this.botton_Upload.TabIndex = 4;
             this.botton_Upload.Text = "Upload ▼";
             this.botton_Upload.UseVisualStyleBackColor = true;
@@ -111,6 +117,7 @@
             // 
             // button_Download
             // 
+            this.button_Download.Cursor = System.Windows.Forms.Cursors.Default;
             this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_Download.Location = new System.Drawing.Point(596, 3);
@@ -123,25 +130,87 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 6;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.12469F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.87531F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
-            this.tableLayoutPanel1.Controls.Add(this.listview_File, 2, 1);
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel1.Controls.Add(this.treeview_Dir, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button_Download, 5, 0);
-            this.tableLayoutPanel1.Controls.Add(this.botton_Upload, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.listview_File, 1, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(693, 412);
             this.tableLayoutPanel1.TabIndex = 7;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 7;
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 83F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.label_funcType, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.progressBar, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label_fName, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.button_Download, 6, 0);
+            this.tableLayoutPanel2.Controls.Add(this.botton_Upload, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label_percent, 2, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(693, 40);
+            this.tableLayoutPanel2.TabIndex = 8;
+            // 
+            // label_funcType
+            // 
+            this.label_funcType.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label_funcType.AutoSize = true;
+            this.label_funcType.Location = new System.Drawing.Point(3, 12);
+            this.label_funcType.Name = "label_funcType";
+            this.label_funcType.Size = new System.Drawing.Size(77, 15);
+            this.label_funcType.TabIndex = 7;
+            this.label_funcType.Text = "다운로드 : ";
+            // 
+            // progressBar
+            // 
+            this.progressBar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.progressBar.Location = new System.Drawing.Point(85, 8);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(0);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(151, 23);
+            this.progressBar.TabIndex = 6;
+            // 
+            // label_fName
+            // 
+            this.label_fName.AutoSize = true;
+            this.label_fName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_fName.Location = new System.Drawing.Point(292, 0);
+            this.label_fName.Name = "label_fName";
+            this.label_fName.Size = new System.Drawing.Size(168, 40);
+            this.label_fName.TabIndex = 8;
+            this.label_fName.Text = "Path";
+            this.label_fName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label_percent
+            // 
+            this.label_percent.AutoSize = true;
+            this.label_percent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_percent.Location = new System.Drawing.Point(242, 0);
+            this.label_percent.Name = "label_percent";
+            this.label_percent.Size = new System.Drawing.Size(44, 40);
+            this.label_percent.TabIndex = 9;
+            this.label_percent.Text = "0%";
+            this.label_percent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // treeMenu
             // 
@@ -167,7 +236,7 @@
             // 
             this.listMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.listMenu.Name = "listMenu";
-            this.listMenu.Size = new System.Drawing.Size(211, 32);
+            this.listMenu.Size = new System.Drawing.Size(61, 4);
             // 
             // Document_Center
             // 
@@ -177,6 +246,8 @@
             this.Name = "Document_Center";
             this.Size = new System.Drawing.Size(693, 412);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.treeMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -196,5 +267,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ContextMenuStrip uploadMenu;
         private System.Windows.Forms.ContextMenuStrip listMenu;
+        public System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label label_funcType;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        public System.Windows.Forms.Label label_fName;
+        public System.Windows.Forms.Label label_percent;
     }
 }

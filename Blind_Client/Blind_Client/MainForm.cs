@@ -16,26 +16,24 @@ namespace Blind_Client
 {
     public partial class MainForm : Form
     {
-        //internal struct LASTINPUTINFO
-        //{
-        //    public uint cbSize;
-        //    public uint dwTime;
-        //}
-        //[DllImport("user32.dll")]
-        //private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii); 
-        //[DllImport("kernel32.dll")]
-        //private static extern uint GetLastError();
-        //[DllImport("user32.dll")]
-        //private static extern int RegisterHotKey(IntPtr hwnd, int id, KeyModifiers fsModifiers, Keys vk);
-        //[DllImport("user32.dll")]
-        //private static extern int UnregisterHotKey(IntPtr hwnd, int id);
-        //const int WM_HOTKEY = 0x0312;
-
+        internal struct LASTINPUTINFO
+        {
+            public uint cbSize;
+            public uint dwTime;
+        }
+        [DllImport("user32.dll")]
+        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+        [DllImport("kernel32.dll")]
+        private static extern uint GetLastError();
+        [DllImport("user32.dll")]
+        private static extern int RegisterHotKey(IntPtr hwnd, int id, KeyModifiers fsModifiers, Keys vk);
+        [DllImport("user32.dll")]
+        private static extern int UnregisterHotKey(IntPtr hwnd, int id);
+        const int WM_HOTKEY = 0x0312;
+        const uint WAITTIMESEC = 15;
 
         bool isInner;
         public string ClientID = "";
-        private Socket socket;
-        private Thread receiveThread;
 
         public SynchronizationContext _uiSyncContext;
 
@@ -50,16 +48,17 @@ namespace Blind_Client
         Task tChat; 
         LockForm lockForm;
 
+
+        VPN_Class VPNClass;
         BlindWebDevice WebDevice;
         Task tWebDevice;
-
         
         public MainForm(bool isInner,string ClientID)
         {
             InitializeComponent();
+
             this.isInner = isInner;
             this.ClientID = ClientID;
-
             mainSocket = new BlindSocket();
             _uiSyncContext = SynchronizationContext.Current;
         }
@@ -67,6 +66,7 @@ namespace Blind_Client
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.FormClosing += MainForm_FormClosing; //폼 종료되는 것 연결
+            
             if (!BlindNetUtil.IsConnectedInternet())
             {
                 MessageBox.Show("There is no internet connection", "확인", MessageBoxButtons.OK);
@@ -79,23 +79,33 @@ namespace Blind_Client
                 MessageBox.Show("Main socket connection failed.", "확인", MessageBoxButtons.OK);
                 Close();
             }
-            //timer1.Enabled = true;
-            
-            //RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
-            //RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
+
+            //단축키&타이머 등록
+            BlindLockTimer.Enabled = true;
+            RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
+            RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            ClientID = "test1";
+            VPNClass = new VPN_Class();
+            //클라이언트 cid 서버로부터 받아오기
+                //ClientID = "test1";
             byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientID); // String -> bytes 변환
-            //Client Cid Get
-            mainSocket.CryptoSend(SendStringToByteGender,PacketType.Response);//서버로 클라이언트 id 보냄
+            mainSocket.CryptoSend(SendStringToByteGender, PacketType.Response);//서버로 클라이언트 id 보냄
             blindClientCidPacket = mainSocket.CryptoReceive(); // 서버로부터 cid받아옴
-            byte[] data = BlindNetUtil.ByteTrimEndNull(blindClientCidPacket.data);
+            byte[] data = BlindNetUtil.ByteTrimEndNull(blindClientCidPacket.data); // 넑값 지움
             byte[] tmp = new byte[4];
             Array.Copy(data, 0, tmp, 0, data.Length);
             uint ClintCID = BitConverter.ToUInt32(tmp, 0);
+
+            if (ClintCID.ToString() == "0") //서버에서 아이디를 조회못했을때 0반환
+            {
+                MessageBox.Show("서버로부터 id를 받지 못하였거나 등록되지 않은 아이디입니다." + Environment.NewLine + "\t           관리자에게 문의하십시요.");
+                mainSocket.Close();
+                Application.Exit();
+                return;
+            }
 
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
@@ -104,35 +114,24 @@ namespace Blind_Client
             WebDevice = new BlindWebDevice();
             tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-
-            //documentCenter = new Doc_Center(document_Center, isInner);
-            //documentCenter.Run();
-            //document_Center.docCenter = documentCenter;
-
-            int _userID = 2;
-            _ChatMain = new ChatMain(_userID);
+            documentCenter = new Doc_Center(document_Center, isInner);
+            documentCenter.Run();
+            document_Center.docCenter = documentCenter;
+            
+            _ChatMain = new ChatMain(ClintCID);
+            _ChatMain.Dock = DockStyle.Fill;
             MainControlPanel.Controls.Add(_ChatMain);
-            //chat = new BlindChat(_userID, ref _ChatMain, this);
-            //tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+            //Func
+            chat = new BlindChat(ClintCID, ref _ChatMain, this);
+            tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            //int _userID = 4;
-            //_ChatMain = new ChatMain(_userID);
-            //MainControlPanel.Controls.Add(_ChatMain);
-            //chat = new BlindChat(_userID, ref _ChatMain, this);
-            //tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler); 
-
-            //lockForm = new LockForm(isInner);
-        }
-
-        private void MainForm_FormClosing(object sender,FormClosingEventArgs e)
-        {
-            WebDevice.MainFormClosingSocketClose();
-            Application.Exit();
+            //ScreenLocking
+            lockForm = new LockForm(isInner);
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
         {
-            //document_Center.BringToFront();
+            document_Center.BringToFront();
         }
 
         private void btn_ActivateChat_Click(object sender, EventArgs e)
@@ -140,95 +139,98 @@ namespace Blind_Client
             _ChatMain.BringToFront();
         }
 
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    timer1.Enabled = false;
-        //    lockForm.SetHook();
-        //    lockForm.DisableTask();
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            VPNClass.CMD_VPN_Instruction("VPN");
+            if (e.CloseReason != CloseReason.ApplicationExitCall) // application.EXIT 함수 호출했을때. 맨처음 cid 확인후 0 리턴받으면 exit함
+            {
+                WebDevice.MainFormClosingSocketClose();
+                //프로그램 종료시 단축키&타이머 해제
+                BlindLockTimer.Enabled = false;
+                UnregisterHotKey(this.Handle, 0);
+                UnregisterHotKey(this.Handle, 1);
+                Application.Exit();
+            }
+        }
 
-        //    lockForm.ShowDialog();
+        private void BlindChatTimer_Tick(object sender, EventArgs e)
+        {
+            if (GetIdleTime() > WAITTIMESEC * 1000) 
+            {
+                BlindLockTimer.Enabled = false;
+                lockForm.SetHook();
+                lockForm.DisableTask();
 
-        //    timer1.Enabled = true;
-        //}
-        //private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        //{
-        //    timer1.Enabled = false;
-        //    UnregisterHotKey(this.Handle, 0);
-        //    UnregisterHotKey(this.Handle, 1);
-        //}
+                lockForm.ShowDialog();
 
+                BlindLockTimer.Enabled = true;
+            }
+        }
 
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            switch (m.Msg)
+            {
+                case WM_HOTKEY:
+                    {
+                        if (m.WParam == (IntPtr)0x0)
+                        {
+                            BlindLockTimer.Enabled = false;
+                            lockForm.SetHook();
+                            lockForm.DisableTask();
 
+                            lockForm.ShowDialog();
 
+                            BlindLockTimer.Enabled = true;
+                        }
+                        else if (m.WParam == (IntPtr)0x1)
+                        {
 
-        //private void timer1_Tick(object sender, EventArgs e)
-        //{
-        //    if (GetIdleTime() > 10000) // 10초
-        //    {
-        //        timer1.Enabled = false;
+                            BlindLockTimer.Enabled = false;
+                            lockForm.SetHook();
+                            lockForm.DisableTask();
 
-        //        lockForm.ShowDialog();
-        //        timer1.Enabled = true;
-        //    }
-        //}
+                            lockForm.ShowDialog();
 
-        //protected override void WndProc(ref Message m)
-        //{
-        //    base.WndProc(ref m);
-        //    switch (m.Msg)
-        //    {
-        //        case WM_HOTKEY:
-        //            {
-        //                if (m.WParam == (IntPtr)0x0)
-        //                {
-        //                    timer1.Enabled = false;
+                            BlindLockTimer.Enabled = true;
+                        }
+                    }
+                    break;
+            }
+        }
 
-        //                    lockForm.ShowDialog();
-        //                    timer1.Enabled = true;
-        //                }
-        //                else if (m.WParam == (IntPtr)0x1)
-        //                {
-        //                    timer1.Enabled = false;
+        public enum KeyModifiers
+        {
+            None = 0,
+            Alt = 1,
+            Control = 2,
+            Shift = 4,
+            Windows = 8
+        };
+        public static uint GetIdleTime()
+        {
+            LASTINPUTINFO LastInPut = new LASTINPUTINFO();
+            LastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(LastInPut);
+            GetLastInputInfo(ref LastInPut);
 
-        //                    lockForm.ShowDialog();
-        //                    timer1.Enabled = true;
-        //                }
-        //            }
-        //            break;
-        //    }
-        //}
+            return ((uint)Environment.TickCount - LastInPut.dwTime);
+        }
 
-        //public enum KeyModifiers
-        //{
-        //    None = 0,
-        //    Alt = 1,
-        //    Control = 2,
-        //    Shift = 4,
-        //    Windows = 8
-        //};
-        //public static uint GetIdleTime()
-        //{
-        //    LASTINPUTINFO LastInPut = new LASTINPUTINFO();
-        //    LastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(LastInPut);
-        //    GetLastInputInfo(ref LastInPut);
+        public static long GetTickCount()
+        {
+            return Environment.TickCount;
+        }
 
-        //    return ((uint)Environment.TickCount - LastInPut.dwTime);
-        //}
-
-        //public static long GetTickCount()
-        //{
-        //    return Environment.TickCount;
-        //}
-
-        //public static long GetLastInputTime()
-        //{
-        //    LASTINPUTINFO lastInPut = new LASTINPUTINFO();
-        //    lastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(lastInPut);
-        //    if (!GetLastInputInfo(ref lastInPut))
-        //    {
-        //        throw new Exception(GetLastError().ToString());
-        //    }
-        //    return lastInPut.dwTime;
-        //}
+        public static long GetLastInputTime()
+        {
+            LASTINPUTINFO lastInPut = new LASTINPUTINFO();
+            lastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(lastInPut);
+            if (!GetLastInputInfo(ref lastInPut))
+            {
+                throw new Exception(GetLastError().ToString());
+            }
+            return lastInPut.dwTime;
+        }
     }
 }

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using BlindNet;
 
 namespace Blind_Client
 {
     public partial class Document_Center : UserControl
     {
         public Doc_Center docCenter;
-        TreeNode selected;
+        public TreeNode selected;
         ListViewItem selectItem;
         bool isAddDir;
         string prevLabel;
@@ -30,16 +31,46 @@ namespace Blind_Client
             listview_File.LargeImageList = imageList;
             listview_File.SmallImageList = imageList;
 
+            SetVisibleDoing(false);
+            progressBar.Step = 1;
+
             uploadMenu.Items.Add("파일", null, new EventHandler(UploadFile));
             uploadMenu.Items.Add("폴더", null, new EventHandler(UploadDir));
         }
 
+        private void SetVisibleDoing(bool value)
+        {
+            label_funcType.Visible = value;
+            progressBar.Visible = value;
+            label_percent.Visible = value;
+            label_fName.Visible = value;
+        }
+
         private async void button_Download_Click(object sender, EventArgs e)
         {
-            ListView.CheckedListViewItemCollection items = listview_File.CheckedItems;
+            ListViewItem[] items = new ListViewItem[listview_File.CheckedItems.Count];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = listview_File.CheckedItems[0];
+                listview_File.CheckedItems[0].Checked = false;
+            }
+
             foreach (ListViewItem item in items)
             {
+                int size = docCenter.GetFilesSize(item);
+                if (size == 0)
+                {
+                    MessageBox.Show("파일 사이즈를 받아오는데 실패했습니다.");
+                    return;
+                }
+                SetVisibleDoing(true);
+                progressBar.Maximum = size;
+                progressBar.Value = 0;
+                label_funcType.Text = "다운로드 : ";
+                label_percent.Text = "0%";
+
                 bool result = false;
+                label_fName.Text = selected.FullPath + "\\" + item.Text;
                 if (item.SubItems[2].Text == string.Empty)
                     result = await docCenter.DownloadDir(item);
                 else
@@ -47,8 +78,9 @@ namespace Blind_Client
                 if (!result)
                     MessageBox.Show("'" + item.Text + "' 다운로드에 실패했습니다.");
             }
+            SetVisibleDoing(false);
         }
-        
+
         private TreeNode FindSameNode(uint id)
         {
             foreach (TreeNode node in treeview_Dir.Nodes)
@@ -71,7 +103,7 @@ namespace Blind_Client
 
         private void treeview_Dir_MouseDown(object sender, MouseEventArgs e)
         {
-            selected = treeview_Dir.GetNodeAt(e.Location);
+            selected = treeview_Dir.GetNodeAt(e.Location) ?? selected;
 
             if (e.Button == MouseButtons.Right)
             {
@@ -149,55 +181,14 @@ namespace Blind_Client
 
         private void treeview_Dir_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            char[] invalidChars = new char[] {
-                ':', '\\', '/', '\'', '\"', ' ',
-                '@', '.', ',', '!', '?', '*'
-            };
-
-            if (e.Label == null || e.Label.Length == 0)
-            {
-                e.CancelEdit = true;
-                if (isAddDir)
-                {
-                    e.Node.Remove();
-                    isAddDir = false;
-                }
-                else
-                    e.Node.Text = prevLabel;
-                treeview_Dir.LabelEdit = false;
+            if (!isInvalidName(e))
                 return;
-            }
-
-            if (e.Label.IndexOfAny(invalidChars) != -1)
-            {
-                e.CancelEdit = true;
-                MessageBox.Show("잘못된 이름입니다.");
-                e.Node.BeginEdit();
-                return;
-            }
 
             TreeNode sameDir = IsInSameDir(e.Node.Parent, e.Label);
             if (sameDir != null)
             {
-                if (MessageBox.Show("이미 같은 이름의 폴더가 존재합니다.존재합니다. 덮어 쓰시겠습니까?", "폴더 이름 변경", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    e.Node.EndEdit(false);
-                    if (docCenter.RemoveDir(sameDir))
-                        sameDir.Remove();
-                    else
-                    {
-                        e.CancelEdit = true;
-                        MessageBox.Show("덮어쓰기에 실패했습니다.");
-                        e.Node.BeginEdit();
-                        return;
-                    }
-                }
-                else
-                {
-                    e.CancelEdit = true;
-                    e.Node.BeginEdit();
+                if (!SelectOverwrite(sameDir, e))
                     return;
-                }
             }
 
             e.Node.EndEdit(false);
@@ -225,6 +216,63 @@ namespace Blind_Client
             isAddDir = false;
             treeview_Dir.LabelEdit = false;
             prevLabel = null;
+        }
+
+        bool SelectOverwrite(TreeNode sameDir, NodeLabelEditEventArgs e)
+        {
+            if (MessageBox.Show("이미 같은 이름의 폴더가 존재합니다.존재합니다. 덮어 쓰시겠습니까?", "폴더 이름 변경", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                e.Node.EndEdit(false);
+                if (docCenter.RemoveDir(sameDir))
+                    sameDir.Remove();
+                else
+                {
+                    e.CancelEdit = true;
+                    MessageBox.Show("덮어쓰기에 실패했습니다.");
+                    e.Node.BeginEdit();
+                    return false;
+                }
+            }
+            else
+            {
+                e.CancelEdit = true;
+                e.Node.BeginEdit();
+                return false;
+            }
+
+            return true;
+        }
+
+        bool isInvalidName(NodeLabelEditEventArgs e)
+        {
+            char[] invalidChars = new char[] {
+                ':', '\\', '/', '\'', '\"', ' ',
+                '@', '.', ',', '!', '?', '*'
+            };
+
+            if (e.Label == null || e.Label.Length == 0)
+            {
+                e.CancelEdit = true;
+                if (isAddDir)
+                {
+                    e.Node.Remove();
+                    isAddDir = false;
+                }
+                else
+                    e.Node.Text = prevLabel;
+                treeview_Dir.LabelEdit = false;
+                return false;
+            }
+
+            if (e.Label.IndexOfAny(invalidChars) != -1)
+            {
+                e.CancelEdit = true;
+                MessageBox.Show("잘못된 이름입니다.");
+                e.Node.BeginEdit();
+                return false;
+            }
+
+            return true;
         }
 
         TreeNode IsInSameDir(TreeNode parent, string name)
@@ -276,7 +324,7 @@ namespace Blind_Client
             for (int i = 0; i < selectFiles.Length; i++)
             {
                 if (IsInSameFile(Path.GetFileName(selectFiles[i])) != null)
-                    if (MessageBox.Show("이미 " + selectFiles[i] + " 파일이 존재합니다.\n덮어 쓰시겠습니까?", "파일 업로드", MessageBoxButtons.YesNo) == DialogResult.No)
+                    if (MessageBox.Show("이미 " + Path.GetFileName(selectFiles[i]) + " 파일이 존재합니다.\n덮어 쓰시겠습니까?", "파일 업로드", MessageBoxButtons.YesNo) == DialogResult.No)
                         selectFiles[i] = null;
             }
 
@@ -285,8 +333,29 @@ namespace Blind_Client
                 if (path == null)
                     continue;
                 FileInfo fi = new FileInfo(path);
-                await docCenter.UploadFileAsync(treeview_Dir.SelectedNode, fi);
+                int size = (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / fi.Length)) + 1;
+                if (size == 0)
+                {
+                    MessageBox.Show("파일 사이즈를 받아오는데 실패했습니다.");
+                    return;
+                }
+                SetVisibleDoing(true);
+                progressBar.Maximum = size;
+                progressBar.Value = 0;
+                label_funcType.Text = "업로드 : ";
+#if DEBUG
+                label_funcType.Text = size.ToString();
+#endif
+                label_funcType.Update();
+                label_percent.Text = "0%";
+                label_percent.Update();
+                label_fName.Text = fi.FullName;
+                label_fName.Update();
+
+                if (!await docCenter.UploadFileAsync(treeview_Dir.SelectedNode, fi))
+                    MessageBox.Show(fi.Name + " 파일 업로드에 실패했습니다.");
             }
+            SetVisibleDoing(false);
             docCenter.UpdateDir(treeview_Dir.SelectedNode);
         }
 
@@ -312,7 +381,7 @@ namespace Blind_Client
                 TreeNode sameDir = IsInSameDir(treeview_Dir.SelectedNode, Path.GetFileName(selectDirs[i]));
                 if (sameDir != null)
                 {
-                    if (MessageBox.Show("이미 같은 이름의 폴더가 존재합니다.존재합니다. 덮어 쓰시겠습니까?", "폴더 이름 변경", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (MessageBox.Show("이미 \"" + Path.GetFileName(selectDirs[i]) + "\" 폴더가 존재합니다.존재합니다. 덮어 쓰시겠습니까?", "폴더 업로드", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         if (docCenter.RemoveDir(sameDir))
                             sameDir.Remove();
@@ -329,6 +398,27 @@ namespace Blind_Client
 
             foreach (string path in selectDirs)
             {
+                if (path == null)
+                    continue;
+
+                DirectoryInfo dir = new DirectoryInfo(path);
+                int size = 0;
+                foreach (FileInfo fi in dir.GetFiles("*", SearchOption.AllDirectories))
+                    size += (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / fi.Length)) + 1;
+                size += dir.GetDirectories("*", SearchOption.AllDirectories).Length;
+                SetVisibleDoing(true);
+                progressBar.Maximum = size;
+                progressBar.Value = 0;
+                label_funcType.Text = "업로드 : ";
+#if DEBUG
+                label_funcType.Text = size.ToString();
+#endif
+                label_funcType.Update();
+                label_percent.Text = "0%";
+                label_percent.Update();
+                label_fName.Text = dir.FullName;
+                label_fName.Update();
+
                 TreeNode newNode = await docCenter.UploadDirAsync(treeview_Dir.SelectedNode, path);
                 if (newNode == null)
                 {
@@ -337,20 +427,34 @@ namespace Blind_Client
                 }
 
                 treeview_Dir.SelectedNode.Nodes.Add(newNode);
-                DirectoryInfo dir = new DirectoryInfo(path);
                 await UploadSubFiles(newNode, dir);
             }
 
             docCenter.UpdateDir(treeview_Dir.SelectedNode);
+#if DEBUG
+            label_fName.Text = "완료";
+            label_fName.Update();
+#endif
+            SetVisibleDoing(false);
         }
 
         private async Task UploadSubFiles(TreeNode node, DirectoryInfo dir)
         {
             foreach (FileInfo f in dir.GetFiles())
+            {
+#if DEBUG
+                label_fName.Text = f.FullName;
+                label_fName.Update();
+#endif
                 await docCenter.UploadFileAsync(node, f);
+            }
 
             foreach (DirectoryInfo d in dir.GetDirectories())
             {
+#if DEBUG
+                label_fName.Text = d.FullName;
+                label_fName.Update();
+#endif
                 TreeNode n = await docCenter.UploadDirAsync(node, d.FullName);
                 await UploadSubFiles(n, d);
             }
@@ -368,20 +472,63 @@ namespace Blind_Client
                 listMenu.Items.Clear();
                 if (selectItem != null)
                 {
-                    if (selectItem.SubItems[1].Text == "DIR")
-                        if (selected.Parent != null)
-                        {
-                            treeMenu.Items.Add("폴더 삭제", null, new EventHandler(treeMenu_RemoveDir));
-                            treeMenu.Items.Add("이름 변경", null, new EventHandler(treeMenu_ChangeName));
-                        }
-                    treeMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
+                    if (!selectItem.Checked)
+                    {
+                        foreach (ListViewItem item in listview_File.CheckedItems)
+                            item.Checked = false;
+                        selectItem.Checked = true;
+                    }
+                    listMenu.Items.Add("삭제", null, new EventHandler(listMenu_Remove));
+                    listMenu.Items.Add("다운로드", null, new EventHandler(button_Download_Click));
+                    //listMenu.Items.Add("이동", null, new EventHandler(treeMenu_ChangeName));
+                    //listMenu.Items.Add("복사", null, new EventHandler(treeMenu_ChangeName));
+
+                    //if (listview_File.CheckedItems.Count == 1)
+                    //listMenu.Items.Add("이름 변경", null, new EventHandler(treeMenu_ChangeName));
                 }
                 else
                 {
+                    listview_File.SelectedItems.Clear();
                     listMenu.Items.Add("폴더 추가", null, new EventHandler(treeMenu_AddDir));
-                    treeMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
+                    listMenu.Items.Add("파일 업로드", null, new EventHandler(UploadFile));
+                    listMenu.Items.Add("폴더 업로드", null, new EventHandler(UploadDir));
+                    listMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
                 }
-                treeMenu.Show(treeview_Dir, e.Location);
+                listMenu.Show(treeview_Dir, e.Location);
+            }
+        }
+
+        private void listMenu_Remove(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in listview_File.CheckedItems)
+            {
+                bool result = false;
+                if (item.SubItems[2].Text == string.Empty)
+                {
+                    foreach (TreeNode node in selected.Nodes)
+                        if (node.Text == item.Text)
+                            result = docCenter.RemoveDir(node);
+                }
+                else
+                    result = docCenter.RemoveFile((uint)item.Tag);
+                item.Remove();
+                if (!result)
+                    MessageBox.Show("오류가 발생했습니다.");
+            }
+            docCenter.UpdateDir(selected);
+        }
+
+        private void listview_File_DoubleClick(object sender, EventArgs e)
+        {
+            string text = listview_File.FocusedItem.Text;
+            foreach (TreeNode node in selected.Nodes)
+            {
+                if (node.Text == text)
+                {
+                    selected = node;
+                    treeview_Dir.SelectedNode = node;
+                    return;
+                }
             }
         }
     }

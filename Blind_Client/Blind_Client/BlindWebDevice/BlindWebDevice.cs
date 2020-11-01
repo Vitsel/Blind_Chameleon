@@ -26,7 +26,6 @@ namespace Blind_Client.BlindWebDeviceClass
     {
         BlindSocket BS = new BlindSocket();
         BlindPacket BP = new BlindPacket();
-        MainForm MF;
         DeviceDriverHelper DDH;
         public void MainFormClosingSocketClose() { BS.Close(); }
 
@@ -34,11 +33,9 @@ namespace Blind_Client.BlindWebDeviceClass
         {
             BS.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.WebDevicePort);
             DDH = new DeviceDriverHelper();
-
             SqlLookup();
         }
 
-        
         private void SqlLookup()
         {
             while (true)

@@ -118,7 +118,7 @@ namespace Blind_Client.BlindChatCode
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct User
     {
-        public int ID;
+        public uint ID;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.SMALLSIZE)]
         public string Name;
@@ -155,7 +155,7 @@ namespace Blind_Client.BlindChatCode
     {
         public int ID;
         public int RoomID;
-        public int UserID;
+        public uint UserID;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.SMALLSIZE)]
         public string Time;
@@ -164,7 +164,7 @@ namespace Blind_Client.BlindChatCode
     public struct ChatMessage
     {
         public int ID;
-        public int UserID;
+        public uint UserID;
         public int RoomID;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.MESSAGESIZE)]
@@ -196,7 +196,7 @@ namespace Blind_Client.BlindChatCode
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.SMALLSIZE)]
         public string Name;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public int[] UserID;
+        public uint[] UserID;
     }
 
     //방 초대 구조체

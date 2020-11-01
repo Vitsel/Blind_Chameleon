@@ -13,6 +13,11 @@
         /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
         protected override void Dispose(bool disposing)
         {
+            while(RoomItem_LayoutPanel.Controls.Count > 0)
+            {
+                RoomItem_LayoutPanel.Controls[0].Dispose();
+            }
+
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -49,9 +54,9 @@
             // 
             // lbl_room
             // 
-            this.lbl_room.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.lbl_room.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.lbl_room.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_room.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_room.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_room.Location = new System.Drawing.Point(0, 0);
             this.lbl_room.Name = "lbl_room";
             this.lbl_room.Size = new System.Drawing.Size(336, 50);
@@ -71,10 +76,10 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button1.BackColor = System.Drawing.Color.Yellow;
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(0, 0);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
@@ -112,9 +117,9 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.FlowLayoutPanel RoomItem_LayoutPanel;
         private System.Windows.Forms.Label lbl_room;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button1;
+        public System.Windows.Forms.FlowLayoutPanel RoomItem_LayoutPanel;
     }
 }

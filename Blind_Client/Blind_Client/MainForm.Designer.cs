@@ -33,8 +33,10 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.document_Center = new Blind_Client.Document_Center();
+            this.BlindLockTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
+            this.MainControlPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // Button_DocCenter
@@ -58,7 +60,8 @@
             this.tableLayoutPanel1.Controls.Add(this.Button_DocCenter, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.MainControlPanel, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.btn_ActivateChat, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(-3, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
@@ -66,18 +69,20 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(703, 361);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(700, 360);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // MainControlPanel
             // 
+            this.MainControlPanel.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 2);
+            this.MainControlPanel.Controls.Add(this.document_Center);
             this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainControlPanel.Location = new System.Drawing.Point(96, 53);
             this.MainControlPanel.Name = "MainControlPanel";
-            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
-            this.MainControlPanel.Size = new System.Drawing.Size(604, 305);
+            this.MainControlPanel.Size = new System.Drawing.Size(601, 304);
             this.MainControlPanel.TabIndex = 3;
+            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
             // 
             // btn_ActivateChat
             // 
@@ -90,6 +95,19 @@
             this.btn_ActivateChat.UseVisualStyleBackColor = true;
             this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
             // 
+            // BlindLockTimer
+            // 
+            this.BlindLockTimer.Tick += new System.EventHandler(this.BlindChatTimer_Tick);
+            // 
+            // document_Center
+            // 
+            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.document_Center.Location = new System.Drawing.Point(0, 0);
+            this.document_Center.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.document_Center.Name = "document_Center";
+            this.document_Center.Size = new System.Drawing.Size(688, 380);
+            this.document_Center.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -99,9 +117,12 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.MainControlPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -112,9 +133,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btn_ActivateChat;
         private System.Windows.Forms.Panel MainControlPanel;
-
         public Document_Center document_Center;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer BlindLockTimer;
     }
 }
 

@@ -13,13 +13,13 @@ namespace Blind_Client.BlindChatUI.RoomUI
 {
     public partial class MessageRoom : Form
     {
-        private int _userID;
+        private uint _userID;
         private ChatRoom _room;
         private List<ChatMessage> _messageList;
-        public delegate void MyFunc(string text, int userID, int roomID);
+        public delegate void MyFunc(string text, uint userID, int roomID);
         public MyFunc SendChatMessage;
 
-        public MessageRoom(int userID, ChatRoom room, List<ChatMessage> messageList)
+        public MessageRoom(uint userID, ChatRoom room, List<ChatMessage> messageList)
         {
             InitializeComponent();
             _userID = userID;
@@ -28,6 +28,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
             this.Name = room.ID.ToString();
             this.lbl_ID.Text = "#" + room.ID.ToString();
             this.Text = this.lbl_Title.Text = _room.Name;
+            this.StartPosition = FormStartPosition.CenterParent;
 
         }
         public void AddMessage(ChatMessage message)
@@ -36,6 +37,10 @@ namespace Blind_Client.BlindChatUI.RoomUI
             if (message.UserID == _userID)
             {
                 msgItem = new Message_Item(message, MessageDirection.right);
+            }
+            else if (message.UserID == 0)
+            {
+                msgItem = new Message_Item(message, MessageDirection.middle);
             }
             else
             {
@@ -102,6 +107,12 @@ namespace Blind_Client.BlindChatUI.RoomUI
             {
                 tb_Message.Text = "";
             }
+        }
+
+        private void btn_menu_Click(object sender, EventArgs e)
+        {
+            Room_Menu menu = new Room_Menu(_room);
+            menu.Show();
         }
     }
 }

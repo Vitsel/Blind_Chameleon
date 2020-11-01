@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BlindLogger;
 using MySql.Data.MySqlClient;
 
 namespace Blind_Server
@@ -25,9 +26,8 @@ namespace Blind_Server
         public static BlindServerScoket WebDeviceSocket;
         public static BlindServerScoket chatPortSock;
         public static BlindServerScoket lockPortSock;
-        //public static MySqlConnection hDB = new MySqlConnection("Server=localhost;Database=BlindChat;Uid=root;Pwd=sungsu430;");
-        public static BlindPacket BlindClintCidPacket;
         public static MySqlConnection connection;
+
         static void Main(string[] args)
         {
             var handl = GetConsoleWindow();
@@ -35,9 +35,6 @@ namespace Blind_Server
             //DataBase MySql Connection
             connection = DataBaseConnection();
             
-
-            //hDB.Open();
-
             //ShowWindow(handl, SW_HIDE); //Console 창 숨기기
             socket_docCenter = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
             socket_docCenter.BindListen();
@@ -65,16 +62,20 @@ namespace Blind_Server
         {
             if (socket == null)
                 return;
-            uint cid;
             IPEndPoint iep = (IPEndPoint)(socket.socket.RemoteEndPoint);
-            Console.WriteLine("Accepted {0} : {1}", iep.Address, iep.Port);
-            //로그인 인증 추가
 
+            //로그인 인증 추가
+            uint cid;
             byte[] cName = socket.CryptoReceiveMsg();// 아이디 받음
-            cid = GetClientID(Encoding.UTF8.GetString(cName)); // 바이트 -> 스트링
+            if (Encoding.UTF8.GetString(cName) != "\0")
+                cid = GetClientID(Encoding.UTF8.GetString(cName)); // 바이트 -> 스트링
+            else
+                cid = 0;
             uint[] gids = GetGids(cid);
             socket.CryptoSend(BitConverter.GetBytes(cid), PacketType.Response);//cid 보냄
 
+
+            Console.WriteLine("Accepted {0} : {1}"+$"({cid})", iep.Address, iep.Port);
 
             //Client 구조체 초기화 및 추가
             TaskScheduler scheduler = TaskScheduler.Default;
@@ -82,13 +83,11 @@ namespace Blind_Server
             client.socket = socket;
             client.token = new CancellationTokenSource();
 
-            client.documentCenter = new Doc_Center(cid, gids); //기능 객체 생성
+            client.documentCenter = new Doc_Center(cid,gids); //기능 객체 생성
             client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
 
-            //client.chat = new BlindChat(hDB);
-            //client.chat = new BlindChat();
-            //client.tChat = Task.Factory.StartNew(() => client.chat.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
-
+            client.chat = new BlindChat();
+            client.tChat = Task.Factory.StartNew(() => client.chat.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             client.blindLock = new BlindLock();
             client.tBlindLock = Task.Factory.StartNew(() => client.blindLock.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
@@ -112,15 +111,15 @@ namespace Blind_Server
 
         static uint GetClientID(string cName)
         {
+            uint result;
             string command = "SELECT cid FROM blindEmployee WHERE id =" +"'" + cName + "';";
             MySqlCommand commander = new MySqlCommand(command, connection);
-            /*MySqlDataReader reader = commander.ExecuteReader();
-            if (!reader.Read())
+            result= UInt32.Parse(commander.ExecuteScalar().ToString());
+
+            if (result != 0)
+                return result;
+            else
                 return 0;
-            reader.Close();
-            return (uint)reader["cid"];
-            */
-            return UInt32.Parse(commander.ExecuteScalar().ToString());
         }
 
         static uint[] GetGids(uint cid)
@@ -142,7 +141,6 @@ namespace Blind_Server
 
     class BlindClient
     {
-        public uint id;
         public BlindSocket socket;
         public CancellationTokenSource token;
         public Doc_Center documentCenter; //기능 객체

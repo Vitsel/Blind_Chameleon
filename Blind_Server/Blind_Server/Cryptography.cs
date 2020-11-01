@@ -9,15 +9,16 @@ namespace BlindCryptography
     {
         public class AES256
         {
-            public readonly RijndaelManaged aes;
+            public readonly AesManaged aes;
 
             public AES256(int keySize = 256, CipherMode mode = CipherMode.CBC, PaddingMode pad = PaddingMode.PKCS7)
             {
-                aes = new RijndaelManaged()
+                aes = new AesManaged()
                 {
-                    KeySize = keySize,
+                    //KeySize = keySize,
                     Mode = mode,
                     Padding = pad,
+                    //BlockSize = 128
                 };
                 aes.GenerateKey();
                 aes.GenerateIV();
@@ -25,16 +26,16 @@ namespace BlindCryptography
 
             public AES256(byte[] key, byte[] iv = null)
             {
-                aes = new RijndaelManaged()
+                aes = new AesManaged()
                 {
-                    KeySize = 256,
+                    //KeySize = 256,
                     Mode = CipherMode.CBC,
                     Padding = PaddingMode.PKCS7,
-                    Key = key
+                    Key = key,
+                    //BlockSize = 128
                 };
                 if (iv == null)
                 {
-
                     byte[] tmp = new byte[16];
                     Array.Copy(key, tmp, 16);
                     aes.IV = tmp;
@@ -50,7 +51,11 @@ namespace BlindCryptography
                 using (MemoryStream ms = new MemoryStream())
                 {
                     using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
                         cs.Write(plain, 0, plain.Length);
+                        if (!cs.HasFlushedFinalBlock)
+                            cs.FlushFinalBlock();
+                    }
                     encrypted = ms.ToArray();
                 }
                 return encrypted;
@@ -64,7 +69,11 @@ namespace BlindCryptography
                 using (MemoryStream ms = new MemoryStream())
                 {
                     using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
                         cs.Write(bPlain, 0, bPlain.Length);
+                        if (!cs.HasFlushedFinalBlock)
+                            cs.FlushFinalBlock();
+                    }
                     encrypted = ms.ToArray();
                 }
                 return Convert.ToBase64String(encrypted);
@@ -77,7 +86,11 @@ namespace BlindCryptography
                 using (MemoryStream ms = new MemoryStream())
                 {
                     using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
+                    {
                         cs.Write(encrypted, 0, encrypted.Length);
+                        if (!cs.HasFlushedFinalBlock)
+                            cs.FlushFinalBlock();
+                    }
                     decrypted = ms.ToArray();
                 }
                 return decrypted;
@@ -91,7 +104,11 @@ namespace BlindCryptography
                 using (MemoryStream ms = new MemoryStream())
                 {
                     using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
+                    {
                         cs.Write(bEncrypted, 0, bEncrypted.Length);
+                        if (!cs.HasFlushedFinalBlock)
+                            cs.FlushFinalBlock();
+                    }
                     decrypted = ms.ToArray();
                 }
                 return Encoding.UTF8.GetString(decrypted);

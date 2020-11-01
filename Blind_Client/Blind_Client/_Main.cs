@@ -17,7 +17,8 @@ namespace Blind_Client
             
             
             VPN_Class VPN = new VPN_Class();
-            /*
+            
+            
             Loop:
             VPN.CMD_VPN_Instruction("VPN");
             
@@ -32,7 +33,7 @@ namespace Blind_Client
                     Environment.Exit(0); //완전종료
                 }
             }
-            */
+            
 
             isInner = VPN.Network_Position;
             Application.Run(new MainForm(isInner,VPN.IsInnerClient_Id));//인자값 | 첫번째 : 내부 | 두번째 : 내부(사용자계정명) 외부(VPN 사용자 입력값)

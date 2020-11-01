@@ -13,6 +13,8 @@ using Org.BouncyCastle.Asn1.Crmf;
 using MySql.Data.MySqlClient;
 using System.Data;
 using Org.BouncyCastle.Tsp;
+using System.Data.SQLite;
+using System.Security.Cryptography;
 
 namespace Blind_Server
 {
@@ -50,7 +52,18 @@ namespace Blind_Server
             string sql = $"insert into ChatRoomJoined (UserID, RoomID, Time) values ({roomJoined.UserID},{roomJoined.RoomID},\'{timeNow}\');";
             ExecuteQuery(sql);
 
-            SendChatPacketToParticipants(chatPack, roomJoined.RoomID);
+            sql = $"select * from ChatRoomJoined where Time = \'{timeNow}\' and UserID={ roomJoined.UserID }";
+            MySqlDataReader rdr = ExecuteSelect(sql);
+            
+            if (rdr.Read())
+            {
+                roomJoined = (ChatRoomJoined)GetStructFromDB<ChatRoomJoined>(rdr);
+                rdr.Close();
+                byte[] data = BlindNetUtil.StructToByte(roomJoined);
+
+                ChatPacket packet = BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
+                SendChatPacketToParticipants(packet, roomJoined.RoomID);
+            }
         }
 
         public void MessageToParticipants(ChatPacket chatPack)
@@ -68,7 +81,7 @@ namespace Blind_Server
             AddToDBTimeNow<ChatMessage>(pack);
 
             //방데이터에 최신 메시지 시간 수정
-            string sql = $"update ChatRoom set LastMessageTime = \'{timeNow}\' where ID = {message.RoomID}";
+            string sql = $"update ChatRoom set LastMessageTime = \'{message.Time}\' where ID = {message.RoomID}";
             ExecuteQuery(sql);
 
             //방에 속한 사용자들에게 메시지 전송
@@ -151,7 +164,7 @@ namespace Blind_Server
             NewRoomStruct newroom = BlindChatUtil.ChatPacketToStruct<NewRoomStruct>(chatPack);
             
             //DB에 방 정보 추가
-            string sql = $"insert into ChatRoom (Name, Time) values (\'{newroom.Name}\',\'{timeNow}\');";
+            string sql = $"insert into ChatRoom (Name, Time, LastMessageTime) values (\'{newroom.Name}\',\'{timeNow}\', \'{timeNow}\');";
             ExecuteQuery(sql);
 
             //방금 생성한 방 정보 불러오기(roomid를 알아오기 위해)
@@ -300,6 +313,7 @@ namespace Blind_Server
                     room.ID = int.Parse(row["ID"].ToString());
                     room.Name = row["Name"].ToString();
                     room.Time = row["Time"].ToString();
+                    room.LastMessageTime = row["LastMessageTime"].ToString();
 
                     st = room;
                 }
@@ -363,6 +377,7 @@ namespace Blind_Server
                     room.ID = int.Parse(rdr["ID"].ToString());
                     room.Name = rdr["Name"].ToString();
                     room.Time = rdr["Time"].ToString();
+                    room.LastMessageTime = rdr["LastMessageTime"].ToString();
 
                     st = room;
                 }
@@ -527,7 +542,7 @@ namespace Blind_Server
 
     public static class BlindChatConst
     {
-        public const int CHATDATASIZE = 1023;
+        public const int CHATDATASIZE = 2048;
         public const int MESSAGESIZE = 512;
         public const int SMALLSIZE = 32;
         public const string ZERO_TIME = "0000-00-00 00:00:00";

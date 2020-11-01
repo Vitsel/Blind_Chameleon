@@ -16,7 +16,7 @@ namespace Blind_Client.BlindChatUI
     {
         public enum MainChatControl { User, Room, More }
 
-        private int _UserID;
+        private uint _UserID;
         private BlindChat _BlindChat;
 
         public Control_User _UserControl;
@@ -25,12 +25,12 @@ namespace Blind_Client.BlindChatUI
         private Panel buttonPanel;
         private Button _selectedButton;
 
-        public int UserID { get { return _UserID; } set { _UserID = value; } }
+        public uint UserID { get { return _UserID; } set { _UserID = value; } }
         public BlindChat BlindChat { set { _BlindChat = value; } }
         //public Control_User UserControl { get{ return _UserControl; } }
         //public Control_Room RoomControl { get { return _RoomControl; } }
 
-        public ChatMain(int UserID)
+        public ChatMain(uint UserID)
         {
             InitializeComponent();
             this.Dock = DockStyle.Fill;

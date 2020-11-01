@@ -1,4 +1,6 @@
-﻿using Blind_Client.BlindChatCode;
+﻿
+
+using Blind_Client.BlindChatCode;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,12 +15,14 @@ namespace Blind_Client.BlindChatUI.RoomUI
 {
     public partial class CreateRoomForm : Form
     {
-        private int _UserID;
+        private uint _UserID;
         private int _UserCount;
-        public delegate void MyFunc(string text, int[] array);
+        private bool isMove;
+        private Point fPt;
+        public delegate void MyFunc(string text, uint[] array);
         public MyFunc CreateRoom;
 
-        public CreateRoomForm(int _UserID)
+        public CreateRoomForm(uint _UserID)
         {
             InitializeComponent();
             this._UserID = _UserID;
@@ -39,7 +43,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
                 }
                 else
                 {
-                    int[] selectedUser = new int[20];
+                    uint[] selectedUser = new uint[20];
                     selectedUser[0] = _UserID;
 
 
@@ -95,6 +99,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
                     item.AddUserCount = AddUserCount;
                     item.SubUserCount = SubUserCount;
                     item.LoadUserCount = LoadUserCount;
+                    item.Width = CreateRoomIItem_LayoutPanel.Width-6;
 
                     CreateRoomIItem_LayoutPanel.Controls.Add(item);
 
@@ -103,5 +108,28 @@ namespace Blind_Client.BlindChatUI.RoomUI
             LoadUserCount();
         }
 
+        private void lbl_FormName_MouseDown(object sender, MouseEventArgs e)
+        {
+            isMove = true;
+            fPt = new Point(e.X, e.Y);
+        }
+
+        private void lbl_FormName_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(isMove && (e.Button&MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (fPt.X - e.X), this.Top - (fPt.Y - e.Y));
+            }
+        }
+
+        private void lbl_FormName_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMove = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

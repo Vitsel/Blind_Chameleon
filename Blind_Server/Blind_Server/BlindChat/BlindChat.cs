@@ -29,7 +29,7 @@ namespace Blind_Server
 
         public void Run()
         {
-            this.hDB = new MySqlConnection("Server=54.84.228.2;Database=BlindChat;Uid=root;Pwd=kit2020;");
+            this.hDB = new MySqlConnection("Server=" + BlindNetConst.DatabaseIP + ";Database=BlindChat;Uid=root;Pwd=kit2020;");
             this.hDB.Open();
 
             chatSock = GetChatPortSocket();
@@ -67,6 +67,10 @@ namespace Blind_Server
                 else if(chatPacket.Type == ChatType.RoomJoined)
                 {
                     ExecuteInvitation(chatPacket);
+                }
+                else if(chatPacket.Type == ChatType.Invitation)
+                {
+
                 }
 
             }

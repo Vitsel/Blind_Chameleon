@@ -16,7 +16,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
         private ChatRoom _Room;
         public delegate void MyFunc(ChatRoom Room);
         public MyFunc RoomClickEvent, RoomDoubleClickEvent;
-
+        public int ID { get{ return _Room.ID; } }
 
         public Room_Item(ChatRoom Room)
         {
@@ -27,6 +27,14 @@ namespace Blind_Client.BlindChatUI.RoomUI
             _Room = Room;
         }
 
+        public void NewMessage()
+        {
+            btn_NewMessage.BackColor = Color.Red;
+        }
+        public void OpenedMessage()
+        {
+            btn_NewMessage.BackColor = Color.Transparent;
+        }
         private void lbl_Name_Click(object sender, EventArgs e)
         {
             if(RoomClickEvent != null)

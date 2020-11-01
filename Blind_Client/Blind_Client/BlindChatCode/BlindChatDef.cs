@@ -49,6 +49,19 @@ namespace Blind_Client.BlindChatCode
             }
             return messageList;
         }
+        static public List<User> GetUserList(int roomID)
+        {
+            List<User> userList = new List<User>();
+            string sql = $"select * from User where ID in (select userID from ChatRoomJoined where RoomID = {roomID})";
+            SQLiteDataReader rdr = DB.ExecuteSelect(sql);
+
+            while (rdr.Read())
+            {
+                User user = DB.GetUser(rdr);
+                userList.Add(user);
+            }
+            return userList;
+        }
 
         public void LoadList()
         {
@@ -58,16 +71,22 @@ namespace Blind_Client.BlindChatCode
 
 
 
-        public void InviteUser(int userID, int roomID, string roomName)
+        public static void InviteUser(uint userID, int roomID)
         {
-            Invitation inv = new Invitation();
-            inv.Name = roomName;
-            inv.RoomID = roomID;
-            inv.UserID = userID;
+            ChatRoomJoined roomJoined = new ChatRoomJoined();
+            roomJoined.UserID = userID;
+            roomJoined.RoomID = roomID;
+            
+            ChatPacketSend(BlindChatUtil.StructToChatPacket(roomJoined));
 
-            ChatPacketSend(BlindChatUtil.StructToChatPacket(inv));
+            //Invitation inv = new Invitation();
+            //inv.Name = roomName;
+            //inv.RoomID = roomID;
+            //inv.UserID = userID;
+
+            //ChatPacketSend(BlindChatUtil.StructToChatPacket(inv));
         }
-        public void CreateRoom(string text, int[] users)
+        public void CreateRoom(string text, uint[] users)
         {
             //한 방에는 최대 20명
             NewRoomStruct newRoom = new NewRoomStruct();
@@ -77,7 +96,7 @@ namespace Blind_Client.BlindChatCode
             ChatPacketSend(BlindChatUtil.StructToChatPacket(newRoom));
             
         }
-        public void ChatMessageSend(string text, int userID, int roomID)
+        public void ChatMessageSend(string text, uint userID, int roomID)
         {
             ChatMessage message = new ChatMessage();
             message.Message = text;
@@ -90,7 +109,7 @@ namespace Blind_Client.BlindChatCode
 
 
 
-        public void ChatPacketSend(ChatPacket chatPack)
+        public static void ChatPacketSend(ChatPacket chatPack)
         {
             if (chatPack.Data.Length > BlindChatConst.CHATDATASIZE)
             {

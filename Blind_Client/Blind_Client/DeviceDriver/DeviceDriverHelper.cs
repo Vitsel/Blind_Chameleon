@@ -20,30 +20,30 @@ namespace Blind_Client
         public void DeviceToggle(string ApplyWay)
         {
             /*
-             ApplyWay(적용방식) 앞숫자 : USB 뒷숫자 : CAM
-            값: 11 (USB,CAM 차단) | 값: 10 (USB만 차단) | 값 : 01 (CAM만 차단) | 값 : 00 (모두 허용)
+             ApplyWay(적용방식) 앞숫자 : USB 뒷숫자 : CAM   | 0 : 허용  1: 차단
+            값: 11 (USB,CAM 허용) | 값: 10 (USB만 허용) | 값 : 01 (CAM만 허용) | 값 : 00 (모두 허용)
             */
             if (this.ApplyWay != ApplyWay)
             {
                 if (ApplyWay == "11")
                 {
-                    usbBlockApply = true;
-                    camBlockApply = true;
+                    usbBlockApply = false;
+                    camBlockApply = false;
                 }
                 else if (ApplyWay == "10")
                 {
-                    usbBlockApply = true;
-                    camBlockApply = false;
-                }
-                else if (ApplyWay == "01")
-                {
                     usbBlockApply = false;
                     camBlockApply = true;
                 }
+                else if (ApplyWay == "01")
+                {
+                    usbBlockApply = true;
+                    camBlockApply = false;
+                }
                 else if (ApplyWay == "00")
                 {
-                    usbBlockApply = false;
-                    camBlockApply = false;
+                    usbBlockApply = true;
+                    camBlockApply = true;
                 }
                 this.ApplyWay = ApplyWay;
 
@@ -53,14 +53,12 @@ namespace Blind_Client
                 string camRegLocation = "SYSTEM\\ControlSet001\\Services\\usbvideo";
 
                 RegistryKey usbRegKey = Registry.LocalMachine.OpenSubKey(usbRegLocation, true);
-                RegistryKey camRegKey = Registry.LocalMachine.OpenSubKey(camRegLocation, true);
-                if (usbRegKey == null || camRegKey == null)
-                {
-                    MessageBox.Show("Registry Not Open");
-                    return;
-                }
-
                 usbRegKey = Registry.LocalMachine.CreateSubKey(usbRegLocation);
+                RegistryKey camRegKey = Registry.LocalMachine.OpenSubKey(camRegLocation, true);
+
+                if (camRegKey == null)
+                    camRegKey = Registry.LocalMachine.CreateSubKey(camRegLocation);
+
                 if (usbBlockApply == true)
                     usbRegKey.SetValue("Deny_All", 1, RegistryValueKind.DWord); //레지 값 추가
                 else

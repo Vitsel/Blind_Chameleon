@@ -62,7 +62,7 @@ namespace Blind_Client
                 string instruction_DisConnect = "rasdial \"Blind VPN\" /disconnect";
                 string instruction_Remove = "rasphone -r Blind_VPN";
                 pro.StandardInput.Write(instruction_DisConnect + Environment.NewLine); //지정한 명령어 + \r\n
-                Thread.Sleep(2000); //바로삭제하면 완전히 제거가안됨 일정간격 줘야함.
+                Thread.Sleep(1000); //바로삭제하면 완전히 제거가안됨 일정간격 줘야함.
                 pro.StandardInput.Write(instruction_Remove + Environment.NewLine); //지정한 명령어 + \r\n
             }
             else if(Type == "VPNREG")
