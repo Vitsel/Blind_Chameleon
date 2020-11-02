@@ -14,13 +14,13 @@ namespace Blind_Client.BlindChatUI
 {
     public partial class Control_Room : UserControl
     {
-        private int _UserID; 
+        private uint _UserID; 
         private CreateRoomForm createRoomForm;
         public delegate void MyFunc(string text, int[] array);
         public MyFunc CreateRoom;
         private BlindChat _BlindChat;
 
-        public Control_Room(int UserID, BlindChat BlindChat)
+        public Control_Room(uint UserID, BlindChat BlindChat)
         {
             InitializeComponent();
             _UserID = UserID;
@@ -68,7 +68,7 @@ namespace Blind_Client.BlindChatUI
                 item.Width = this.Width-18;
             }
         }
-        public void SendCreateRoom(string text, int[] array)
+        public void SendCreateRoom(string text, uint[] array)
         {
             _BlindChat.CreateRoom(text, array);
         }

@@ -32,9 +32,9 @@
             this.Button_DocCenter = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
-            this.document_Center = new Blind_Client.Document_Center();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
+            this.document_Center = new Blind_Client.Document_Center();
             this.BlindLockTimer = new System.Windows.Forms.Timer(this.components);
             this.panel_Fore = new System.Windows.Forms.Panel();
             this.btn_minimize = new System.Windows.Forms.Button();
@@ -88,12 +88,14 @@
             // 
             // MainControlPanel
             // 
+            this.MainControlPanel.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 2);
             this.MainControlPanel.Controls.Add(this.document_Center);
             this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainControlPanel.Location = new System.Drawing.Point(93, 0);
             this.MainControlPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainControlPanel.Name = "MainControlPanel";
+
             this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 3);
             this.MainControlPanel.Size = new System.Drawing.Size(607, 331);
             this.MainControlPanel.TabIndex = 3;
@@ -106,6 +108,7 @@
             this.document_Center.Name = "document_Center";
             this.document_Center.Size = new System.Drawing.Size(607, 331);
             this.document_Center.TabIndex = 1;
+
             // 
             // panel1
             // 
@@ -240,6 +243,7 @@
             // 
             this.ellipseControl3.CorenerRadius = 5;
             this.ellipseControl3.TargetControl = this.panel_Fore;
+
             // 
             // MainForm
             // 
@@ -258,6 +262,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.MainControlPanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel_Fore.ResumeLayout(false);

@@ -14,10 +14,10 @@ namespace Blind_Client.BlindChatUI
 {
     public partial class Control_User : UserControl
     {
-        private int _UserID;
+        private uint _UserID;
         private User_Info _UserInfo;
 
-        public Control_User(int UserID)
+        public Control_User(uint UserID)
         {
             InitializeComponent();
             _UserID = UserID;

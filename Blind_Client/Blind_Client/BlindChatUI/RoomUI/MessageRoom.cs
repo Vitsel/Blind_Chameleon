@@ -13,13 +13,13 @@ namespace Blind_Client.BlindChatUI.RoomUI
 {
     public partial class MessageRoom : Form
     {
-        private int _userID;
+        private uint _userID;
         private ChatRoom _room;
         private List<ChatMessage> _messageList;
-        public delegate void MyFunc(string text, int userID, int roomID);
+        public delegate void MyFunc(string text, uint userID, int roomID);
         public MyFunc SendChatMessage;
 
-        public MessageRoom(int userID, ChatRoom room, List<ChatMessage> messageList)
+        public MessageRoom(uint userID, ChatRoom room, List<ChatMessage> messageList)
         {
             InitializeComponent();
             _userID = userID;

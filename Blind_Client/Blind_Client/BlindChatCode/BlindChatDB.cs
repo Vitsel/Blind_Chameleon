@@ -11,13 +11,13 @@ namespace Blind_Client.BlindChatCode
 {
     class BlindChatDB
     {
-        private int userID;
+        private uint userID;
         private SQLiteConnection hDB;
 
         public bool Exists { get { FileInfo fileInfo = new FileInfo($"./{userID}.bc"); return fileInfo.Exists; } }
 
 
-        public BlindChatDB(int userID)
+        public BlindChatDB(uint userID)
         {
             this.userID = userID;
         }
@@ -60,7 +60,7 @@ namespace Blind_Client.BlindChatCode
         {
             User user = new User();
 
-            user.ID = int.Parse(rdr["ID"].ToString());
+            user.ID = uint.Parse(rdr["ID"].ToString());
             user.Online = int.Parse(rdr["Online"].ToString());
             user.Name = rdr["Name"].ToString();
             user.Time = rdr["Time"].ToString();
@@ -88,7 +88,7 @@ namespace Blind_Client.BlindChatCode
             ChatRoomJoined roomJoined = new ChatRoomJoined();
 
             roomJoined.ID = int.Parse(rdr["ID"].ToString());
-            roomJoined.UserID = int.Parse(rdr["UserID"].ToString());
+            roomJoined.UserID = uint.Parse(rdr["UserID"].ToString());
             roomJoined.RoomID = int.Parse(rdr["RoomID"].ToString());
             roomJoined.Time = rdr["Time"].ToString();
 
@@ -99,7 +99,7 @@ namespace Blind_Client.BlindChatCode
             ChatMessage message = new ChatMessage();
 
             message.ID = int.Parse(rdr["ID"].ToString());
-            message.UserID = int.Parse(rdr["UserID"].ToString());
+            message.UserID = uint.Parse(rdr["UserID"].ToString());
             message.RoomID = int.Parse(rdr["RoomID"].ToString());
             message.Message = rdr["Message"].ToString();
             message.Time = rdr["Time"].ToString();

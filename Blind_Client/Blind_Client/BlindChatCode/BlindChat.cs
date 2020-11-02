@@ -13,8 +13,8 @@ namespace Blind_Client.BlindChatCode
 {
     public partial class BlindChat
     {
-        private int _UserID;
-        public int UserID { get { return _UserID; } }
+        private uint _UserID;
+        public uint UserID { get { return _UserID; } }
         static private BlindChatDB DB;
         private static BlindSocket chatSock;
         private MainForm form;
@@ -24,7 +24,7 @@ namespace Blind_Client.BlindChatCode
 
         //=========================================
 
-        public BlindChat(int _UserID, ref ChatMain UI, MainForm form)
+        public BlindChat(uint _UserID, ref ChatMain UI, MainForm form)
         {
             this.form = form;
 

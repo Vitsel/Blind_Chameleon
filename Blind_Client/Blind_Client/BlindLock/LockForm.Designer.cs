@@ -117,7 +117,6 @@
             this.tb_Password.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tb_Password.Location = new System.Drawing.Point(0, 138);
             this.tb_Password.Name = "tb_Password";
-            this.tb_Password.PasswordChar = '⬤';
             this.tb_Password.Size = new System.Drawing.Size(197, 30);
             this.tb_Password.TabIndex = 2;
             this.tb_Password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_Password_KeyDown);

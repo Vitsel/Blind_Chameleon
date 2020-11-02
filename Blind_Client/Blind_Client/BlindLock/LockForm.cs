@@ -45,7 +45,8 @@ namespace Blind_Client.BlindLock
         ~LockForm()
         {
             ActivateWhenUnlock();
-            lockSock.Close();
+            if(!isInner)
+                lockSock.Close();
         }
         private void ActivateWhenLock()
         {
@@ -111,8 +112,7 @@ namespace Blind_Client.BlindLock
                 if(tb_Password.Text == "unlock")
                     result = true;
                 else
-                    result = LogonUser(Environment.UserName, ".", tb_Password.Text, 8, 0, out token);
-
+                    result = LogonUser(Environment.UserName, "Blind2A", tb_Password.Text, 8, 0, out token);
 
                 if (result)
                 {
@@ -241,19 +241,34 @@ namespace Blind_Client.BlindLock
         public void EnableTask()
         {
             RegistryKey objRegistryKey = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
-            objRegistryKey.DeleteValue("DisableTaskMgr");
-            objRegistryKey.DeleteValue("NoDispScrSavPage");
-            objRegistryKey.DeleteValue("DisableChangePassword");
-            objRegistryKey.DeleteValue("DisableLockWorkstation");
+            string[] RegCheckValue = { "DisableTaskMgr", "NoDispScrSavPage", "DisableChangePassword", "DisableLockWorkstation" };
+            string Temp = "";
+            for (int i = 0; i < 4; i++)
+            {
+                Temp = Convert.ToString(objRegistryKey.GetValue(RegCheckValue[i]));
 
+                if (Temp == "1")
+                    objRegistryKey.DeleteValue(RegCheckValue[i].ToString());
+
+                Temp = "";
+            }
 
             objRegistryKey = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer");
-            objRegistryKey.DeleteValue("NoLogoff");
-            objRegistryKey.DeleteValue("NoClose");
+            string[] RegCheckValue2 = { "NoLogoff","NoClose"};
+            for (int i = 0; i < 2; i++)
+            {
+                Temp = Convert.ToString(objRegistryKey.GetValue(RegCheckValue2[i]));
 
+                if (Temp == "1")
+                    objRegistryKey.DeleteValue(RegCheckValue2[i].ToString());
+
+                Temp = "";
+            }
 
             objRegistryKey = Registry.LocalMachine.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
-            objRegistryKey.DeleteValue("HideFastUserSwitching");
+            Temp = Convert.ToString(objRegistryKey.GetValue("HideFastUserSwitching"));
+            if(Temp == "1")
+              objRegistryKey.DeleteValue("HideFastUserSwitching");
 
             //objRegistryKey = Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Control\Lsa");
             //objRegistryKey.SetValue("LimitBlankPasswordUse", 1);

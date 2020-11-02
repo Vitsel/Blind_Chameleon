@@ -71,7 +71,7 @@ namespace Blind_Client.BlindChatCode
 
 
 
-        public static void InviteUser(int userID, int roomID)
+        public static void InviteUser(uint userID, int roomID)
         {
             ChatRoomJoined roomJoined = new ChatRoomJoined();
             roomJoined.UserID = userID;
@@ -86,7 +86,7 @@ namespace Blind_Client.BlindChatCode
 
             //ChatPacketSend(BlindChatUtil.StructToChatPacket(inv));
         }
-        public void CreateRoom(string text, int[] users)
+        public void CreateRoom(string text, uint[] users)
         {
             //한 방에는 최대 20명
             NewRoomStruct newRoom = new NewRoomStruct();
@@ -96,7 +96,7 @@ namespace Blind_Client.BlindChatCode
             ChatPacketSend(BlindChatUtil.StructToChatPacket(newRoom));
             
         }
-        public void ChatMessageSend(string text, int userID, int roomID)
+        public void ChatMessageSend(string text, uint userID, int roomID)
         {
             ChatMessage message = new ChatMessage();
             message.Message = text;

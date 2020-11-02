@@ -1,11 +1,15 @@
 ﻿using BlindNet;
 using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using Blind_Client.BlindChatUI;
 using Blind_Client.BlindLock;
+using Blind_Client.BlindWebDeviceClass;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -28,29 +32,39 @@ namespace Blind_Client
         [DllImport("user32.dll")]
         private static extern int UnregisterHotKey(IntPtr hwnd, int id);
         const int WM_HOTKEY = 0x0312;
-        const uint WAITTIMESEC = 10;
+        const uint WAITTIMESEC = 15;
 
         private bool isMove;
         private Point fPt;
 
 
         bool isInner;
+        public string ClientID = "";
+
         public SynchronizationContext _uiSyncContext;
 
         BlindSocket mainSocket;
         CancellationTokenSource token;
         Doc_Center documentCenter;
-        
+
+        BlindPacket blindClientCidPacket;
+
         ChatMain _ChatMain;
         BlindChat chat;
         Task tChat; 
         LockForm lockForm;
 
-        public MainForm(bool isInner)
+
+        VPN_Class VPNClass;
+        BlindWebDevice WebDevice;
+        Task tWebDevice;
+        
+        public MainForm(bool isInner,string ClientID)
         {
             InitializeComponent();
 
             this.isInner = isInner;
+            this.ClientID = ClientID;
             mainSocket = new BlindSocket();
             _uiSyncContext = SynchronizationContext.Current;
 
@@ -68,6 +82,8 @@ namespace Blind_Client
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.FormClosing += MainForm_FormClosing; //폼 종료되는 것 연결
+            
             if (!BlindNetUtil.IsConnectedInternet())
             {
                 MessageBox.Show("There is no internet connection", "확인", MessageBoxButtons.OK);
@@ -82,35 +98,56 @@ namespace Blind_Client
             }
 
             //단축키&타이머 등록
-            //BlindLockTimer.Enabled = true;
-            //RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
-            //RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
+            BlindLockTimer.Enabled = true;
+            RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
+            RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            VPNClass = new VPN_Class();
+            //클라이언트 cid 서버로부터 받아오기
+                //ClientID = "test1";
+            byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientID); // String -> bytes 변환
+            mainSocket.CryptoSend(SendStringToByteGender, PacketType.Response);//서버로 클라이언트 id 보냄
+            blindClientCidPacket = mainSocket.CryptoReceive(); // 서버로부터 cid받아옴
+            byte[] data = BlindNetUtil.ByteTrimEndNull(blindClientCidPacket.data); // 넑값 지움
+            byte[] tmp = new byte[4];
+            Array.Copy(data, 0, tmp, 0, data.Length);
+            uint ClintCID = BitConverter.ToUInt32(tmp, 0);
+
+            if (ClintCID.ToString() == "0") //서버에서 아이디를 조회못했을때 0반환
+            {
+                MessageBox.Show("서버로부터 id를 받지 못하였거나 등록되지 않은 아이디입니다." + Environment.NewLine + "\t           관리자에게 문의하십시요.");
+                mainSocket.Close();
+                Application.Exit();
+                return;
+            }
+
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
 
-            //documentCenter = new Doc_Center(document_Center, isInner);
-            //documentCenter.Run();
-            //document_Center.docCenter = documentCenter;
+            WebDevice = new BlindWebDevice();
+            //tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            int _userID = 3;
-            //UI
-            _ChatMain = new ChatMain(_userID);
+
+            documentCenter = new Doc_Center(document_Center, isInner);
+            documentCenter.Run();
+            document_Center.docCenter = documentCenter;
+            
+            _ChatMain = new ChatMain(ClintCID);
             _ChatMain.Dock = DockStyle.Fill;
             MainControlPanel.Controls.Add(_ChatMain);
             EllipseControl blindchatEllipse = new EllipseControl();
             blindchatEllipse.TargetControl = _ChatMain;
             blindchatEllipse.CorenerRadius = 5;
             //Func
-            chat = new BlindChat(_userID, ref _ChatMain, this);
+            chat = new BlindChat(ClintCID, ref _ChatMain, this);
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             //ScreenLocking
-            //lockForm = new LockForm(isInner);
+            lockForm = new LockForm(isInner);
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
@@ -125,28 +162,30 @@ namespace Blind_Client
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //프로그램 종료시 단축키&타이머 해제
-            //BlindLockTimer.Enabled = false;
-            //UnregisterHotKey(this.Handle, 0);
-            //UnregisterHotKey(this.Handle, 1);
+            VPNClass.CMD_VPN_Instruction("VPN");
+            if (e.CloseReason != CloseReason.ApplicationExitCall) // application.EXIT 함수 호출했을때. 맨처음 cid 확인후 0 리턴받으면 exit함
+            {
+                WebDevice.MainFormClosingSocketClose();
+                //프로그램 종료시 단축키&타이머 해제
+                BlindLockTimer.Enabled = false;
+                UnregisterHotKey(this.Handle, 0);
+                UnregisterHotKey(this.Handle, 1);
+                Application.Exit();
+            }
         }
-
-
-
-
 
         private void BlindChatTimer_Tick(object sender, EventArgs e)
         {
-            //if (GetIdleTime() > WAITTIMESEC * 1000) // 10초
-            //{
-            //    BlindLockTimer.Enabled = false;
-            //    lockForm.SetHook();
-            //    lockForm.DisableTask();
+            if (GetIdleTime() > WAITTIMESEC * 1000) 
+            {
+                BlindLockTimer.Enabled = false;
+                lockForm.SetHook();
+                lockForm.DisableTask();
 
-            //    lockForm.ShowDialog();
+                lockForm.ShowDialog();
 
-            //    BlindLockTimer.Enabled = true;
-            //}
+                BlindLockTimer.Enabled = true;
+            }
         }
 
         private const int cGrip = 20;
@@ -197,31 +236,32 @@ namespace Blind_Client
                         }
                     }
                     break;
-                    //    case WM_HOTKEY:
-                    //        {
-                    //            if (m.WParam == (IntPtr)0x0)
-                    //            {
-                    //                BlindLockTimer.Enabled = false;
-                    //                lockForm.SetHook();
-                    //                lockForm.DisableTask();
 
-                    //                lockForm.ShowDialog();
+                case WM_HOTKEY:
+                    {
+                        if (m.WParam == (IntPtr)0x0)
+                        {
+                            BlindLockTimer.Enabled = false;
+                            lockForm.SetHook();
+                            lockForm.DisableTask();
 
-                    //                BlindLockTimer.Enabled = true;
-                    //            }
-                    //            else if (m.WParam == (IntPtr)0x1)
-                    //            {
+                            lockForm.ShowDialog();
 
-                    //                BlindLockTimer.Enabled = false;
-                    //                lockForm.SetHook();
-                    //                lockForm.DisableTask();
+                            BlindLockTimer.Enabled = true;
+                        }
+                        else if (m.WParam == (IntPtr)0x1)
+                        {
 
-                    //                lockForm.ShowDialog();
+                            BlindLockTimer.Enabled = false;
+                            lockForm.SetHook();
+                            lockForm.DisableTask();
 
-                    //                BlindLockTimer.Enabled = true;
-                    //            }
-                    //        }
-                    //        break;
+                            lockForm.ShowDialog();
+
+                            BlindLockTimer.Enabled = true;
+                        }
+                    }
+                    break;
             }
             base.WndProc(ref m);
         }

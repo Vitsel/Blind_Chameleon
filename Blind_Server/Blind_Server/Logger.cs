@@ -34,7 +34,7 @@ namespace BlindLogger
                     break;
                 case LogService.DeviceControl:
                     this.service = "Device Control";
-                    port = BlindNetConst.DEVICECTLPORT;
+                    port = BlindNetConst.WebDevicePort;
                     break;
                 case LogService.ScreenLock:
                     this.service = "ScreenLock";

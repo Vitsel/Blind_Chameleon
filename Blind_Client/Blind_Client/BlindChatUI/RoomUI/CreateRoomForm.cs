@@ -15,14 +15,14 @@ namespace Blind_Client.BlindChatUI.RoomUI
 {
     public partial class CreateRoomForm : Form
     {
-        private int _UserID;
+        private uint _UserID;
         private int _UserCount;
         private bool isMove;
         private Point fPt;
-        public delegate void MyFunc(string text, int[] array);
+        public delegate void MyFunc(string text, uint[] array);
         public MyFunc CreateRoom;
 
-        public CreateRoomForm(int _UserID)
+        public CreateRoomForm(uint _UserID)
         {
             InitializeComponent();
             this._UserID = _UserID;
@@ -43,7 +43,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
                 }
                 else
                 {
-                    int[] selectedUser = new int[20];
+                    uint[] selectedUser = new uint[20];
                     selectedUser[0] = _UserID;
 
 
