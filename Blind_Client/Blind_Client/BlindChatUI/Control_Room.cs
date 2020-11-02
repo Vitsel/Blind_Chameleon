@@ -24,6 +24,12 @@ namespace Blind_Client.BlindChatUI
         {
             InitializeComponent();
             _UserID = UserID;
+
+            lbl_room.BackColor = BlindColor.ButtonColor;
+            lbl_room.ForeColor = BlindColor.UIColor;
+            btn_Create.BackColor = BlindColor.PressedColor;
+            btn_Create.ForeColor = BlindColor.UIColor;
+            RoomItem_LayoutPanel.BackColor = BlindColor.BackColor;
         }
         public void SetBlindChat(BlindChat chat)
         {
@@ -59,7 +65,7 @@ namespace Blind_Client.BlindChatUI
             base.OnResize(e);
             foreach (Room_Item item in RoomItem_LayoutPanel.Controls)
             {
-                item.Width = this.Width;
+                item.Width = this.Width-18;
             }
         }
         public void SendCreateRoom(string text, int[] array)

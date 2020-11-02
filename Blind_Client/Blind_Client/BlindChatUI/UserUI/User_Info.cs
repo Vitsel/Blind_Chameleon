@@ -16,6 +16,9 @@ namespace Blind_Client.BlindChatUI.UserUI
         public User_Info()
         {
             InitializeComponent();
+            BlindChatUtil.SetEllipse(this, 10);
+
+            this.BackColor = BlindColor.LightColor;
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)

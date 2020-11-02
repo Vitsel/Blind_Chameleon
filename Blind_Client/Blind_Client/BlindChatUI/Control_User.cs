@@ -22,6 +22,10 @@ namespace Blind_Client.BlindChatUI
             InitializeComponent();
             _UserID = UserID;
 
+            lbl_user.ForeColor = BlindColor.UIColor;
+            panel2.BackColor = BlindColor.BackColor;
+            panel3.BackColor = BlindColor.BackColor;
+            UserInfo_LayoutPanel.BackColor = BlindColor.BackColor;
         }
 
         private void Control_User_Load(object sender, EventArgs e)
@@ -54,12 +58,14 @@ namespace Blind_Client.BlindChatUI
         public void AddCategory(string department)
         {
             User_Category category = new User_Category(department);
+            category.Width = UserItem_LayoutPanel.Width;
             UserItem_LayoutPanel.Controls.Add(category);
         }
         public void AddUser(User user)
         {
             User_Item userItem = new User_Item(user);
             userItem.UserClickEvent = DisplayUserInfo;
+            userItem.Width = UserItem_LayoutPanel.Width;
 
             UserItem_LayoutPanel.Controls.Add(userItem);
         }

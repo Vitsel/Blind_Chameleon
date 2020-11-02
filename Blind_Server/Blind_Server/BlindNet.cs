@@ -436,8 +436,8 @@ namespace BlindNet
 
     static class BlindNetConst
     {
-        //public const string ServerIP = "127.0.0.1";
-        public const string ServerIP = "10.0.1.6";
+        public const string ServerIP = "127.0.0.1";
+        //public const string ServerIP = "10.0.1.6";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;

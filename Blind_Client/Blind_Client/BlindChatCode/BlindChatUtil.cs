@@ -1,15 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Blind_Client.BlindChatUI;
 using BlindNet;
 
 namespace Blind_Client.BlindChatCode
 {
+    static public class BlindColor
+    {
+        public static Color UIColor = Color.FromArgb(241, 196, 15);
+        public static Color LabelColor = Color.FromArgb(43, 43, 43);
+        public static Color BackColor = Color.FromArgb(255, 255, 255);
+        public static Color LightColor = Color.FromArgb(240, 240, 240);
+
+        public static Color ButtonColor = Color.FromArgb(80, 80, 80);
+        public static Color OnMouseColor = Color.FromArgb(220, 220, 220);
+        public static Color PressedColor = Color.FromArgb(110, 110, 110);
+    }
+
     static public class BlindChatUtil
     {
+        public static void SetEllipse(Control obj, int radius = 10)
+        {
+            EllipseControl objEllipse = new EllipseControl();
+            objEllipse.TargetControl = obj;
+            objEllipse.CorenerRadius = radius;
+        }
         public static T ChatPacketToStruct<T>(ChatPacket chatPack) where T : struct
         {
             byte[] chatPackByte = new byte[Marshal.SizeOf(typeof(T))];

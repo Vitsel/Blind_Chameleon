@@ -29,51 +29,56 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.Lbl_UserDepartment = new System.Windows.Forms.Label();
+            this.Lbl_UserPosition = new System.Windows.Forms.Label();
             this.Lbl_UserName = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.Lbl_UserDepartment);
+            this.panel1.Controls.Add(this.Lbl_UserPosition);
             this.panel1.Controls.Add(this.Lbl_UserName);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(2);
             this.panel1.Size = new System.Drawing.Size(200, 40);
             this.panel1.TabIndex = 0;
             // 
-            // Lbl_UserDepartment
+            // Lbl_UserPosition
             // 
-            this.Lbl_UserDepartment.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Lbl_UserDepartment.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Lbl_UserDepartment.ForeColor = System.Drawing.Color.DimGray;
-            this.Lbl_UserDepartment.Location = new System.Drawing.Point(0, 23);
-            this.Lbl_UserDepartment.Margin = new System.Windows.Forms.Padding(0);
-            this.Lbl_UserDepartment.Name = "Lbl_UserDepartment";
-            this.Lbl_UserDepartment.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.Lbl_UserDepartment.Size = new System.Drawing.Size(200, 17);
-            this.Lbl_UserDepartment.TabIndex = 1;
-            this.Lbl_UserDepartment.Text = "label1";
-            this.Lbl_UserDepartment.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Lbl_UserDepartment.Click += new System.EventHandler(this.Lbl_UserName_Click);
-            this.Lbl_UserDepartment.DoubleClick += new System.EventHandler(this.Lbl_UserName_DoubleClick);
+            this.Lbl_UserPosition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Lbl_UserPosition.Font = new System.Drawing.Font("KoPub돋움체 Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Lbl_UserPosition.ForeColor = System.Drawing.Color.DimGray;
+            this.Lbl_UserPosition.Location = new System.Drawing.Point(2, 25);
+            this.Lbl_UserPosition.Margin = new System.Windows.Forms.Padding(0);
+            this.Lbl_UserPosition.Name = "Lbl_UserPosition";
+            this.Lbl_UserPosition.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.Lbl_UserPosition.Size = new System.Drawing.Size(196, 13);
+            this.Lbl_UserPosition.TabIndex = 1;
+            this.Lbl_UserPosition.Text = "label1";
+            this.Lbl_UserPosition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Lbl_UserPosition.Click += new System.EventHandler(this.Lbl_UserName_Click);
+            this.Lbl_UserPosition.DoubleClick += new System.EventHandler(this.Lbl_UserName_DoubleClick);
+            this.Lbl_UserPosition.MouseLeave += new System.EventHandler(this.Lbl_UserName_MouseLeave);
+            this.Lbl_UserPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Lbl_UserName_MouseMove);
             // 
             // Lbl_UserName
             // 
             this.Lbl_UserName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.Lbl_UserName.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Lbl_UserName.Location = new System.Drawing.Point(0, 0);
+            this.Lbl_UserName.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Lbl_UserName.Location = new System.Drawing.Point(2, 2);
             this.Lbl_UserName.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_UserName.Name = "Lbl_UserName";
-            this.Lbl_UserName.Size = new System.Drawing.Size(200, 23);
+            this.Lbl_UserName.Size = new System.Drawing.Size(196, 23);
             this.Lbl_UserName.TabIndex = 0;
             this.Lbl_UserName.Text = "label1";
             this.Lbl_UserName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.Lbl_UserName.Click += new System.EventHandler(this.Lbl_UserName_Click);
             this.Lbl_UserName.DoubleClick += new System.EventHandler(this.Lbl_UserName_DoubleClick);
+            this.Lbl_UserName.MouseLeave += new System.EventHandler(this.Lbl_UserName_MouseLeave);
+            this.Lbl_UserName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Lbl_UserName_MouseMove);
             // 
             // User_Item
             // 
@@ -92,7 +97,7 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label Lbl_UserDepartment;
+        private System.Windows.Forms.Label Lbl_UserPosition;
         private System.Windows.Forms.Label Lbl_UserName;
     }
 }

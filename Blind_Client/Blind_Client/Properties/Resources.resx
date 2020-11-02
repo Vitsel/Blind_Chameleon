@@ -121,7 +121,19 @@
   <data name="BlindLockBack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BlindLockBack.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ChatIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ChatIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ChatIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ChatIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UserIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UserIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="opened_folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\opened-folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UserIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UserIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

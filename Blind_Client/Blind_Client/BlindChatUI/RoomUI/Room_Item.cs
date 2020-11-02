@@ -17,13 +17,16 @@ namespace Blind_Client.BlindChatUI.RoomUI
         public delegate void MyFunc(ChatRoom Room);
         public MyFunc RoomClickEvent, RoomDoubleClickEvent;
         public int ID { get{ return _Room.ID; } }
+        public string Time { set { lbl_Time.Text = value; } }
 
         public Room_Item(ChatRoom Room)
         {
             InitializeComponent();
             lbl_Name.Cursor = Cursors.Hand;
             lbl_Info.Cursor = Cursors.Hand;
-            
+
+            this.BackColor = BlindColor.OnMouseColor;
+
             _Room = Room;
         }
 
@@ -47,19 +50,14 @@ namespace Blind_Client.BlindChatUI.RoomUI
         {
             this.lbl_Name.Text = _Room.Name;
             this.lbl_Info.Text = "#" + _Room.ID;
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            this.lbl_Name.Width = this.Width;
-            this.lbl_Info.Width = this.Width;
+            this.lbl_Time.Text = _Room.LastMessageTime;
         }
 
         private void lbl_Name_DoubleClick(object sender, EventArgs e)
         {
             if (RoomDoubleClickEvent != null)
             {
+                OpenedMessage();
                 RoomDoubleClickEvent(_Room);
             }
         }

@@ -1,4 +1,5 @@
-﻿using Blind_Client.BlindChatUI.RoomUI;
+﻿using Blind_Client.BlindChatUI;
+using Blind_Client.BlindChatUI.RoomUI;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -13,6 +14,7 @@ namespace Blind_Client.BlindChatCode
 {
     public partial class BlindChat
     {
+
         public delegate void VoidFunction();
         public void ExecuteWithInvoke(Form form, VoidFunction function)
         {
@@ -118,16 +120,22 @@ namespace Blind_Client.BlindChatCode
             }
             ExecuteWithInvoke(this.form, delegate
             {
-                UI._RoomControl.LoadRooms();
+                //UI._RoomControl.LoadRooms();
                 
                     foreach(Room_Item item in UI._RoomControl.RoomItem_LayoutPanel.Controls)
                     {
-                        if(item.ID == message.ID)
+                        if(item.ID == message.RoomID)
                         {
-                            if (GetFormWithName(message.ID.ToString()) == null)
+                            if (GetFormWithName(message.RoomID.ToString()) == null)
                                 item.NewMessage();
                             else
                                 item.OpenedMessage();
+
+                            item.Time = message.Time;
+                            //item.BringToFront();
+
+                            UI._RoomControl.RoomItem_LayoutPanel.Controls.SetChildIndex((Control)item, 0);
+                            UI._RoomControl.RoomItem_LayoutPanel.Invalidate();
                         }
                     }
                 
