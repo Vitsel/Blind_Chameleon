@@ -76,18 +76,18 @@
             // 
             // btn_Create
             // 
-            this.btn_Create.BackColor = System.Drawing.Color.Yellow;
+            this.btn_Create.BackColor = System.Drawing.Color.Gray;
             this.btn_Create.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Create.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_Create.FlatAppearance.BorderSize = 0;
             this.btn_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Create.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_Create.Image = global::Blind_Client.Properties.Resources.newroom;
             this.btn_Create.Location = new System.Drawing.Point(0, 0);
             this.btn_Create.Margin = new System.Windows.Forms.Padding(0);
             this.btn_Create.Name = "btn_Create";
             this.btn_Create.Size = new System.Drawing.Size(64, 50);
             this.btn_Create.TabIndex = 0;
-            this.btn_Create.Text = "방생성";
             this.btn_Create.UseVisualStyleBackColor = false;
             this.btn_Create.Click += new System.EventHandler(this.button1_Click);
             // 

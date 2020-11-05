@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI.UserUI
 {
@@ -24,7 +25,9 @@ namespace Blind_Client.BlindChatUI.UserUI
             InitializeComponent();
             Lbl_UserPosition.Cursor = Cursors.Hand;
             Lbl_UserName.Cursor = Cursors.Hand;
-            BlindChatUtil.SetEllipse(this, 10);
+            BlindNetUtil.SetEllipse(this, 10);
+            
+            this.BackColor = BlindColor.Light;
 
             _user = user;
             
@@ -48,12 +51,12 @@ namespace Blind_Client.BlindChatUI.UserUI
 
         private void Lbl_UserName_MouseMove(object sender, MouseEventArgs e)
         {
-            panel1.BackColor = BlindColor.OnMouseColor;
+            panel1.BackColor = BlindColor.Gray;
         }
 
         private void Lbl_UserName_MouseLeave(object sender, EventArgs e)
         {
-            panel1.BackColor = BlindColor.BackColor;
+            panel1.BackColor = BlindColor.Light;
         }
 
         private void User_Item_Load(object sender, EventArgs e)

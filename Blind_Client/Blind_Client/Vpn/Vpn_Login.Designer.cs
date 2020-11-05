@@ -136,7 +136,6 @@
             this.panel_Login.Name = "panel_Login";
             this.panel_Login.Size = new System.Drawing.Size(332, 226);
             this.panel_Login.TabIndex = 8;
-            this.panel_Login.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_Login_Paint);
             // 
             // EXIT_button
             // 

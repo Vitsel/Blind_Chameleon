@@ -70,7 +70,21 @@ namespace Blind_Client.BlindChatCode
         }
 
 
+        public static void ExitRoom(uint userID, int roomID)
+        {
+            ChatRoomJoined roomJoined = new ChatRoomJoined();
+            roomJoined.UserID = userID;
+            roomJoined.RoomID = roomID;
+            roomJoined.Time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
 
+            ChatPacketSend(BlindChatUtil.StructToChatPacket(roomJoined, ChatType.Exit));
+
+            Form form = BlindChatUtil.GetFormWithName(roomJoined.RoomID.ToString());
+            if(form != null)
+            {
+                form.Close();
+            }
+        }
         public static void InviteUser(uint userID, int roomID)
         {
             ChatRoomJoined roomJoined = new ChatRoomJoined();

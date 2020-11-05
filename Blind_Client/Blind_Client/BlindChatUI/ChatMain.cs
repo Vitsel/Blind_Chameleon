@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using System.Diagnostics;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI
 {
@@ -41,7 +42,7 @@ namespace Blind_Client.BlindChatUI
             buttonPanel = new Panel();
             buttonPanel.Width = 6;
             buttonPanel.Height = btn_Chat.Height;
-            buttonPanel.BackColor = BlindColor.UIColor;
+            buttonPanel.BackColor = BlindColor.Info;
 
             _UserControl = new Control_User(UserID);
             _UserControl.Dock = DockStyle.Fill;
@@ -56,14 +57,15 @@ namespace Blind_Client.BlindChatUI
 
             this.btn_Chat.Cursor = this.btn_Member.Cursor = Cursors.Hand;
 
-            this.Function_LayoutPanel.BackColor = BlindColor.BackColor;
-            this.BackColor = BlindColor.ButtonColor;
-            this.btn_Chat.ForeColor = this.btn_Member.ForeColor = BlindColor.UIColor;
-            this.btn_Chat.BackColor = this.btn_Member.BackColor = BlindColor.ButtonColor;
+            this.Button_LayoutPanel.BackColor = tableLayoutPanel1.BackColor = BlindColor.LightBlue;
+            this.Function_LayoutPanel.BackColor = BlindColor.Light;
+            //this.BackColor = BlindColor.Secondary;
+            this.btn_Chat.ForeColor = this.btn_Member.ForeColor = BlindColor.Light;
+            this.btn_Chat.BackColor = this.btn_Member.BackColor = BlindColor.LightBlue;
 
-            BlindChatUtil.SetEllipse(btn_Member, 20);
-            BlindChatUtil.SetEllipse(btn_Chat, 20);
-
+            BlindNetUtil.SetEllipse(btn_Member, 20);
+            BlindNetUtil.SetEllipse(btn_Chat, 20);
+            
             //EllipseControl funcEllipse = new EllipseControl();
             //funcEllipse.TargetControl = Function_LayoutPanel;
             //funcEllipse.CorenerRadius = 10;
@@ -95,7 +97,7 @@ namespace Blind_Client.BlindChatUI
         {
             if(_selectedButton != null)
             {
-                _selectedButton.BackColor = BlindColor.ButtonColor;
+               _selectedButton.BackColor = BlindColor.LightBlue;
             }
 
             buttonPanel.Parent = btn;
@@ -103,7 +105,7 @@ namespace Blind_Client.BlindChatUI
             //buttonPanel.Location = new Point(0, btn.Location.Y);
             //buttonPanel.BringToFront();
 
-            btn.BackColor = BlindColor.PressedColor;
+            btn.BackColor = BlindColor.BrightBlue;
             _selectedButton = btn;
         }
         private void ChatMain_Load(object sender, EventArgs e)

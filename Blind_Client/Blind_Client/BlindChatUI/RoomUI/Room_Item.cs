@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI.RoomUI
 {
@@ -25,8 +26,9 @@ namespace Blind_Client.BlindChatUI.RoomUI
             lbl_Name.Cursor = Cursors.Hand;
             lbl_Info.Cursor = Cursors.Hand;
 
-            this.BackColor = BlindColor.OnMouseColor;
-
+            this.BackColor = BlindColor.Light;
+            BlindNetUtil.SetEllipse(this, 10);
+            
             _Room = Room;
         }
 
@@ -51,6 +53,16 @@ namespace Blind_Client.BlindChatUI.RoomUI
             this.lbl_Name.Text = _Room.Name;
             this.lbl_Info.Text = "#" + _Room.ID;
             this.lbl_Time.Text = _Room.LastMessageTime;
+        }
+
+        private void lbl_Name_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.BackColor = BlindColor.Gray;
+        }
+
+        private void lbl_Name_MouseLeave(object sender, EventArgs e)
+        {
+            this.BackColor = BlindColor.Light;
         }
 
         private void lbl_Name_DoubleClick(object sender, EventArgs e)

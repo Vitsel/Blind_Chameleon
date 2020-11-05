@@ -1,9 +1,11 @@
 ﻿
 
 using Blind_Client.BlindChatCode;
+using BlindNet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -25,8 +27,30 @@ namespace Blind_Client.BlindChatUI.RoomUI
         public CreateRoomForm(uint _UserID)
         {
             InitializeComponent();
+
+            this.StartPosition = FormStartPosition.CenterParent;
             this._UserID = _UserID;
             _UserCount = 1;
+
+            lbl_FormName.BackColor = BlindColor.Light;
+            lbl_FormName.ForeColor = BlindColor.Primary;
+            button1.BackColor = BlindColor.Light;
+            button1.ForeColor = BlindColor.Primary;
+            btn_Cancel.BackColor = btn_Confirm.BackColor = BlindColor.Primary;
+            btn_Cancel.ForeColor = btn_Confirm.ForeColor = BlindColor.Light;
+            CreateRoomIItem_LayoutPanel.BackColor = BlindColor.Light;
+            panel3.BackColor = lbl_UserCount.BackColor = BlindColor.Light;
+            lbl_UserCount.ForeColor = BlindColor.Secondary;
+
+            panel7.BackColor = tb_RoomName.BackColor = BlindColor.Light;
+            
+            BlindNetUtil.SetEllipse(this, 10);
+
+            BlindNetUtil.SetEllipse(tableLayoutPanel1, 10);
+
+            BlindNetUtil.SetEllipse(panel7, 10);
+            BlindNetUtil.SetEllipse(btn_Confirm, 5);
+            BlindNetUtil.SetEllipse(btn_Cancel, 5);
         }
 
         private void btn_Confirm_Click(object sender, EventArgs e)
@@ -99,7 +123,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
                     item.AddUserCount = AddUserCount;
                     item.SubUserCount = SubUserCount;
                     item.LoadUserCount = LoadUserCount;
-                    item.Width = CreateRoomIItem_LayoutPanel.Width-6;
+                    item.Width = CreateRoomIItem_LayoutPanel.Width-24;
 
                     CreateRoomIItem_LayoutPanel.Controls.Add(item);
 

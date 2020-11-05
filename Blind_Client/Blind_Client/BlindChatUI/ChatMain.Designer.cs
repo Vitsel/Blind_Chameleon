@@ -28,26 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChatMain));
+            this.Function_LayoutPanel = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Button_LayoutPanel = new System.Windows.Forms.Panel();
             this.btn_Chat = new System.Windows.Forms.Button();
             this.btn_Member = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.Function_LayoutPanel = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1.SuspendLayout();
             this.Button_LayoutPanel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // Function_LayoutPanel
+            // 
+            this.Function_LayoutPanel.BackColor = System.Drawing.Color.Transparent;
+            this.Function_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Function_LayoutPanel.Location = new System.Drawing.Point(80, 0);
+            this.Function_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.Function_LayoutPanel.Name = "Function_LayoutPanel";
+            this.Function_LayoutPanel.Size = new System.Drawing.Size(620, 500);
+            this.Function_LayoutPanel.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.Button_LayoutPanel, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 166F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(80, 500);
+            this.tableLayoutPanel1.TabIndex = 2;
             // 
             // Button_LayoutPanel
             // 
             this.Button_LayoutPanel.Controls.Add(this.btn_Chat);
             this.Button_LayoutPanel.Controls.Add(this.btn_Member);
-            this.Button_LayoutPanel.Controls.Add(this.panel1);
-            this.Button_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.Button_LayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.Button_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Button_LayoutPanel.Location = new System.Drawing.Point(0, 166);
             this.Button_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.Button_LayoutPanel.Name = "Button_LayoutPanel";
-            this.Button_LayoutPanel.Size = new System.Drawing.Size(150, 500);
-            this.Button_LayoutPanel.TabIndex = 0;
+            this.Button_LayoutPanel.Size = new System.Drawing.Size(80, 166);
+            this.Button_LayoutPanel.TabIndex = 1;
             // 
             // btn_Chat
             // 
@@ -55,14 +79,15 @@
             this.btn_Chat.Dock = System.Windows.Forms.DockStyle.Top;
             this.btn_Chat.FlatAppearance.BorderSize = 0;
             this.btn_Chat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Chat.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_Chat.Image = ((System.Drawing.Image)(resources.GetObject("btn_Chat.Image")));
-            this.btn_Chat.Location = new System.Drawing.Point(0, 130);
-            this.btn_Chat.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_Chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_Chat.Image = global::Blind_Client.Properties.Resources.chat;
+            this.btn_Chat.Location = new System.Drawing.Point(0, 83);
+            this.btn_Chat.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.btn_Chat.Name = "btn_Chat";
             this.btn_Chat.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.btn_Chat.Size = new System.Drawing.Size(150, 80);
+            this.btn_Chat.Size = new System.Drawing.Size(80, 83);
             this.btn_Chat.TabIndex = 2;
+            this.btn_Chat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_Chat.UseVisualStyleBackColor = false;
             this.btn_Chat.Click += new System.EventHandler(this.btn_Chat_Click);
             // 
@@ -72,34 +97,17 @@
             this.btn_Member.Dock = System.Windows.Forms.DockStyle.Top;
             this.btn_Member.FlatAppearance.BorderSize = 0;
             this.btn_Member.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Member.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_Member.Image = global::Blind_Client.Properties.Resources.UserIcon1;
-            this.btn_Member.Location = new System.Drawing.Point(0, 50);
-            this.btn_Member.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_Member.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_Member.Image = global::Blind_Client.Properties.Resources.user;
+            this.btn_Member.Location = new System.Drawing.Point(0, 0);
+            this.btn_Member.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.btn_Member.Name = "btn_Member";
             this.btn_Member.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.btn_Member.Size = new System.Drawing.Size(150, 80);
+            this.btn_Member.Size = new System.Drawing.Size(80, 83);
             this.btn_Member.TabIndex = 1;
+            this.btn_Member.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_Member.UseVisualStyleBackColor = false;
             this.btn_Member.Click += new System.EventHandler(this.btn_Member_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(150, 50);
-            this.panel1.TabIndex = 4;
-            // 
-            // Function_LayoutPanel
-            // 
-            this.Function_LayoutPanel.BackColor = System.Drawing.Color.Transparent;
-            this.Function_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Function_LayoutPanel.Location = new System.Drawing.Point(150, 0);
-            this.Function_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.Function_LayoutPanel.Name = "Function_LayoutPanel";
-            this.Function_LayoutPanel.Size = new System.Drawing.Size(550, 500);
-            this.Function_LayoutPanel.TabIndex = 1;
             // 
             // ChatMain
             // 
@@ -107,23 +115,23 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.Controls.Add(this.Function_LayoutPanel);
-            this.Controls.Add(this.Button_LayoutPanel);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "ChatMain";
             this.Size = new System.Drawing.Size(700, 500);
             this.Load += new System.EventHandler(this.ChatMain_Load);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.Button_LayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
+        private System.Windows.Forms.Panel Function_LayoutPanel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel Button_LayoutPanel;
         private System.Windows.Forms.Button btn_Chat;
         private System.Windows.Forms.Button btn_Member;
-        private System.Windows.Forms.Panel Function_LayoutPanel;
-        private System.Windows.Forms.Panel panel1;
     }
 }

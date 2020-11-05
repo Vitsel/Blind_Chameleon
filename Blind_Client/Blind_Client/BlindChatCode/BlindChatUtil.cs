@@ -13,24 +13,31 @@ namespace Blind_Client.BlindChatCode
 {
     static public class BlindColor
     {
-        public static Color UIColor = Color.FromArgb(241, 196, 15);
-        public static Color LabelColor = Color.FromArgb(43, 43, 43);
-        public static Color BackColor = Color.FromArgb(255, 255, 255);
-        public static Color LightColor = Color.FromArgb(240, 240, 240);
+        public static Color Primary = Color.FromArgb(78,115, 223);
+        public static Color Info = Color.FromArgb(54, 185, 204);
+        public static Color Light = Color.FromArgb(248, 249, 252);
+        public static Color Secondary = Color.FromArgb(133, 135, 150);
 
-        public static Color ButtonColor = Color.FromArgb(80, 80, 80);
-        public static Color OnMouseColor = Color.FromArgb(220, 220, 220);
-        public static Color PressedColor = Color.FromArgb(110, 110, 110);
+        public static Color Gray = Color.FromArgb(236, 236, 250);
+        public static Color DarkGray = Color.FromArgb(206, 206, 220);
+        public static Color LightBlue = Color.FromArgb(99, 116, 223);
+        public static Color BrightBlue = Color.FromArgb(119, 136, 223);
+        public static Color SkyBlue = Color.FromArgb(200, 205, 250);
+        public static Color Black = Color.FromArgb(20, 20, 20);
     }
 
     static public class BlindChatUtil
     {
-        public static void SetEllipse(Control obj, int radius = 10)
+        public static Form GetFormWithName(string formName)
         {
-            EllipseControl objEllipse = new EllipseControl();
-            objEllipse.TargetControl = obj;
-            objEllipse.CorenerRadius = radius;
+            foreach (Form openForm in Application.OpenForms)
+            {
+                if (openForm.Name == formName)
+                    return openForm;
+            }
+            return null;
         }
+
         public static T ChatPacketToStruct<T>(ChatPacket chatPack) where T : struct
         {
             byte[] chatPackByte = new byte[Marshal.SizeOf(typeof(T))];
@@ -60,10 +67,10 @@ namespace Blind_Client.BlindChatCode
             byte[] data = BlindNetUtil.StructToByte(room);
             return BlindChatUtil.ByteToChatPacket(data, ChatType.Room);
         }
-        public static ChatPacket StructToChatPacket(ChatRoomJoined roomJoined)
+        public static ChatPacket StructToChatPacket(ChatRoomJoined roomJoined, ChatType type = ChatType.RoomJoined)
         {
             byte[] data = BlindNetUtil.StructToByte(roomJoined);
-            return BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
+            return BlindChatUtil.ByteToChatPacket(data, type);
         }
         public static ChatPacket StructToChatPacket(ChatMessage message)
         {
@@ -118,7 +125,8 @@ namespace Blind_Client.BlindChatCode
 
         //chat functions.. ex) quit chat, create chat
         NewRoom = 7,
-        Invitation = 8
+        Invitation = 8,
+        Exit = 9
     }
 
     public enum UserStat

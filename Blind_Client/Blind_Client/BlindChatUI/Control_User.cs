@@ -22,10 +22,10 @@ namespace Blind_Client.BlindChatUI
             InitializeComponent();
             _UserID = UserID;
 
-            lbl_user.ForeColor = BlindColor.UIColor;
-            panel2.BackColor = BlindColor.BackColor;
-            panel3.BackColor = BlindColor.BackColor;
-            UserInfo_LayoutPanel.BackColor = BlindColor.BackColor;
+            lbl_user.ForeColor = BlindColor.Primary;
+            panel2.BackColor = BlindColor.Light;
+            panel3.BackColor = BlindColor.Light;
+            UserInfo_LayoutPanel.BackColor = BlindColor.Light;
         }
 
         private void Control_User_Load(object sender, EventArgs e)

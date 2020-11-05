@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Blind_Client.BlindChatUI;
 
 namespace BlindNet
 {
@@ -323,6 +324,12 @@ namespace BlindNet
 
     static class BlindNetUtil
     {
+        public static void SetEllipse(Control obj, int radius = 10)
+        {
+            EllipseControl objEllipse = new EllipseControl();
+            objEllipse.TargetControl = obj;
+            objEllipse.CorenerRadius = radius;
+        }
         static public bool IsConnectedInternet()
         {
             const string NCSI_TEST_URL = "http://www.msftncsi.com/ncsi.txt";

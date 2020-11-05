@@ -36,6 +36,7 @@ namespace Blind_Client
 
         private bool isMove;
         private Point fPt;
+        private Button _selectedBtn;
 
 
         bool isInner;
@@ -69,8 +70,9 @@ namespace Blind_Client
             _uiSyncContext = SynchronizationContext.Current;
 
             //UI
-            Button_DocCenter.ForeColor = btn_ActivateChat.ForeColor = BlindColor.UIColor;
-            Button_DocCenter.BackColor = btn_ActivateChat.BackColor = BlindColor.PressedColor;
+            panel_Fore.BackColor = BlindColor.Primary;
+            Button_DocCenter.ForeColor = btn_ActivateChat.ForeColor = BlindColor.Light;
+            Button_DocCenter.BackColor = btn_ActivateChat.BackColor = BlindColor.Primary;
 
 
 
@@ -101,6 +103,8 @@ namespace Blind_Client
             BlindLockTimer.Enabled = true;
             RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
             RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
+
+            ActivateControl(MainControl.Document);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -139,9 +143,7 @@ namespace Blind_Client
             _ChatMain = new ChatMain(ClintCID);
             _ChatMain.Dock = DockStyle.Fill;
             MainControlPanel.Controls.Add(_ChatMain);
-            EllipseControl blindchatEllipse = new EllipseControl();
-            blindchatEllipse.TargetControl = _ChatMain;
-            blindchatEllipse.CorenerRadius = 5;
+
             //Func
             chat = new BlindChat(ClintCID, ref _ChatMain, this);
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
@@ -152,12 +154,12 @@ namespace Blind_Client
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
         {
-            document_Center.BringToFront();
+            ActivateControl(MainControl.Document);
         }
 
         private void btn_ActivateChat_Click(object sender, EventArgs e)
         {
-            _ChatMain.BringToFront();
+            ActivateControl(MainControl.Community);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -173,6 +175,13 @@ namespace Blind_Client
                 Application.Exit();
             }
         }
+
+
+
+
+
+
+
 
         private void BlindChatTimer_Tick(object sender, EventArgs e)
         {
@@ -378,6 +387,38 @@ namespace Blind_Client
             btn_minimize.ForeColor = Color.Gray;
         }
 
+        enum MainControl { Document, Community}
+
+        private void ActivateControl(MainControl controlType)
+        {
+            switch (controlType)
+            {
+                case MainControl.Document:
+                    {
+                        document_Center.BringToFront();
+                        SetButton(Button_DocCenter);
+                    }
+                    break;
+                case MainControl.Community:
+                    {
+                        _ChatMain.BringToFront();
+                        SetButton(btn_ActivateChat);
+                    }
+                    break;
+
+            }
+        }
+
+        private void SetButton(Button btn)
+        {
+            if (_selectedBtn != null)
+            {
+                _selectedBtn.BackColor = BlindColor.Primary;
+            }
+
+            btn.BackColor = BlindColor.Info;
+            _selectedBtn = btn;
+        }
 
 
     }

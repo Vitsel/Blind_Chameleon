@@ -21,7 +21,10 @@ namespace Blind_Client.BlindChatCode
         {
             this.userID = userID;
         }
+        ~BlindChatDB()
+        {
 
+        }
         public ChatTimeStamp GetAllTime()
         {
             ChatTimeStamp chatTimeStamp = new ChatTimeStamp();

@@ -1,4 +1,5 @@
 ﻿using Blind_Client.BlindChatCode;
+using BlindNet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,18 +19,34 @@ namespace Blind_Client.BlindChatUI.RoomUI
         private List<ChatMessage> _messageList;
         public delegate void MyFunc(string text, uint userID, int roomID);
         public MyFunc SendChatMessage;
+        private bool isMove;
+        private Point fPt;
 
         public MessageRoom(uint userID, ChatRoom room, List<ChatMessage> messageList)
         {
             InitializeComponent();
+
+            isMove = false;
             _userID = userID;
             _room = room;
             _messageList = messageList;
             this.Name = room.ID.ToString();
             this.lbl_ID.Text = "#" + room.ID.ToString();
             this.Text = this.lbl_Title.Text = _room.Name;
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.StartPosition = FormStartPosition.Manual;
 
+            lbl_Title.BackColor = lbl_ID.BackColor = btn_menu.BackColor = button1.BackColor = BlindColor.Primary;
+            lbl_Title.ForeColor = lbl_ID.ForeColor = button1.ForeColor = BlindColor.Light;
+            panel4.BackColor = btn_Send.ForeColor = BlindColor.Light;
+            btn_Send.BackColor = BlindColor.BrightBlue;
+            panel5.BackColor = tb_Message.BackColor = BlindColor.Light;
+            message_LayoutPanel.BackColor = BlindColor.Gray;
+            
+            BlindNetUtil.SetEllipse(this, 5);
+            BlindNetUtil.SetEllipse(panel2, 5);
+            //BlindNetUtil.SetEllipse(btn_Send, 5);
+            BlindNetUtil.SetEllipse(panel4, 5);
+            BlindNetUtil.SetEllipse(btn_menu, 20);
         }
         public void AddMessage(ChatMessage message)
         {
@@ -111,8 +128,34 @@ namespace Blind_Client.BlindChatUI.RoomUI
 
         private void btn_menu_Click(object sender, EventArgs e)
         {
-            Room_Menu menu = new Room_Menu(_room);
+            Room_Menu menu = new Room_Menu(_userID, _room);
+            //menu.Parent = this;
+            menu.Location = new Point(this.Location.X + this.Width, this.Location.Y);
             menu.Show();
+        }
+
+        private void lbl_FormName_MouseDown(object sender, MouseEventArgs e)
+        {
+            isMove = true;
+            fPt = new Point(e.X, e.Y);
+        }
+
+        private void lbl_FormName_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMove && (e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (fPt.X - e.X), this.Top - (fPt.Y - e.Y));
+            }
+        }
+
+        private void lbl_FormName_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMove = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

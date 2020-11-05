@@ -36,6 +36,10 @@ namespace Blind_Client.BlindChatCode
             this.UI = UI;
             DB = new BlindChatDB(this._UserID);
         }
+        ~BlindChat()
+        {
+            chatSock.Close();
+        }
 
         private bool Start = false;
         public void Run()
@@ -110,10 +114,9 @@ namespace Blind_Client.BlindChatCode
                     }
                     Start = true;
                 }
-                else if(packet.Type == ChatType.Invitation)
+                else if(packet.Type == ChatType.Exit)
                 {
-
-                    //UI._RoomControl.RoomItem_LayoutPanel.Controls.Add();
+                    ExecuteExit(packet);
                 }
                 else
                 {

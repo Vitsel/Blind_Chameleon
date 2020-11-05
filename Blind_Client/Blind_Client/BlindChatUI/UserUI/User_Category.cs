@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI.UserUI
 {
@@ -17,10 +18,10 @@ namespace Blind_Client.BlindChatUI.UserUI
         {
             InitializeComponent();
             Lbl_Category.Text = department;
-            Lbl_Category.ForeColor = BlindColor.UIColor;
-            Lbl_Category.BackColor = BlindColor.ButtonColor;
-
-            BlindChatUtil.SetEllipse(this, 3);
+            Lbl_Category.ForeColor = BlindColor.Light;
+            Lbl_Category.BackColor = BlindColor.Info;
+            
+            BlindNetUtil.SetEllipse(this, 3);
         }
     }
 }

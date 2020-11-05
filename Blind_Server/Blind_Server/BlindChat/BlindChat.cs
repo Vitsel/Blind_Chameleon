@@ -68,9 +68,9 @@ namespace Blind_Server
                 {
                     ExecuteInvitation(chatPacket);
                 }
-                else if(chatPacket.Type == ChatType.Invitation)
+                else if(chatPacket.Type == ChatType.Exit)
                 {
-
+                    ExecuteExit(chatPacket);
                 }
 
             }

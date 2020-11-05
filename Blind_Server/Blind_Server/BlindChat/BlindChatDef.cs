@@ -42,7 +42,44 @@ namespace Blind_Server
         }
 
 
+        public void ExecuteExit(ChatPacket chatPack)
+        {
+            string timeNow = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            ChatRoomJoined roomJoined = BlindChatUtil.ChatPacketToStruct<ChatRoomJoined>(chatPack);
 
+            SendChatPacketToParticipants(chatPack, roomJoined.RoomID);
+
+            string sql = $"delete from ChatRoomJoined where UserID = {roomJoined.UserID} and RoomID = {roomJoined.RoomID};";
+            ExecuteQuery(sql);
+
+            ChatMessage message = new ChatMessage();
+            message.RoomID = roomJoined.RoomID;
+            message.UserID = 0;
+            message.Time = timeNow;
+
+            sql = $"select * from User where ID = {roomJoined.UserID}";
+
+            ChatMessage _message = new ChatMessage();
+            message.RoomID = roomJoined.RoomID;
+            message.UserID = 0;
+            message.Time = timeNow;
+
+            sql = $"select * from User where ID = {roomJoined.UserID}";
+            MySqlDataAdapter adpt = new MySqlDataAdapter(sql, hDB);
+            DataSet ds = new DataSet();
+            adpt.Fill(ds); 
+            DataRow r = ds.Tables[0].Rows[0];
+
+            User userInfo = (User)GetStructFromDB<User>(r);
+            message.Message = $"{userInfo.Name}님이 나갔습니다.";
+
+            byte[] _data = BlindNetUtil.StructToByte(message);
+            ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
+            SendChatPacketToParticipants(_packet, message.RoomID);
+
+            //시간을 수정한 메시지를 DB에 등록
+            AddToDBTimeNow<ChatMessage>(_packet);
+        }
 
         public void ExecuteInvitation(ChatPacket chatPack)
         {
@@ -63,7 +100,28 @@ namespace Blind_Server
 
                 ChatPacket packet = BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
                 SendChatPacketToParticipants(packet, roomJoined.RoomID);
+
+                ChatMessage message = new ChatMessage();
+                message.RoomID = roomJoined.RoomID;
+                message.UserID = 0;
+                message.Time = timeNow;
+
+                sql = $"select * from User where ID = {roomJoined.UserID}";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, hDB);
+                DataSet ds = new DataSet();
+                adpt.Fill(ds);
+                DataRow r = ds.Tables[0].Rows[0];
+                User userInfo = (User)GetStructFromDB<User>(r);
+
+                message.Message = $"{userInfo.Name}님이 접속하셨습니다.";
+                byte[] _data = BlindNetUtil.StructToByte(message);
+                ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
+                SendChatPacketToParticipants(_packet, message.RoomID);
+
+                //시간을 수정한 메시지를 DB에 등록
+                AddToDBTimeNow<ChatMessage>(_packet);
             }
+            
         }
 
         public void MessageToParticipants(ChatPacket chatPack)
@@ -179,7 +237,28 @@ namespace Blind_Server
                 for(int i =0; newroom.UserID[i] != 0; i++)
                 {
                     sql = $"insert into ChatRoomJoined (UserID, RoomID, Time) values ({newroom.UserID[i]}, {RoomID}, \'{timeNow}\');";
-                    ExecuteQuery(sql);
+                    ExecuteQuery(sql); 
+                    
+                    ChatMessage message = new ChatMessage();
+                    message.RoomID = RoomID;
+                    message.UserID = 0;
+                    message.Time = timeNow;
+
+                    sql = $"select * from User where ID = {newroom.UserID[i]}";
+                    MySqlDataAdapter adpt = new MySqlDataAdapter(sql, hDB);
+                    DataSet ds = new DataSet();
+                    adpt.Fill(ds);
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        User userInfo = (User)GetStructFromDB<User>(row);
+                        message.Message = $"{userInfo.Name}님이 접속하셨습니다.";
+                    }
+                    byte[] _data = BlindNetUtil.StructToByte(message);
+                    ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
+                    SendChatPacketToParticipants(_packet, message.RoomID);
+
+                    //시간을 수정한 메시지를 DB에 등록
+                    AddToDBTimeNow<ChatMessage>(_packet);
                 }
 
                 //방에 속한 사용자들에게 전송
@@ -560,7 +639,8 @@ namespace Blind_Server
 
         //chat functions.. ex) quit chat, create chat
         NewRoom = 7,
-        Invitation = 8
+        Invitation = 8,
+        Exit = 9
     }
 
     public enum UserStat

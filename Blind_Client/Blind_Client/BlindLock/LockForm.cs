@@ -1,4 +1,5 @@
-﻿using BlindNet;
+﻿using Blind_Client.BlindChatCode;
+using BlindNet;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,11 @@ namespace Blind_Client.BlindLock
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0, 0);
             this.TopMost = true;
+
+            BlindNetUtil.SetEllipse(btn_Unlock, 10);
+            tbl_InfoLayout.BackColor = BlindColor.Gray;
+            btn_Unlock.ForeColor = BlindColor.Light;
+            btn_Unlock.BackColor = tableLayoutPanel1.BackColor = BlindColor.Primary;
 
             if (!isInner)
             {
