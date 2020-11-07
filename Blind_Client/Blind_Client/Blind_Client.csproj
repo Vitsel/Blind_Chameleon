@@ -233,6 +233,11 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="VPN\VPN.cs" />
     <Compile Include="VPN\Vpn_Login.cs">
       <SubType>Form</SubType>
@@ -298,14 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Vpn\Vpn_Login.resx">
       <DependentUpon>Vpn_Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -328,21 +328,15 @@
     <EmbeddedResource Include="Resources\opened-folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\adduser.png" />
     <None Include="Resources\adduser1.png" />
     <Content Include="Resources\BlindLockBack.gif" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\BlindLockBack.gif" />
     <None Include="Resources\chat.png" />
-    <Content Include="Resources\ChatIcon.png" />
     <None Include="Resources\user.png" />
-    <None Include="Resources\document.png" />
-    <None Include="Resources\community.png" />
-    <None Include="Resources\hamburger.png" />
     <None Include="Resources\hamburger1.png" />
     <None Include="Resources\newroom.png" />
-    <None Include="Resources\exit.png" />
     <None Include="Resources\exit1.png" />
     <Content Include="Resources\UserIcon.png" />
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

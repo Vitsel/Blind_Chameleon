@@ -179,8 +179,9 @@ namespace Blind_Client.BlindChatCode
                     "FOREIGN KEY(\'UserID\') REFERENCES \'User\'(\'ID\')" +
                     "); ";
                 ExecuteNonQuery(sql);
-
+#if DEBUG
                 MessageBox.Show("DB가 새로 생성되었습니다.");
+#endif
             }
             else
             {

@@ -75,8 +75,8 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.btn_Invite);
             this.panel4.Controls.Add(this.lbl_RoomName);
+            this.panel4.Controls.Add(this.btn_Invite);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(0, 20);
             this.panel4.Margin = new System.Windows.Forms.Padding(0);
@@ -108,7 +108,7 @@
             this.lbl_RoomName.ForeColor = System.Drawing.Color.DimGray;
             this.lbl_RoomName.Location = new System.Drawing.Point(0, 0);
             this.lbl_RoomName.Name = "lbl_RoomName";
-            this.lbl_RoomName.Size = new System.Drawing.Size(266, 50);
+            this.lbl_RoomName.Size = new System.Drawing.Size(206, 50);
             this.lbl_RoomName.TabIndex = 3;
             this.lbl_RoomName.Text = "label2";
             this.lbl_RoomName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

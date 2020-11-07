@@ -57,17 +57,6 @@ namespace Blind_Client.BlindChatCode
             chatSock = new BlindSocket();
             chatSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
 
-            {
-                user = new User();
-                user.ID = _UserID;
-                packet = BlindChatUtil.StructToChatPacket(user);
-                ChatPacketSend(packet);
-            }
-
-            packet = ChatPacketReceive();
-            user = BlindChatUtil.ChatPacketToStruct<User>(packet);
-            _UserID = user.ID;
-
             syncTime = DB.GetAllTime();
             packet = BlindChatUtil.StructToChatPacket(syncTime);
             ChatPacketSend(packet);
@@ -110,7 +99,9 @@ namespace Blind_Client.BlindChatCode
                     {
                         LoadList();
                         LoadUI();
+#if DEBUG
                         MessageBox.Show("데이터 로드 완료");
+#endif 
                     }
                     Start = true;
                 }

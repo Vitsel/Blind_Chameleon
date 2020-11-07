@@ -35,7 +35,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
             this.Text = this.lbl_Title.Text = _room.Name;
             this.StartPosition = FormStartPosition.Manual;
 
-            lbl_Title.BackColor = lbl_ID.BackColor = btn_menu.BackColor = button1.BackColor = BlindColor.Primary;
+            panel1.BackColor = lbl_Title.BackColor = lbl_ID.BackColor = btn_menu.BackColor = button1.BackColor = BlindColor.Primary;
             lbl_Title.ForeColor = lbl_ID.ForeColor = button1.ForeColor = BlindColor.Light;
             panel4.BackColor = btn_Send.ForeColor = BlindColor.Light;
             btn_Send.BackColor = BlindColor.BrightBlue;

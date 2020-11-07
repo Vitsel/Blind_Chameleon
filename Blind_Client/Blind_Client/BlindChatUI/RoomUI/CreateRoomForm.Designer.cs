@@ -200,7 +200,7 @@
             this.lbl_FormName.Size = new System.Drawing.Size(280, 60);
             this.lbl_FormName.TabIndex = 0;
             this.lbl_FormName.Text = "대화 상대 선택";
-            this.lbl_FormName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lbl_FormName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.lbl_FormName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbl_FormName_MouseDown);
             this.lbl_FormName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lbl_FormName_MouseMove);
             this.lbl_FormName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lbl_FormName_MouseUp);

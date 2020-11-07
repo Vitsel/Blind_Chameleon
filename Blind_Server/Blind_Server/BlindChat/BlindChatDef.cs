@@ -302,17 +302,6 @@ namespace Blind_Server
                 SendChatPacketToParticipants(chatPacket, RoomID);
             }
 
-            //각 정보들을 방에 속한 사용자들에게 전송
-            //while (rdr.Read())
-            //{
-            //    T st = (T)GetStructFromDB<T>(rdr);
-
-            //    byte[] data = BlindNetUtil.StructToByte(st);
-
-            //    ChatPacket chatPacket = BlindChatUtil.ByteToChatPacket(data, Type);
-            //    SendChatPacketToParticipants(chatPacket, RoomID);
-            //}
-            //rdr.Close();
         }
 
 
@@ -357,6 +346,7 @@ namespace Blind_Server
         {
             ChatTimeStamp syncTime = BlindChatUtil.ChatPacketToStruct<ChatTimeStamp>(chatPack);
 
+            
             ClientUpdateUser(syncTime.timeUser);
             ClientUpdateChatRoom(syncTime.timeChatRoom);
             ClientUpdateChatRoomJoined(syncTime.timeChatRoomJoined);
@@ -373,7 +363,7 @@ namespace Blind_Server
                 if (typeof(T) == typeof(User))
                 {
                     User user = new User();
-                    user.ID = int.Parse(row["ID"].ToString());
+                    user.ID = uint.Parse(row["ID"].ToString());
                     user.Online = int.Parse(row["isOnline"].ToString());
                     user.Name = row["Name"].ToString();
                     user.Time = row["Time"].ToString();
@@ -437,7 +427,7 @@ namespace Blind_Server
                 if (typeof(T) == typeof(User))
                 {
                     User user = new User();
-                    user.ID = int.Parse(rdr["ID"].ToString());
+                    user.ID = uint.Parse(rdr["ID"].ToString());
                     user.Online = int.Parse(rdr["isOnline"].ToString());
                     user.Name = rdr["Name"].ToString();
                     user.Time = rdr["Time"].ToString();
@@ -664,7 +654,7 @@ namespace Blind_Server
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct User
     {
-        public int ID;
+        public uint ID;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.SMALLSIZE)]
         public string Name;
