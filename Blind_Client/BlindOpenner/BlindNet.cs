@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -83,8 +84,6 @@ namespace BlindNet
             }
             catch (Exception ex)
             {
-                IPEndPoint iep = (IPEndPoint)(socket.RemoteEndPoint);
-                Console.WriteLine("ERROR : [Host : " + iep.Address + ":" + iep.Port + "] " + ex.Message);
                 return 0;
             }
             return totalSendBytes;
@@ -99,13 +98,10 @@ namespace BlindNet
             Array.Copy(data, 0, pack.data, 0, data.Length);
             byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
             realSendBytes = socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
-            using (NetworkStream stream = new NetworkStream(socket))
-                stream.Flush();
+            new NetworkStream(socket).Flush();
 
             byte[] result = new byte[BlindNetConst.MINIPACKSIZE];
             int rcvNum = socket.Receive(result, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
-            using (NetworkStream stream = new NetworkStream(socket))
-                stream.Flush();
             if (result[0] != (byte)PacketType.OK)
                 return 0;
             return realSendBytes;
@@ -123,13 +119,10 @@ namespace BlindNet
             Array.Copy(data, 0, pack.data, 0, data.Length);
             byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
             realSendBytes = socket.Send(encrypted, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
-            using (NetworkStream stream = new NetworkStream(socket))
-                stream.Flush();
+            new NetworkStream(socket).Flush();
 
             byte[] result = new byte[BlindNetConst.MINIPACKSIZE];
             int rcvNum = socket.Receive(result, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
-            using (NetworkStream stream = new NetworkStream(socket))
-                stream.Flush();
             if (result[0] != (byte)PacketType.OK)
                 return 0;
             return realSendBytes;
@@ -144,8 +137,7 @@ namespace BlindNet
             if (!isRecieving)
             {
                 rcvNum = socket.Receive(data, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
-                using (NetworkStream stream = new NetworkStream(socket))
-                    stream.Flush();
+                new NetworkStream(socket).Flush();
                 if (rcvNum == 0)
                 {
                     BlindPacket end;
@@ -155,7 +147,7 @@ namespace BlindNet
                 }
                 byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
                 temp[0] = (byte)PacketType.OK;
-                socket.Send(temp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                socket.Send(temp, BlindNetConst.MINIDATASIZE, SocketFlags.None);
 
                 decrypted = aes.Decryption(data);
                 miniPacket = BlindNetUtil.ByteToStruct<BlindMiniPacket>(decrypted);
@@ -167,12 +159,7 @@ namespace BlindNet
                 {
                     byte[] tmp = new byte[BlindNetConst.PACKSIZE];
                     rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
-                    using (NetworkStream stream = new NetworkStream(socket))
-                        stream.Flush();
-#if DEBUG
-                    if (tmp[tmp.Length-1] == 0)
-                        Console.WriteLine("Received less bytes");
-#endif
+                    new NetworkStream(socket).Flush();
                     if (rcvNum == 0)
                     {
                         BlindPacket end;
@@ -183,21 +170,12 @@ namespace BlindNet
                     byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
                     temp[0] = (byte)PacketType.OK;
                     socket.Send(tmp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
-                    using (NetworkStream stream = new NetworkStream(socket))
-                        stream.Flush();
 
                     data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
                     if (data.Length == BlindNetConst.PACKSIZE)
                         break;
-#if DEBUG
-                    else
-                        Console.WriteLine("Data is {0} bytes", data.Length);
-#endif
                 }
 
-#if DEBUG
-                Console.WriteLine("Total received {0} bytes", data.Length);
-#endif
                 decrypted = aes.Decryption(data);
             }
 
@@ -231,7 +209,7 @@ namespace BlindNet
                 {
                     socket.Connect(iep);
                 }
-                catch (SocketException ex)
+                catch (Exception ex)
                 {
                     continue;
                 }
@@ -282,8 +260,7 @@ namespace BlindNet
                     continue;
                 else if (pack.header == PacketType.Fail)
                 {
-                    IPEndPoint iep = (IPEndPoint)(socket.RemoteEndPoint);
-                    Console.WriteLine("ERROR [Host " + iep.Address + ":" + iep.Port + "] Connection test with text is failed");
+                    MessageBox.Show("Connection test with text is failed");
                     this.aes = null;
                     return null;
                 }
@@ -346,15 +323,11 @@ namespace BlindNet
 
             for (int i = 1; ; i++)
             {
-                byte[] prevIv = aes.aes.IV;
-                aes.aes.GenerateIV();
-                byte[] newIv = aes.aes.IV;
-                aes.aes.IV = prevIv;
-
-                clientSock.CryptoSend(newIv, PacketType.Info);
-                byte[] iv = clientSock.CryptoReceiveMsg();
-
-                if (!newIv.SequenceEqual(iv))
+                string testTxt = BlindNetUtil.GetRandomString(BlindNetConst.MINRNDTXT, BlindNetConst.MAXRNDTXT);
+                clientSock.CryptoSend(Encoding.UTF8.GetBytes(testTxt), PacketType.MSG);
+                var pack = clientSock.CryptoReceive();
+                string recvTxt = Encoding.UTF8.GetString(pack.data).TrimEnd('\0');
+                if (recvTxt != testTxt)
                 {
                     if (i < BlindNetConst.MAXRETRY)
                         clientSock.CryptoSend(null, PacketType.Retry);
@@ -365,12 +338,9 @@ namespace BlindNet
                     }
                 }
                 else
-                {
-                    clientSock.CryptoSend(null, PacketType.OK);
-                    aes.aes.IV = newIv;
                     break;
-                }
             }
+            clientSock.CryptoSend(null, PacketType.OK);
             return clientSock;
         }
     }
@@ -554,7 +524,7 @@ namespace BlindNet
     static class BlindNetConst
     {
         public const string ServerIP = "127.0.0.1";
-        //public const string ServerIP = "10.0.1.6";
+        //public const string ServerIP = "3.92.252.3";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;

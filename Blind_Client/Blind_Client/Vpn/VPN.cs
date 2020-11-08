@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define PROGRAMMING
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -262,6 +264,9 @@ namespace Blind_Client
             this.VpnConnectionEvent+= new VpnConnectionEventHandler(VpnLogin_Dialog.ConnectionEventChecking);
             bool result = false;
 
+#if PROGRAMMING
+            return VPN_First_Check();
+#endif
             if (VPN_First_Check())
             {
                 if (Network_Position == true && VPN_Connection_IP == "127.0.0.1") //내부일때

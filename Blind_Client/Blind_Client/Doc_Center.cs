@@ -27,6 +27,7 @@ namespace Blind_Client
         {
             socket = new BlindSocket();
             await socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
+            socket.socket.NoDelay = true;
 
             socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.Info);
             BlindPacket packet = socket.CryptoReceive();
@@ -104,11 +105,28 @@ namespace Blind_Client
                 item.Text = file.name;
                 item.SubItems.Add(file.modDate);
                 item.SubItems.Add(file.type);
-                item.SubItems.Add(file.size.ToString());
+                item.SubItems.Add(ConvertSize(file.size));
                 item.Tag = file.id;
                 form.listview_File.Items.Add(item);
             }
             form.listview_File.EndUpdate();
+        }
+
+        string ConvertSize(uint size)
+        {
+            string result = string.Empty;
+            double kb = Math.Truncate((double)size / 1024 * 100) / 100;
+            if (kb < 1024)
+                return kb + "KB";
+
+            double mb = Math.Truncate(kb / 1024 * 100) / 100;
+            if (mb < 1024)
+                return mb + "MB";
+
+            double gb = Math.Truncate(mb / 1024 * 100) / 100;
+            if (gb < 1024)
+                return gb + "GB";
+            return result;
         }
 
         public bool AddDir(TreeNode node, string name)
@@ -353,6 +371,20 @@ namespace Blind_Client
             result = (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / size)) + 1;
 
             return result;
+        }
+
+        public bool RenameFile(uint id, string name)
+        {
+            if (socket.CryptoSend(BitConverter.GetBytes(id), PacketType.DocRenameFile) == 0)
+                return false;
+            if (socket.CryptoSend(Encoding.UTF8.GetBytes(name), PacketType.Info) == 0)
+                return false;
+
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header != PacketType.OK)
+                return false;
+
+            return true;
         }
     }
 

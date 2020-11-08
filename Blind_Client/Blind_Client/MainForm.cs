@@ -30,7 +30,7 @@ namespace Blind_Client
         [DllImport("user32.dll")]
         private static extern int UnregisterHotKey(IntPtr hwnd, int id);
         const int WM_HOTKEY = 0x0312;
-        const uint WAITTIMESEC = 15;
+        const uint WAITTIMESEC = 60;
 
         bool isInner;
         public string ClientID = "";
@@ -99,7 +99,7 @@ namespace Blind_Client
             Array.Copy(data, 0, tmp, 0, data.Length);
             uint ClintCID = BitConverter.ToUInt32(tmp, 0);
 
-            if (ClintCID.ToString() == "0") //서버에서 아이디를 조회못했을때 0반환
+            if (ClintCID == 0) //서버에서 아이디를 조회못했을때 0반환
             {
                 MessageBox.Show("서버로부터 id를 받지 못하였거나 등록되지 않은 아이디입니다." + Environment.NewLine + "\t           관리자에게 문의하십시요.");
                 mainSocket.Close();
@@ -111,8 +111,8 @@ namespace Blind_Client
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
 
-            WebDevice = new BlindWebDevice();
-            tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+            //WebDevice = new BlindWebDevice();
+            //tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             documentCenter = new Doc_Center(document_Center, isInner);
             documentCenter.Run();

@@ -47,9 +47,12 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.text_rename = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.treeMenu.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeview_Dir
@@ -74,7 +77,7 @@
             this.size});
             this.listview_File.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listview_File.HideSelection = false;
-            this.listview_File.Location = new System.Drawing.Point(210, 43);
+            this.listview_File.Location = new System.Drawing.Point(0, 0);
             this.listview_File.Name = "listview_File";
             this.listview_File.Size = new System.Drawing.Size(480, 366);
             this.listview_File.TabIndex = 3;
@@ -135,13 +138,14 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel1.Controls.Add(this.treeview_Dir, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.listview_File, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(693, 412);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
@@ -238,6 +242,26 @@
             this.listMenu.Name = "listMenu";
             this.listMenu.Size = new System.Drawing.Size(61, 4);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.text_rename);
+            this.panel1.Controls.Add(this.listview_File);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(210, 43);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(480, 366);
+            this.panel1.TabIndex = 9;
+            // 
+            // text_rename
+            // 
+            this.text_rename.Location = new System.Drawing.Point(88, 3);
+            this.text_rename.Name = "text_rename";
+            this.text_rename.Size = new System.Drawing.Size(100, 25);
+            this.text_rename.TabIndex = 4;
+            this.text_rename.Visible = false;
+            this.text_rename.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_rename_KeyDown);
+            this.text_rename.Leave += new System.EventHandler(this.text_rename_Leave);
+            // 
             // Document_Center
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -249,6 +273,8 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.treeMenu.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -272,5 +298,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         public System.Windows.Forms.Label label_fName;
         public System.Windows.Forms.Label label_percent;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox text_rename;
     }
 }

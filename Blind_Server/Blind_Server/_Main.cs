@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BlindLogger;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Asn1;
 
 namespace Blind_Server
 {
@@ -32,9 +33,12 @@ namespace Blind_Server
         {
             var handl = GetConsoleWindow();
 
+            BlindOpenner openner = new BlindOpenner();
+            Task.Run(() => openner.Run());
+
             //DataBase MySql Connection
             connection = DataBaseConnection();
-            
+
             //ShowWindow(handl, SW_HIDE); //Console 창 숨기기
             socket_docCenter = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
             socket_docCenter.BindListen();
@@ -56,7 +60,7 @@ namespace Blind_Server
                 BlindSocket client = mainSocket.AcceptWithECDH();
                 AddConnectedUser(client);
             }
-         }
+        }
 
         static async void AddConnectedUser(BlindSocket socket)
         {
@@ -64,18 +68,23 @@ namespace Blind_Server
                 return;
             IPEndPoint iep = (IPEndPoint)(socket.socket.RemoteEndPoint);
 
-            //로그인 인증 추가
+            //로그인 인증
             uint cid;
             byte[] cName = socket.CryptoReceiveMsg();// 아이디 받음
             if (Encoding.UTF8.GetString(cName) != "\0")
                 cid = GetClientID(Encoding.UTF8.GetString(cName)); // 바이트 -> 스트링
             else
                 cid = 0;
-            uint[] gids = GetGids(cid);
             socket.CryptoSend(BitConverter.GetBytes(cid), PacketType.Response);//cid 보냄
+            if (cid == 0)
+            {
+                socket.Close();
+                return;
+            }
+            uint[] gids = GetGids(cid);
 
 
-            Console.WriteLine("Accepted {0} : {1}"+$"({cid})", iep.Address, iep.Port);
+            Console.WriteLine("Accepted {0} : {1}" + $"({cid})", iep.Address, iep.Port);
 
             //Client 구조체 초기화 및 추가
             TaskScheduler scheduler = TaskScheduler.Default;
@@ -83,7 +92,7 @@ namespace Blind_Server
             client.socket = socket;
             client.token = new CancellationTokenSource();
 
-            client.documentCenter = new Doc_Center(cid,gids); //기능 객체 생성
+            client.documentCenter = new Doc_Center(cid, gids); //기능 객체 생성
             client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
 
             client.chat = new BlindChat();
@@ -92,9 +101,9 @@ namespace Blind_Server
             client.blindLock = new BlindLock();
             client.tBlindLock = Task.Factory.StartNew(() => client.blindLock.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            client.blindWebDevice = new BlindWebDevice();
-            client.tBlindWebDevice = Task.Factory.StartNew(() => client.blindWebDevice.Run(cid,connection), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
-            
+            //client.blindWebDevice = new BlindWebDevice();
+            //client.tBlindWebDevice = Task.Factory.StartNew(() => client.blindWebDevice.Run(cid, connection), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
+
             Clients.Add(client);
         }
 
@@ -112,14 +121,14 @@ namespace Blind_Server
         static uint GetClientID(string cName)
         {
             uint result;
-            string command = "SELECT cid FROM blindEmployee WHERE id =" +"'" + cName + "';";
+            string command = "SELECT cid FROM blindEmployee WHERE id =" + "'" + cName + "';";
             MySqlCommand commander = new MySqlCommand(command, connection);
-            result= UInt32.Parse(commander.ExecuteScalar().ToString());
-
-            if (result != 0)
-                return result;
-            else
+            var cid = commander.ExecuteScalar();
+            if (cid == null)
                 return 0;
+            result = UInt32.Parse(cid.ToString());
+
+            return result;
         }
 
         static uint[] GetGids(uint cid)
