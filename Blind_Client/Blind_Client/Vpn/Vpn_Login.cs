@@ -94,10 +94,5 @@ namespace Blind_Client
             Application.ExitThread();
             Environment.Exit(0); //완전종료
         }
-
-        private void panel_Login_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }

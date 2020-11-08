@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI.UserUI
 {
@@ -22,10 +23,14 @@ namespace Blind_Client.BlindChatUI.UserUI
         public User_Item(User user)
         {
             InitializeComponent();
-            Lbl_UserDepartment.Cursor = Cursors.Hand;
+            Lbl_UserPosition.Cursor = Cursors.Hand;
             Lbl_UserName.Cursor = Cursors.Hand;
+            BlindNetUtil.SetEllipse(this, 10);
+            
+            this.BackColor = BlindColor.Light;
 
             _user = user;
+            
         }
 
         private void Lbl_UserName_Click(object sender, EventArgs e)
@@ -44,10 +49,20 @@ namespace Blind_Client.BlindChatUI.UserUI
             }
         }
 
+        private void Lbl_UserName_MouseMove(object sender, MouseEventArgs e)
+        {
+            panel1.BackColor = BlindColor.Gray;
+        }
+
+        private void Lbl_UserName_MouseLeave(object sender, EventArgs e)
+        {
+            panel1.BackColor = BlindColor.Light;
+        }
+
         private void User_Item_Load(object sender, EventArgs e)
         {
             Lbl_UserName.Text = _user.Name;
-            Lbl_UserDepartment.Text = _user.Department;
+            Lbl_UserPosition.Text = _user.Position;
         }
     }
 

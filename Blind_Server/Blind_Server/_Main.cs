@@ -95,10 +95,10 @@ namespace Blind_Server
             client.documentCenter = new Doc_Center(cid, gids); //기능 객체 생성
             client.tDocumentCenter = Task.Factory.StartNew(() => client.documentCenter.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler); //기능 객체의 최초 함수 실행
 
-            client.chat = new BlindChat();
+            client.chat = new BlindChat(cid);
             client.tChat = Task.Factory.StartNew(() => client.chat.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            client.blindLock = new BlindLock();
+            client.blindLock = new BlindLock(cid);
             client.tBlindLock = Task.Factory.StartNew(() => client.blindLock.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             //client.blindWebDevice = new BlindWebDevice();

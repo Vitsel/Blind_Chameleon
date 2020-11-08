@@ -42,7 +42,44 @@ namespace Blind_Server
         }
 
 
+        public void ExecuteExit(ChatPacket chatPack)
+        {
+            string timeNow = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            ChatRoomJoined roomJoined = BlindChatUtil.ChatPacketToStruct<ChatRoomJoined>(chatPack);
 
+            SendChatPacketToParticipants(chatPack, roomJoined.RoomID);
+
+            string sql = $"delete from ChatRoomJoined where UserID = {roomJoined.UserID} and RoomID = {roomJoined.RoomID};";
+            ExecuteQuery(sql);
+
+            ChatMessage message = new ChatMessage();
+            message.RoomID = roomJoined.RoomID;
+            message.UserID = 0;
+            message.Time = timeNow;
+
+            sql = $"select * from User where ID = {roomJoined.UserID}";
+
+            ChatMessage _message = new ChatMessage();
+            message.RoomID = roomJoined.RoomID;
+            message.UserID = 0;
+            message.Time = timeNow;
+
+            sql = $"select * from User where ID = {roomJoined.UserID}";
+            MySqlDataAdapter adpt = new MySqlDataAdapter(sql, hDB);
+            DataSet ds = new DataSet();
+            adpt.Fill(ds); 
+            DataRow r = ds.Tables[0].Rows[0];
+
+            User userInfo = (User)GetStructFromDB<User>(r);
+            message.Message = $"{userInfo.Name}님이 나갔습니다.";
+
+            byte[] _data = BlindNetUtil.StructToByte(message);
+            ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
+            SendChatPacketToParticipants(_packet, message.RoomID);
+
+            //시간을 수정한 메시지를 DB에 등록
+            AddToDBTimeNow<ChatMessage>(_packet);
+        }
 
         public void ExecuteInvitation(ChatPacket chatPack)
         {
@@ -63,7 +100,28 @@ namespace Blind_Server
 
                 ChatPacket packet = BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
                 SendChatPacketToParticipants(packet, roomJoined.RoomID);
+
+                ChatMessage message = new ChatMessage();
+                message.RoomID = roomJoined.RoomID;
+                message.UserID = 0;
+                message.Time = timeNow;
+
+                sql = $"select * from User where ID = {roomJoined.UserID}";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, hDB);
+                DataSet ds = new DataSet();
+                adpt.Fill(ds);
+                DataRow r = ds.Tables[0].Rows[0];
+                User userInfo = (User)GetStructFromDB<User>(r);
+
+                message.Message = $"{userInfo.Name}님이 접속하셨습니다.";
+                byte[] _data = BlindNetUtil.StructToByte(message);
+                ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
+                SendChatPacketToParticipants(_packet, message.RoomID);
+
+                //시간을 수정한 메시지를 DB에 등록
+                AddToDBTimeNow<ChatMessage>(_packet);
             }
+            
         }
 
         public void MessageToParticipants(ChatPacket chatPack)
@@ -179,7 +237,28 @@ namespace Blind_Server
                 for(int i =0; newroom.UserID[i] != 0; i++)
                 {
                     sql = $"insert into ChatRoomJoined (UserID, RoomID, Time) values ({newroom.UserID[i]}, {RoomID}, \'{timeNow}\');";
-                    ExecuteQuery(sql);
+                    ExecuteQuery(sql); 
+                    
+                    ChatMessage message = new ChatMessage();
+                    message.RoomID = RoomID;
+                    message.UserID = 0;
+                    message.Time = timeNow;
+
+                    sql = $"select * from User where ID = {newroom.UserID[i]}";
+                    MySqlDataAdapter adpt = new MySqlDataAdapter(sql, hDB);
+                    DataSet ds = new DataSet();
+                    adpt.Fill(ds);
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        User userInfo = (User)GetStructFromDB<User>(row);
+                        message.Message = $"{userInfo.Name}님이 접속하셨습니다.";
+                    }
+                    byte[] _data = BlindNetUtil.StructToByte(message);
+                    ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
+                    SendChatPacketToParticipants(_packet, message.RoomID);
+
+                    //시간을 수정한 메시지를 DB에 등록
+                    AddToDBTimeNow<ChatMessage>(_packet);
                 }
 
                 //방에 속한 사용자들에게 전송
@@ -223,17 +302,6 @@ namespace Blind_Server
                 SendChatPacketToParticipants(chatPacket, RoomID);
             }
 
-            //각 정보들을 방에 속한 사용자들에게 전송
-            //while (rdr.Read())
-            //{
-            //    T st = (T)GetStructFromDB<T>(rdr);
-
-            //    byte[] data = BlindNetUtil.StructToByte(st);
-
-            //    ChatPacket chatPacket = BlindChatUtil.ByteToChatPacket(data, Type);
-            //    SendChatPacketToParticipants(chatPacket, RoomID);
-            //}
-            //rdr.Close();
         }
 
 
@@ -278,6 +346,7 @@ namespace Blind_Server
         {
             ChatTimeStamp syncTime = BlindChatUtil.ChatPacketToStruct<ChatTimeStamp>(chatPack);
 
+            
             ClientUpdateUser(syncTime.timeUser);
             ClientUpdateChatRoom(syncTime.timeChatRoom);
             ClientUpdateChatRoomJoined(syncTime.timeChatRoomJoined);
@@ -294,7 +363,7 @@ namespace Blind_Server
                 if (typeof(T) == typeof(User))
                 {
                     User user = new User();
-                    user.ID = int.Parse(row["ID"].ToString());
+                    user.ID = uint.Parse(row["ID"].ToString());
                     user.Online = int.Parse(row["isOnline"].ToString());
                     user.Name = row["Name"].ToString();
                     user.Time = row["Time"].ToString();
@@ -358,7 +427,7 @@ namespace Blind_Server
                 if (typeof(T) == typeof(User))
                 {
                     User user = new User();
-                    user.ID = int.Parse(rdr["ID"].ToString());
+                    user.ID = uint.Parse(rdr["ID"].ToString());
                     user.Online = int.Parse(rdr["isOnline"].ToString());
                     user.Name = rdr["Name"].ToString();
                     user.Time = rdr["Time"].ToString();
@@ -560,7 +629,8 @@ namespace Blind_Server
 
         //chat functions.. ex) quit chat, create chat
         NewRoom = 7,
-        Invitation = 8
+        Invitation = 8,
+        Exit = 9
     }
 
     public enum UserStat
@@ -584,7 +654,7 @@ namespace Blind_Server
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct User
     {
-        public int ID;
+        public uint ID;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.SMALLSIZE)]
         public string Name;

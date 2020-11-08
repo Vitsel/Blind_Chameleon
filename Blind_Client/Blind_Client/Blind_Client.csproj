@@ -109,12 +109,6 @@
     <Compile Include="BlindChatUI\ChatMain.Designer.cs">
       <DependentUpon>ChatMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="BlindChatUI\Control_More.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="BlindChatUI\Control_More.Designer.cs">
-      <DependentUpon>Control_More.cs</DependentUpon>
-    </Compile>
     <Compile Include="BlindChatUI\Control_Room.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -126,6 +120,9 @@
     </Compile>
     <Compile Include="BlindChatUI\Control_User.Designer.cs">
       <DependentUpon>Control_User.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlindChatUI\EllipseControl.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="BlindChatUI\RoomUI\Control_MessageRoom.cs">
       <SubType>UserControl</SubType>
@@ -236,6 +233,11 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="VPN\VPN.cs" />
     <Compile Include="VPN\Vpn_Login.cs">
       <SubType>Form</SubType>
@@ -301,14 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Vpn\Vpn_Login.resx">
       <DependentUpon>Vpn_Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -331,9 +328,17 @@
     <EmbeddedResource Include="Resources\opened-folder.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\adduser1.png" />
     <Content Include="Resources\BlindLockBack.gif" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\BlindLockBack.gif" />
+    <None Include="Resources\chat.png" />
+    <None Include="Resources\user.png" />
+    <None Include="Resources\hamburger1.png" />
+    <None Include="Resources\newroom.png" />
+    <None Include="Resources\exit1.png" />
+    <Content Include="Resources\UserIcon.png" />
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2%28x86 및 x64%29</ProductName>

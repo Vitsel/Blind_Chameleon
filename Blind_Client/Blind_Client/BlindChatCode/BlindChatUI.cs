@@ -1,4 +1,5 @@
-﻿using Blind_Client.BlindChatUI.RoomUI;
+﻿using Blind_Client.BlindChatUI;
+using Blind_Client.BlindChatUI.RoomUI;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -13,6 +14,7 @@ namespace Blind_Client.BlindChatCode
 {
     public partial class BlindChat
     {
+
         public delegate void VoidFunction();
         public void ExecuteWithInvoke(Form form, VoidFunction function)
         {
@@ -81,15 +83,15 @@ namespace Blind_Client.BlindChatCode
             string sql = $"insert into ChatRoomJoined (ID, roomID, userID, time) values ({roomJoined.ID}, {roomJoined.RoomID}, {roomJoined.UserID}, \'{roomJoined.Time}\');";
             DB.ExecuteNonQuery(sql);
 
-            ChatMessage message = new ChatMessage();
-            message.RoomID = roomJoined.RoomID;
-            message.UserID = 0;
-            message.Time = roomJoined.Time;
+            //ChatMessage message = new ChatMessage();
+            //message.RoomID = roomJoined.RoomID;
+            //message.UserID = 0;
+            //message.Time = roomJoined.Time;
 
-            User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
-            message.Message = $"{user.Name}님이 접속하셨습니다.";
+            //User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
+            //message.Message = $"{user.Name}님이 접속하셨습니다.";
 
-            AddMessage(message);
+            //AddMessage(message);
 
             ExecuteWithInvoke(form, delegate
             {
@@ -118,16 +120,22 @@ namespace Blind_Client.BlindChatCode
             }
             ExecuteWithInvoke(this.form, delegate
             {
-                UI._RoomControl.LoadRooms();
+                //UI._RoomControl.LoadRooms();
                 
                     foreach(Room_Item item in UI._RoomControl.RoomItem_LayoutPanel.Controls)
                     {
-                        if(item.ID == message.ID)
+                        if(item.ID == message.RoomID)
                         {
-                            if (GetFormWithName(message.ID.ToString()) == null)
+                            if (BlindChatUtil.GetFormWithName(message.RoomID.ToString()) == null)
                                 item.NewMessage();
                             else
                                 item.OpenedMessage();
+
+                            item.Time = message.Time;
+                            //item.BringToFront();
+
+                            UI._RoomControl.RoomItem_LayoutPanel.Controls.SetChildIndex((Control)item, 0);
+                            UI._RoomControl.RoomItem_LayoutPanel.Invalidate();
                         }
                     }
                 
@@ -135,7 +143,7 @@ namespace Blind_Client.BlindChatCode
 
 
 
-            MessageRoom form = GetFormWithName(message.RoomID.ToString()) as MessageRoom;
+            MessageRoom form = BlindChatUtil.GetFormWithName(message.RoomID.ToString()) as MessageRoom;
             if(form != null)
             {
                 ExecuteWithInvoke(form, delegate
@@ -144,10 +152,46 @@ namespace Blind_Client.BlindChatCode
                 });
             }
         }
+        public void ExecuteExit(ChatPacket packet)
+        {
+            ChatRoomJoined roomJoined = BlindChatUtil.ChatPacketToStruct<ChatRoomJoined>(packet);
+            if(roomJoined.UserID == _UserID)
+            {
+                string sql = $"delete from ChatRoomJoined where RoomID = {roomJoined.RoomID};";
+                DB.ExecuteNonQuery(sql);
+                sql = $"delete from ChatRoom where ID = {roomJoined.RoomID};";
+                DB.ExecuteNonQuery(sql);
+
+                roomList.RemoveAt(roomList.FindIndex(x => x.ID == roomJoined.RoomID));
+
+
+            }
+            else
+            {
+                string sql = $"delete from ChatRoomJoined where UserID = {roomJoined.UserID} and RoomID = {roomJoined.RoomID}";
+                DB.ExecuteNonQuery(sql);
+
+                ChatMessage message = new ChatMessage();
+                message.RoomID = roomJoined.RoomID;
+                message.UserID = 0;
+                message.Time = roomJoined.Time;
+
+                User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
+                message.Message = $"{user.Name}님이 나갔습니다.";
+
+                AddMessage(message);
+            }
+
+
+            ExecuteWithInvoke(form, delegate
+            {
+                UI._RoomControl.LoadRooms();
+            }); 
+        }
 
         public void OpenMessageRoom(ChatRoom room)
         {
-            Form openForm = GetFormWithName(room.ID.ToString());
+            Form openForm = BlindChatUtil.GetFormWithName(room.ID.ToString());
             if(openForm != null)
             {
                 ExecuteWithInvoke(openForm, delegate
@@ -166,6 +210,7 @@ namespace Blind_Client.BlindChatCode
                 {
                     MessageRoom messageRoom = new MessageRoom(_UserID,room, GetMessageList(room.ID));
                     messageRoom.SendChatMessage = ChatMessageSend;
+                    messageRoom.Location = new Point(form.Location.X + form.Width, form.Location.Y);
                     Application.Run(messageRoom);
                 });
                 tMessageRoom.Start();
@@ -175,14 +220,6 @@ namespace Blind_Client.BlindChatCode
         {
 
         }
-        public Form GetFormWithName(string formName)
-        {
-            foreach(Form openForm in Application.OpenForms)
-            {
-                if (openForm.Name == formName)
-                    return openForm;
-            }
-            return null;
-        }
+
     }
 }

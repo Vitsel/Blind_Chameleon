@@ -30,7 +30,6 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.UserItem_LayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.Search_LayoutPanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lbl_user = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -43,35 +42,26 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.UserItem_LayoutPanel);
-            this.panel1.Controls.Add(this.Search_LayoutPanel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 350);
+            this.panel1.Size = new System.Drawing.Size(150, 348);
             this.panel1.TabIndex = 0;
             // 
             // UserItem_LayoutPanel
             // 
             this.UserItem_LayoutPanel.AutoScroll = true;
             this.UserItem_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UserItem_LayoutPanel.Location = new System.Drawing.Point(0, 50);
+            this.UserItem_LayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.UserItem_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.UserItem_LayoutPanel.Name = "UserItem_LayoutPanel";
-            this.UserItem_LayoutPanel.Size = new System.Drawing.Size(200, 300);
+            this.UserItem_LayoutPanel.Size = new System.Drawing.Size(150, 348);
             this.UserItem_LayoutPanel.TabIndex = 1;
-            // 
-            // Search_LayoutPanel
-            // 
-            this.Search_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.Search_LayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.Search_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.Search_LayoutPanel.Name = "Search_LayoutPanel";
-            this.Search_LayoutPanel.Size = new System.Drawing.Size(200, 50);
-            this.Search_LayoutPanel.TabIndex = 0;
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.lbl_user);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
@@ -81,9 +71,9 @@
             // 
             // lbl_user
             // 
-            this.lbl_user.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.lbl_user.BackColor = System.Drawing.Color.Transparent;
             this.lbl_user.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_user.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_user.Font = new System.Drawing.Font("KoPub돋움체 Bold", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_user.Location = new System.Drawing.Point(0, 0);
             this.lbl_user.Name = "lbl_user";
             this.lbl_user.Size = new System.Drawing.Size(400, 50);
@@ -97,17 +87,19 @@
             this.panel3.Controls.Add(this.panel1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 50);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.panel3.Size = new System.Drawing.Size(400, 350);
             this.panel3.TabIndex = 3;
             // 
             // UserInfo_LayoutPanel
             // 
             this.UserInfo_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UserInfo_LayoutPanel.Location = new System.Drawing.Point(200, 0);
+            this.UserInfo_LayoutPanel.Location = new System.Drawing.Point(150, 0);
             this.UserInfo_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.UserInfo_LayoutPanel.Name = "UserInfo_LayoutPanel";
-            this.UserInfo_LayoutPanel.Size = new System.Drawing.Size(200, 350);
+            this.UserInfo_LayoutPanel.Size = new System.Drawing.Size(248, 348);
             this.UserInfo_LayoutPanel.TabIndex = 1;
             // 
             // Control_User
@@ -131,7 +123,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel Search_LayoutPanel;
         private System.Windows.Forms.FlowLayoutPanel UserItem_LayoutPanel;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;

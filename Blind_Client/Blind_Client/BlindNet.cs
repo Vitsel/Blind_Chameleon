@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Blind_Client.BlindChatUI;
 
 namespace BlindNet
 {
@@ -347,6 +348,12 @@ namespace BlindNet
 
     static class BlindNetUtil
     {
+        public static void SetEllipse(Control obj, int radius = 10)
+        {
+            EllipseControl objEllipse = new EllipseControl();
+            objEllipse.TargetControl = obj;
+            objEllipse.CorenerRadius = radius;
+        }
         static public bool IsConnectedInternet()
         {
             const string NCSI_TEST_URL = "http://www.msftncsi.com/ncsi.txt";
@@ -526,6 +533,7 @@ namespace BlindNet
         public const string ServerIP = "127.0.0.1";
         //public const string ServerIP = "3.92.252.3";
         public const string DatabaseIP = "54.84.228.2";
+
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;

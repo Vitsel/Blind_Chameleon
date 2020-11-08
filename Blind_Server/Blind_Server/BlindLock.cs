@@ -1,7 +1,9 @@
-﻿using BlindNet;
+﻿using BlindLogger;
+using BlindNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +14,11 @@ namespace Blind_Server
     {
         [DllImport("advapi32.dll", EntryPoint = "LogonUser", SetLastError = true)]
         private static extern bool LogonUser(string userName, string domain, string password, int logonType, int logonProvider, out int token);
-
-        public BlindLock()
+        private Logger logger;
+        private uint _cid;
+        public BlindLock(uint cid)
         {
-
+            _cid = cid;
         }
 
         public bool CheckUserValid(string userName, string password)
@@ -33,13 +36,16 @@ namespace Blind_Server
             BlindSocket socket;
             socket = _Main.lockPortSock.AcceptWithECDH();
 
+            IPEndPoint iep = (IPEndPoint)(socket.socket.RemoteEndPoint);
+            logger = new Logger(_cid, iep.Address.ToString(), LogService.ScreenLock);
+
             while (true)
             {
                 byte[] data = socket.CryptoReceiveMsg();
                 if(data == null)
                 {
                     socket.Close();
-                    Console.WriteLine("disconnected-lock");
+                    logger.Log(LogRank.INFO, "BlindLock Disconnected");
                     return;
                 }
 
@@ -47,9 +53,11 @@ namespace Blind_Server
                 LockPacket packet = BlindNetUtil.ByteToStruct<LockPacket>(data);
                 if(packet.Type == lockType.INFO)
                 {
+                    logger.Log(LogRank.INFO, "Unlock try from out of Local");
                     LockInfo info = BlindNetUtil.ByteToStruct<LockInfo>(packet.data);
                     if(CheckUserValid(info.userName, info.password))
                     {
+                        logger.Log(LogRank.INFO, "Unlock try Succeed!");
                         packet.Type = lockType.SUCCESS;
                         packet.data = new byte[60];
                         data = BlindNetUtil.StructToByte(packet);
@@ -58,6 +66,7 @@ namespace Blind_Server
                     }
                     else
                     {
+                        logger.Log(LogRank.WARN, "Unlock try Failed!");
                         packet.Type = lockType.FAILED;
                         packet.data = new byte[60];
                         data = BlindNetUtil.StructToByte(packet);

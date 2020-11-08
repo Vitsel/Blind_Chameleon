@@ -63,10 +63,10 @@ namespace BlindLogger
                     strRank = "FATAL";
                     break;
             }
-            string command = "INSERT INTO logtable values (0, now(), now(), @rank, @cname, @cip, @sip, @service, @port, @contents);";
+            string command = "INSERT INTO logtable values (0, now(), now(), @rank, @cid, @cip, @sip, @service, @port, @contents);";
             MySqlCommand commander = new MySqlCommand(command, connection);
             commander.Parameters.AddWithValue("rank", strRank);
-            commander.Parameters.AddWithValue("cname", cid);
+            commander.Parameters.AddWithValue("cid", cid);
             commander.Parameters.AddWithValue("cip", cip);
             commander.Parameters.AddWithValue("sip", sip);
             commander.Parameters.AddWithValue("service", service);

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI.RoomUI
 {
@@ -28,66 +29,79 @@ namespace Blind_Client.BlindChatUI.RoomUI
         {
             InitializeComponent();
 
-            BubbleIndent = 40;
+            BubbleIndent = 100;
             _message = message;
-            textBox1.Text = message.Message;
-            textBox1.Dock = DockStyle.Fill;
+            label1.Text = message.Message;
+            label1.Dock = DockStyle.Fill;
             panel1.Dock = DockStyle.None;
             this.BackColor = Color.Transparent;
-
+            label1.Enabled = true;
+            label1.ForeColor = Color.Black;
             direction = direct;
-
 
             if(direction == MessageDirection.right)
             {
-                panel1.BackColor = Color.FromArgb(255, 255, 204);
-                textBox1.BackColor = Color.FromArgb(255, 255, 204);
+                panel1.BackColor = label1.BackColor = BlindColor.SkyBlue;
                 lbl_userName.Text = "";
             }
             else if(direction == MessageDirection.middle)
             {
                 panel1.BackColor = Color.Transparent;
-                textBox1.BackColor = Color.LightGray;
+                label1.BackColor = BlindColor.DarkGray;
+                label1.ForeColor = BlindColor.Secondary;
                 
                 lbl_userName.Text = "";
             }
             else
             {
-                panel1.BackColor = Color.FromArgb(204, 255, 204);
-                textBox1.BackColor = Color.FromArgb(204, 255, 204);
+                label1.BackColor = panel1.BackColor = BlindColor.DarkGray;
                 lbl_userName.Dock = DockStyle.Left;
                 panel1.Location = new Point(0, lbl_userName.Height);
             }
+            lbl_userName.ForeColor = BlindColor.Black;
+            BlindNetUtil.SetEllipse(panel1, 10);
+            
         }
 
         public void ReSizeMessage(int Width)
         {
             if (direction != MessageDirection.middle)
             {
-                this.Width = Width - 48;
+                this.Width = Width - 42;
                 //Size TextSize = TextRenderer.MeasureText(_message.Message, textBox1.Font, new Size(this.Width - 100, this.Height-12), TextFormatFlags.WordBreak|TextFormatFlags.WordEllipsis);
 
                 Graphics g = this.CreateGraphics();
-                SizeF TextSize = g.MeasureString(_message.Message, textBox1.Font, this.Width - 100);
+                SizeF TextSize = g.MeasureString(_message.Message, label1.Font, this.Width - BubbleIndent - 12); // indent 뺀거
 
-                this.Height = (int)TextSize.Height + 12 + 24;
+                this.Height = (int)TextSize.Height + 12;     //패딩
+                lbl_userName.Height = panel2.Height = 17;
 
-                panel1.Width = (int)TextSize.Width + 12;
-                panel1.Height = (int)TextSize.Height + 12;
+                panel1.Width = (int)TextSize.Width + 12;    //패딩
+                panel1.Height = (int)TextSize.Height + 12;   //패딩
 
                 if (direction == MessageDirection.right)
                 {
-                    this.Height = panel1.Height + 12;
+                    //this.Height = panel1.Height + 12;
                     panel1.Location = new Point(this.Width - panel1.Width, 0);
                     lbl_userName.Text = "";
+                    lbl_userName.Height = panel2.Height = 0;
                 }
+
+                this.Height = panel1.Height + panel2.Height;
             }
             else
             {
-                this.Width = Width-48;
-                this.Width =
-                panel1.Width = this.Width - 6;
-                textBox1.TextAlign = HorizontalAlignment.Center;
+                lbl_userName.Height = panel2.Height = 0;
+                panel1.Width = this.Width = Width - 36;
+
+                Graphics g = this.CreateGraphics();
+                SizeF TextSize = g.MeasureString(_message.Message, label1.Font, panel1.Width - 12); // indent 뺀거
+
+                label1.Height = panel1.Height = (int)TextSize.Height + 12;
+                label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+
+                this.Height = panel1.Height + panel2.Height+4;
+                panel1.Location = new Point(0, 0);
             }
         }
 
