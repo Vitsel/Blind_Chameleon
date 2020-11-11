@@ -518,7 +518,7 @@ namespace BlindNet
         DocMoveFile = 22,   //문서중앙화 파일 이동
         DocMoveDir = 23,    //문서중앙화 폴더 이동
         DocCopyFile = 24,   //문서중앙화 파일 복사
-        DocCopyDir = 25     //문서중앙화 폴더 복사
+        DocCopyDir = 25,     //문서중앙화 폴더 복사
     }
 
     static class BlindNetConst

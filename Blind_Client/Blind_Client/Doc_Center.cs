@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BlindNet;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Text;
 using System.Diagnostics;
 
@@ -234,7 +235,9 @@ namespace Blind_Client
                     int sendBytes = socket.CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
                     Debug.WriteLine("[FileUpload] Send bytes {0}/{1}", i + len, data.Length);
                     form.progressBar.PerformStep();
-                    form.progressBar.Update();
+                    if (form.progressBar.Value < form.progressBar.Maximum)
+                        form.progressBar.Value += 1;
+                    form.progressBar.Value -= 1;
                     form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
 #if DEBUG
                     form.label_percent.Text = form.progressBar.Value.ToString();
@@ -269,7 +272,9 @@ namespace Blind_Client
             newNode.SelectedImageIndex = 0;
 
             form.progressBar.PerformStep();
-            form.progressBar.Update();
+            if (form.progressBar.Value < form.progressBar.Maximum)
+                form.progressBar.Value += 1;
+            form.progressBar.Value -= 1;
             form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
 #if DEBUG
             form.label_percent.Text = form.progressBar.Value.ToString();
@@ -290,16 +295,20 @@ namespace Blind_Client
             string fileName = Encoding.UTF8.GetString(BlindNetUtil.ByteTrimEndNull(packet.data));
 
             byte[] data = null;
+            bool receiveMode = false;
             do
             {
-                packet = socket.CryptoReceive();
+                packet = socket.CryptoReceive(receiveMode);
                 if (packet.header == PacketType.Disconnect)
                     return false;
                 data = BlindNetUtil.MergeArray<byte>(data, packet.data);
                 form.progressBar.PerformStep();
-                form.progressBar.Update();
+                if (form.progressBar.Value < form.progressBar.Maximum)
+                    form.progressBar.Value += 1;
+                form.progressBar.Value -= 1;
                 form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
                 form.label_percent.Update();
+                receiveMode = true;
             } while (packet.header == PacketType.Sending);
             data = BlindNetUtil.ByteTrimEndNull(data);
 
@@ -337,7 +346,9 @@ namespace Blind_Client
                     return false;
                 data = BlindNetUtil.MergeArray<byte>(data, packet.data);
                 form.progressBar.PerformStep();
-                form.progressBar.Update();
+                if (form.progressBar.Value < form.progressBar.Maximum)
+                    form.progressBar.Value += 1;
+                form.progressBar.Value -= 1;
                 form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
                 form.label_percent.Update();
             } while (packet.header == PacketType.Sending);
@@ -386,6 +397,46 @@ namespace Blind_Client
 
             return true;
         }
+
+        public bool MoveFile(uint srcDir, uint file, uint dstDir)
+        {
+            SrcDstInfo info = new SrcDstInfo(srcDir, file, dstDir);
+            socket.CryptoSend(BlindNetUtil.StructToByte(info), PacketType.DocMoveFile);
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header != PacketType.OK)
+                return false;
+            return true;
+        }
+
+        public bool MoveDir(uint srcDir, uint file, uint dstDir)
+        {
+            SrcDstInfo info = new SrcDstInfo(srcDir, file, dstDir);
+            socket.CryptoSend(BlindNetUtil.StructToByte(info), PacketType.DocMoveDir);
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header != PacketType.OK)
+                return false;
+            return true;
+        }
+
+        public bool CopyFile(uint srcDir, uint file, uint dstDir)
+        {
+            SrcDstInfo info = new SrcDstInfo(srcDir, file, dstDir);
+            socket.CryptoSend(BlindNetUtil.StructToByte(info), PacketType.DocCopyFile);
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header != PacketType.OK)
+                return false;
+            return true;
+        }
+
+        public bool CopyDir(uint srcDir, uint file, uint dstDir)
+        {
+            SrcDstInfo info = new SrcDstInfo(srcDir, file, dstDir);
+            socket.CryptoSend(BlindNetUtil.StructToByte(info), PacketType.DocCopyDir);
+            BlindPacket packet = socket.CryptoReceive();
+            if (packet.header != PacketType.OK)
+                return false;
+            return true;
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -410,5 +461,20 @@ namespace Blind_Client
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 10)]
         public string type;
         public uint size;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    struct SrcDstInfo
+    {
+        public uint srcDir;
+        public uint id;
+        public uint dstDir;
+
+        public SrcDstInfo(uint src, uint id, uint dst)
+        {
+            srcDir = src;
+            this.id = id;
+            dstDir = dst;
+        }
     }
 }

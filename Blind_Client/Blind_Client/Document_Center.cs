@@ -20,6 +20,9 @@ namespace Blind_Client
         string prevExt;
         ListViewItem[] moveItems;
         ListViewItem[] copyItems;
+        uint movSrcDir;
+        uint copySrcDir;
+        TreeNode srcNode;
 
         public Document_Center()
         {
@@ -33,6 +36,7 @@ namespace Blind_Client
             prevExt = string.Empty;
             moveItems = null;
             copyItems = null;
+            srcNode = null;
 
             ImageList imageList = new ImageList();
             imageList.Images.Add(Properties.Resources.opened_folder);
@@ -490,8 +494,8 @@ namespace Blind_Client
                     }
                     listMenu.Items.Add("삭제", null, new EventHandler(listMenu_Remove));
                     listMenu.Items.Add("다운로드", null, new EventHandler(button_Download_Click));
-                    //listMenu.Items.Add("이동", null, new EventHandler(listMenu_Move));
-                    //listMenu.Items.Add("복사", null, new EventHandler(listMenu_Copy));
+                    listMenu.Items.Add("이동", null, new EventHandler(listMenu_Move));
+                    listMenu.Items.Add("복사", null, new EventHandler(listMenu_Copy));
 
                     if (listview_File.CheckedItems.Count == 1)
                         listMenu.Items.Add("이름 변경", null, new EventHandler(listMenu_Rename));
@@ -503,12 +507,12 @@ namespace Blind_Client
                     listMenu.Items.Add("파일 업로드", null, new EventHandler(UploadFile));
                     listMenu.Items.Add("폴더 업로드", null, new EventHandler(UploadDir));
                     listMenu.Items.Add("새로고침", null, new EventHandler(treeMenu_RefreshDir));
-                    /*
+                    if (moveItems != null || copyItems != null)
+                        listMenu.Items.Add(new ToolStripSeparator());
                     if (moveItems != null)
                         listMenu.Items.Add("여기로 이동", null, new EventHandler(listMenu_DoMove));
                     if (copyItems != null)
                         listMenu.Items.Add("여기로 복사", null, new EventHandler(listMenu_DoCopy));
-                    */
                 }
                 listMenu.Show(treeview_Dir, e.Location);
             }
@@ -647,6 +651,8 @@ namespace Blind_Client
             moveItems = new ListViewItem[listview_File.CheckedItems.Count];
             for (int i = 0; i < moveItems.Length; i++)
                 moveItems[i] = listview_File.CheckedItems[i];
+            movSrcDir = ((Directory_Info)selected.Tag).id;
+            srcNode = selected;
         }
 
         private void listMenu_Copy(object sender, EventArgs e)
@@ -654,16 +660,67 @@ namespace Blind_Client
             copyItems = new ListViewItem[listview_File.CheckedItems.Count];
             for (int i = 0; i < copyItems.Length; i++)
                 copyItems[i] = listview_File.CheckedItems[i];
+            copySrcDir = ((Directory_Info)selected.Tag).id;
         }
 
         private void listMenu_DoMove(object sender, EventArgs e)
         {
-
+            foreach (ListViewItem item in moveItems)
+            {
+                if (item.SubItems[2].Text == string.Empty)
+                {
+                    if (!docCenter.MoveDir(movSrcDir, (uint)item.Tag, ((Directory_Info)selected.Tag).id))
+                        MessageBox.Show("\"" + item.Text + "\" 이동에 실패했습니다.", "폴더 이동");
+                    else
+                    {
+                        TreeNode srcDirNode = FindNodeID((uint)item.Tag, srcNode);
+                        if (srcDirNode != null)
+                            srcDirNode.Remove();
+                    }
+                }
+                else
+                {
+                    if (!docCenter.MoveFile(movSrcDir, (uint)item.Tag, ((Directory_Info)selected.Tag).id))
+                        MessageBox.Show("\"" + item.Text + "\" 이동에 실패했습니다.", "파일 이동");
+                }
+            }
+            moveItems = null;
+            srcNode = null;
+            docCenter.UpdateDir(selected);
         }
 
         private void listMenu_DoCopy(object sender, EventArgs e)
         {
+            foreach (ListViewItem item in copyItems)
+            {
+                if (item.SubItems[2].Text == string.Empty)
+                {
+                    if (!docCenter.CopyDir(copySrcDir, (uint)item.Tag, ((Directory_Info)selected.Tag).id))
+                        MessageBox.Show("\"" + item.Text + "\" 복사에 실패했습니다.", "폴더 복사");
+                }
+                else
+                {
+                    if (!docCenter.CopyFile(copySrcDir, (uint)item.Tag, ((Directory_Info)selected.Tag).id))
+                        MessageBox.Show("\"" + item.Text + "\" 복사에 실패했습니다.", "파일 복사");
+                }
+            }
+            docCenter.UpdateDir(selected);
+            copyItems = null;
+        }
 
+        TreeNode FindNodeID(uint id, TreeNode startNode = null)
+        {
+            TreeNodeCollection nodes = null;
+            if (startNode == null)
+                nodes = treeview_Dir.Nodes;
+            else
+                nodes = startNode.Nodes;
+
+            foreach (TreeNode node in nodes)
+                if (((Directory_Info)node.Tag).id == id)
+                    return node;
+
+            return null;
         }
     }
 }

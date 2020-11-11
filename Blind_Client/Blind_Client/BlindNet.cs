@@ -168,13 +168,17 @@ namespace BlindNet
                         end.header = PacketType.Disconnect;
                         return end;
                     }
-                    byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
-                    temp[0] = (byte)PacketType.OK;
-                    socket.Send(tmp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
 
                     data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
                     if (data.Length == BlindNetConst.PACKSIZE)
+                    {
+                        byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                        temp[0] = (byte)PacketType.OK;
+                        socket.Send(temp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                        using (NetworkStream stream = new NetworkStream(socket))
+                            stream.Flush();
                         break;
+                    }
                 }
 
                 decrypted = aes.Decryption(data);
