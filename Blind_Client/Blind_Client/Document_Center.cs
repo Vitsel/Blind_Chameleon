@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using BlindNet;
 using Blind_Client.BlindChatUI;
+using System.Drawing;
 
 namespace Blind_Client
 {
@@ -43,6 +44,11 @@ namespace Blind_Client
             treeview_Dir.ImageList = imageList;
             listview_File.LargeImageList = imageList;
             listview_File.SmallImageList = imageList;
+
+            listview_File.Columns[0].Width = listview_File.Width - 295;
+            listview_File.Columns[1].Width = 120;
+            listview_File.Columns[2].Width = 85;
+            listview_File.Columns[3].Width = 100;
 
             SetVisibleDoing(false);
             progressBar.Step = 1;
@@ -721,6 +727,23 @@ namespace Blind_Client
                     return node;
 
             return null;
+        }
+
+        private void listview_File_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            SolidBrush brush = new SolidBrush(Color.FromArgb(200, 200, 240));
+            e.Graphics.FillRectangle(brush, e.Bounds);
+            e.DrawText();
+        }
+
+        private void listview_File_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void listview_File_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
         }
     }
 }

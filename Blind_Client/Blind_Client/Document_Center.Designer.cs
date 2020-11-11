@@ -43,20 +43,21 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label_fName = new System.Windows.Forms.Label();
             this.label_percent = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.text_rename = new System.Windows.Forms.TextBox();
             this.treeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.text_rename = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.treeMenu.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.treeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeview_Dir
             // 
+            this.treeview_Dir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(236)))), ((int)(((byte)(250)))));
             this.treeview_Dir.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeview_Dir.Location = new System.Drawing.Point(3, 43);
             this.treeview_Dir.Name = "treeview_Dir";
@@ -69,6 +70,7 @@
             // listview_File
             // 
             this.listview_File.AllowColumnReorder = true;
+            this.listview_File.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(236)))), ((int)(((byte)(250)))));
             this.listview_File.CheckBoxes = true;
             this.listview_File.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name,
@@ -79,10 +81,14 @@
             this.listview_File.HideSelection = false;
             this.listview_File.Location = new System.Drawing.Point(0, 0);
             this.listview_File.Name = "listview_File";
+            this.listview_File.OwnerDraw = true;
             this.listview_File.Size = new System.Drawing.Size(480, 366);
             this.listview_File.TabIndex = 3;
             this.listview_File.UseCompatibleStateImageBehavior = false;
             this.listview_File.View = System.Windows.Forms.View.Details;
+            this.listview_File.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listview_File_DrawColumnHeader);
+            this.listview_File.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.listview_File_DrawItem);
+            this.listview_File.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listview_File_DrawSubItem);
             this.listview_File.DoubleClick += new System.EventHandler(this.listview_File_DoubleClick);
             this.listview_File.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listview_File_MouseDown);
             // 
@@ -108,27 +114,33 @@
             // 
             // botton_Upload
             // 
+            this.botton_Upload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(185)))), ((int)(((byte)(204)))));
             this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.botton_Upload.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.botton_Upload.ForeColor = System.Drawing.SystemColors.Control;
             this.botton_Upload.Location = new System.Drawing.Point(496, 3);
             this.botton_Upload.Name = "botton_Upload";
             this.botton_Upload.Size = new System.Drawing.Size(94, 34);
             this.botton_Upload.TabIndex = 4;
             this.botton_Upload.Text = "Upload ▼";
-            this.botton_Upload.UseVisualStyleBackColor = true;
+            this.botton_Upload.UseVisualStyleBackColor = false;
             this.botton_Upload.Click += new System.EventHandler(this.botton_Upload_Click);
             // 
             // button_Download
             // 
+            this.button_Download.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(185)))), ((int)(((byte)(204)))));
             this.button_Download.Cursor = System.Windows.Forms.Cursors.Default;
             this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_Download.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button_Download.ForeColor = System.Drawing.SystemColors.Control;
             this.button_Download.Location = new System.Drawing.Point(596, 3);
             this.button_Download.Name = "button_Download";
             this.button_Download.Size = new System.Drawing.Size(94, 34);
             this.button_Download.TabIndex = 5;
             this.button_Download.Text = "Download";
-            this.button_Download.UseVisualStyleBackColor = true;
+            this.button_Download.UseVisualStyleBackColor = false;
             this.button_Download.Click += new System.EventHandler(this.button_Download_Click);
             // 
             // tableLayoutPanel1
@@ -151,10 +163,11 @@
             // 
             // tableLayoutPanel2
             // 
+            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(116)))), ((int)(((byte)(223)))));
             this.tableLayoutPanel2.ColumnCount = 7;
             this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 83F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 89F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -179,25 +192,29 @@
             // 
             this.label_funcType.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_funcType.AutoSize = true;
+            this.label_funcType.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_funcType.ForeColor = System.Drawing.SystemColors.Control;
             this.label_funcType.Location = new System.Drawing.Point(3, 12);
             this.label_funcType.Name = "label_funcType";
-            this.label_funcType.Size = new System.Drawing.Size(77, 15);
+            this.label_funcType.Size = new System.Drawing.Size(83, 15);
             this.label_funcType.TabIndex = 7;
             this.label_funcType.Text = "다운로드 : ";
             // 
             // progressBar
             // 
             this.progressBar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.progressBar.Location = new System.Drawing.Point(85, 8);
+            this.progressBar.Location = new System.Drawing.Point(89, 8);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(151, 23);
+            this.progressBar.Size = new System.Drawing.Size(150, 23);
             this.progressBar.TabIndex = 6;
             // 
             // label_fName
             // 
             this.label_fName.AutoSize = true;
             this.label_fName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_fName.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_fName.ForeColor = System.Drawing.SystemColors.Control;
             this.label_fName.Location = new System.Drawing.Point(292, 0);
             this.label_fName.Name = "label_fName";
             this.label_fName.Size = new System.Drawing.Size(168, 40);
@@ -209,12 +226,34 @@
             // 
             this.label_percent.AutoSize = true;
             this.label_percent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_percent.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_percent.ForeColor = System.Drawing.SystemColors.Control;
             this.label_percent.Location = new System.Drawing.Point(242, 0);
             this.label_percent.Name = "label_percent";
             this.label_percent.Size = new System.Drawing.Size(44, 40);
             this.label_percent.TabIndex = 9;
             this.label_percent.Text = "0%";
             this.label_percent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.text_rename);
+            this.panel1.Controls.Add(this.listview_File);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(210, 43);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(480, 366);
+            this.panel1.TabIndex = 9;
+            // 
+            // text_rename
+            // 
+            this.text_rename.Location = new System.Drawing.Point(88, 3);
+            this.text_rename.Name = "text_rename";
+            this.text_rename.Size = new System.Drawing.Size(100, 25);
+            this.text_rename.TabIndex = 4;
+            this.text_rename.Visible = false;
+            this.text_rename.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_rename_KeyDown);
+            this.text_rename.Leave += new System.EventHandler(this.text_rename_Leave);
             // 
             // treeMenu
             // 
@@ -242,39 +281,20 @@
             this.listMenu.Name = "listMenu";
             this.listMenu.Size = new System.Drawing.Size(61, 4);
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.text_rename);
-            this.panel1.Controls.Add(this.listview_File);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(210, 43);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(480, 366);
-            this.panel1.TabIndex = 9;
-            // 
-            // text_rename
-            // 
-            this.text_rename.Location = new System.Drawing.Point(88, 3);
-            this.text_rename.Name = "text_rename";
-            this.text_rename.Size = new System.Drawing.Size(100, 25);
-            this.text_rename.TabIndex = 4;
-            this.text_rename.Visible = false;
-            this.text_rename.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_rename_KeyDown);
-            this.text_rename.Leave += new System.EventHandler(this.text_rename_Leave);
-            // 
             // Document_Center
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Document_Center";
             this.Size = new System.Drawing.Size(693, 412);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.treeMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.treeMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
