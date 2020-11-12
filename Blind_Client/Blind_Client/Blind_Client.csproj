@@ -328,17 +328,19 @@
     <EmbeddedResource Include="Resources\opened-folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\adduser1.png" />
-    <Content Include="Resources\BlindLockBack.gif" />
+    <EmbeddedResource Include="Resources\adduser1.png" />
+    <EmbeddedResource Include="Resources\BlindLockBack.gif" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\BlindLockBack.gif" />
-    <None Include="Resources\chat.png" />
-    <None Include="Resources\user.png" />
-    <None Include="Resources\hamburger1.png" />
-    <None Include="Resources\newroom.png" />
-    <None Include="Resources\exit1.png" />
-    <Content Include="Resources\UserIcon.png" />
+    <EmbeddedResource Include="Resources\chat.png" />
+    <EmbeddedResource Include="Resources\user.png" />
+    <EmbeddedResource Include="Resources\hamburger1.png" />
+    <EmbeddedResource Include="Resources\newroom.png" />
+    <EmbeddedResource Include="Resources\exit1.png" />
+    <EmbeddedResource Include="Resources\download.png" />
+    <EmbeddedResource Include="Resources\drapes.png" />
+    <EmbeddedResource Include="Resources\upload.png" />
+    <EmbeddedResource Include="Resources\UserIcon.png" />
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2%28x86 및 x64%29</ProductName>
@@ -351,7 +353,19 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Diagram.jpg" />
+    <None Include="Resources\ColumnHeader.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ColumnHeaderL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ColumnHeaderC.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ColumnHeaderR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\file.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

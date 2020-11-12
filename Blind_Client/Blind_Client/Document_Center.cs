@@ -41,6 +41,7 @@ namespace Blind_Client
 
             ImageList imageList = new ImageList();
             imageList.Images.Add(Properties.Resources.opened_folder);
+            imageList.Images.Add(Properties.Resources.file);
             treeview_Dir.ImageList = imageList;
             listview_File.LargeImageList = imageList;
             listview_File.SmallImageList = imageList;
@@ -731,8 +732,15 @@ namespace Blind_Client
 
         private void listview_File_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
-            SolidBrush brush = new SolidBrush(Color.FromArgb(200, 200, 240));
+            SolidBrush brush = new SolidBrush(Color.FromArgb(163, 210, 202));
             e.Graphics.FillRectangle(brush, e.Bounds);
+            if (e.ColumnIndex == 0)
+                e.Graphics.DrawImage(Properties.Resources.ColumnHeaderL, new Point(e.Bounds.X, e.Bounds.Y));
+            else if (e.ColumnIndex == 3)
+                e.Graphics.DrawImage(Properties.Resources.ColumnHeaderR, new Point(e.Bounds.X, e.Bounds.Y));
+            else
+                e.Graphics.DrawImage(Properties.Resources.ColumnHeaderC, new Point(e.Bounds.X, e.Bounds.Y));
+            //e.Graphics.DrawImage(Properties.Resources.ColumnHeader, new Point(0, 0));
             e.DrawText();
         }
 

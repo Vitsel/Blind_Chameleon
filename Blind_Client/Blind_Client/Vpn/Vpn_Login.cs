@@ -23,6 +23,7 @@ namespace Blind_Client
         public Vpn_Login()
         {
             InitializeComponent();
+            pictureBox1.Parent = panel1;
         }
 
         private void Form1_Load(object sender, EventArgs e)

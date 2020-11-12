@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Text;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Blind_Client
 {
@@ -104,6 +105,7 @@ namespace Blind_Client
                 File_Info file = BlindNetUtil.ByteToStruct<File_Info>(BlindNetUtil.ByteTrimEndNull(packet.data));
                 ListViewItem item = new ListViewItem();
                 item.Text = file.name;
+                item.ImageIndex = 1;
                 item.SubItems.Add(file.modDate);
                 item.SubItems.Add(file.type);
                 item.SubItems.Add(ConvertSize(file.size));
@@ -339,9 +341,10 @@ namespace Blind_Client
 
             string fileName = dPath + item.Text + ".zip";
             byte[] data = null;
+            bool recvMode = false;
             do
             {
-                packet = socket.CryptoReceive();
+                packet = socket.CryptoReceive(recvMode);
                 if (packet.header == PacketType.Disconnect)
                     return false;
                 data = BlindNetUtil.MergeArray<byte>(data, packet.data);
@@ -351,6 +354,7 @@ namespace Blind_Client
                 form.progressBar.Value -= 1;
                 form.label_percent.Text = (form.progressBar.Value * 100 / form.progressBar.Maximum) + "%";
                 form.label_percent.Update();
+                recvMode = true;
             } while (packet.header == PacketType.Sending);
             data = BlindNetUtil.ByteTrimEndNull(data);
 

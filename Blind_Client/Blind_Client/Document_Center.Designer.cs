@@ -35,8 +35,6 @@
             this.modDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.botton_Upload = new System.Windows.Forms.Button();
-            this.button_Download = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label_funcType = new System.Windows.Forms.Label();
@@ -49,6 +47,8 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.button_Download = new System.Windows.Forms.Button();
+            this.botton_Upload = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -57,11 +57,14 @@
             // 
             // treeview_Dir
             // 
-            this.treeview_Dir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(236)))), ((int)(((byte)(250)))));
+            this.treeview_Dir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(242)))));
+            this.treeview_Dir.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.treeview_Dir.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeview_Dir.Location = new System.Drawing.Point(3, 43);
+            this.treeview_Dir.Font = new System.Drawing.Font("KoPub돋움체 Medium", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.treeview_Dir.Location = new System.Drawing.Point(3, 40);
+            this.treeview_Dir.Margin = new System.Windows.Forms.Padding(3, 0, 0, 3);
             this.treeview_Dir.Name = "treeview_Dir";
-            this.treeview_Dir.Size = new System.Drawing.Size(201, 366);
+            this.treeview_Dir.Size = new System.Drawing.Size(204, 369);
             this.treeview_Dir.TabIndex = 2;
             this.treeview_Dir.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeview_Dir_AfterLabelEdit);
             this.treeview_Dir.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeview_Dir_AfterSelect);
@@ -70,7 +73,8 @@
             // listview_File
             // 
             this.listview_File.AllowColumnReorder = true;
-            this.listview_File.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(236)))), ((int)(((byte)(250)))));
+            this.listview_File.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(242)))));
+            this.listview_File.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listview_File.CheckBoxes = true;
             this.listview_File.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name,
@@ -78,11 +82,13 @@
             this.type,
             this.size});
             this.listview_File.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listview_File.Font = new System.Drawing.Font("KoPub돋움체 Medium", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listview_File.HideSelection = false;
             this.listview_File.Location = new System.Drawing.Point(0, 0);
+            this.listview_File.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
             this.listview_File.Name = "listview_File";
             this.listview_File.OwnerDraw = true;
-            this.listview_File.Size = new System.Drawing.Size(480, 366);
+            this.listview_File.Size = new System.Drawing.Size(483, 367);
             this.listview_File.TabIndex = 3;
             this.listview_File.UseCompatibleStateImageBehavior = false;
             this.listview_File.View = System.Windows.Forms.View.Details;
@@ -112,37 +118,6 @@
             this.size.Text = "크기";
             this.size.Width = 92;
             // 
-            // botton_Upload
-            // 
-            this.botton_Upload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(185)))), ((int)(((byte)(204)))));
-            this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.botton_Upload.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.botton_Upload.ForeColor = System.Drawing.SystemColors.Control;
-            this.botton_Upload.Location = new System.Drawing.Point(496, 3);
-            this.botton_Upload.Name = "botton_Upload";
-            this.botton_Upload.Size = new System.Drawing.Size(94, 34);
-            this.botton_Upload.TabIndex = 4;
-            this.botton_Upload.Text = "Upload ▼";
-            this.botton_Upload.UseVisualStyleBackColor = false;
-            this.botton_Upload.Click += new System.EventHandler(this.botton_Upload_Click);
-            // 
-            // button_Download
-            // 
-            this.button_Download.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(185)))), ((int)(((byte)(204)))));
-            this.button_Download.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_Download.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button_Download.ForeColor = System.Drawing.SystemColors.Control;
-            this.button_Download.Location = new System.Drawing.Point(596, 3);
-            this.button_Download.Name = "button_Download";
-            this.button_Download.Size = new System.Drawing.Size(94, 34);
-            this.button_Download.TabIndex = 5;
-            this.button_Download.Text = "Download";
-            this.button_Download.UseVisualStyleBackColor = false;
-            this.button_Download.Click += new System.EventHandler(this.button_Download_Click);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
@@ -163,7 +138,7 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(116)))), ((int)(((byte)(223)))));
+            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
             this.tableLayoutPanel2.ColumnCount = 7;
             this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 89F));
@@ -171,8 +146,8 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.Controls.Add(this.label_funcType, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.progressBar, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label_fName, 3, 0);
@@ -192,11 +167,11 @@
             // 
             this.label_funcType.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_funcType.AutoSize = true;
-            this.label_funcType.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_funcType.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label_funcType.ForeColor = System.Drawing.SystemColors.Control;
-            this.label_funcType.Location = new System.Drawing.Point(3, 12);
+            this.label_funcType.Location = new System.Drawing.Point(3, 11);
             this.label_funcType.Name = "label_funcType";
-            this.label_funcType.Size = new System.Drawing.Size(83, 15);
+            this.label_funcType.Size = new System.Drawing.Size(83, 18);
             this.label_funcType.TabIndex = 7;
             this.label_funcType.Text = "다운로드 : ";
             // 
@@ -213,11 +188,11 @@
             // 
             this.label_fName.AutoSize = true;
             this.label_fName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label_fName.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_fName.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label_fName.ForeColor = System.Drawing.SystemColors.Control;
             this.label_fName.Location = new System.Drawing.Point(292, 0);
             this.label_fName.Name = "label_fName";
-            this.label_fName.Size = new System.Drawing.Size(168, 40);
+            this.label_fName.Size = new System.Drawing.Size(268, 40);
             this.label_fName.TabIndex = 8;
             this.label_fName.Text = "Path";
             this.label_fName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -226,7 +201,7 @@
             // 
             this.label_percent.AutoSize = true;
             this.label_percent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label_percent.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_percent.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label_percent.ForeColor = System.Drawing.SystemColors.Control;
             this.label_percent.Location = new System.Drawing.Point(242, 0);
             this.label_percent.Name = "label_percent";
@@ -240,9 +215,10 @@
             this.panel1.Controls.Add(this.text_rename);
             this.panel1.Controls.Add(this.listview_File);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(210, 43);
+            this.panel1.Location = new System.Drawing.Point(210, 45);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 5, 0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(480, 366);
+            this.panel1.Size = new System.Drawing.Size(483, 367);
             this.panel1.TabIndex = 9;
             // 
             // text_rename
@@ -257,35 +233,71 @@
             // 
             // treeMenu
             // 
+            this.treeMenu.Font = new System.Drawing.Font("KoPub돋움체 Medium", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.treeMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.treeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.treeMenu.Name = "contextMenuStrip1";
-            this.treeMenu.Size = new System.Drawing.Size(215, 28);
+            this.treeMenu.Size = new System.Drawing.Size(206, 26);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(214, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.toolStripMenuItem1.Text = "toolStripMenuItem1";
             // 
             // uploadMenu
             // 
+            this.uploadMenu.Font = new System.Drawing.Font("KoPub돋움체 Medium", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.uploadMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.uploadMenu.Name = "uploadMenu";
             this.uploadMenu.Size = new System.Drawing.Size(61, 4);
             // 
             // listMenu
             // 
+            this.listMenu.Font = new System.Drawing.Font("KoPub돋움체 Medium", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.listMenu.Name = "listMenu";
             this.listMenu.Size = new System.Drawing.Size(61, 4);
+            // 
+            // button_Download
+            // 
+            this.button_Download.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
+            this.button_Download.Cursor = System.Windows.Forms.Cursors.Default;
+            this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_Download.FlatAppearance.BorderSize = 0;
+            this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Download.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button_Download.ForeColor = System.Drawing.SystemColors.Control;
+            this.button_Download.Image = global::Blind_Client.Properties.Resources.download;
+            this.button_Download.Location = new System.Drawing.Point(646, 3);
+            this.button_Download.Name = "button_Download";
+            this.button_Download.Size = new System.Drawing.Size(44, 34);
+            this.button_Download.TabIndex = 5;
+            this.button_Download.UseVisualStyleBackColor = false;
+            this.button_Download.Click += new System.EventHandler(this.button_Download_Click);
+            // 
+            // botton_Upload
+            // 
+            this.botton_Upload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
+            this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.botton_Upload.FlatAppearance.BorderSize = 0;
+            this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.botton_Upload.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.botton_Upload.ForeColor = System.Drawing.SystemColors.Control;
+            this.botton_Upload.Image = global::Blind_Client.Properties.Resources.upload1;
+            this.botton_Upload.Location = new System.Drawing.Point(596, 3);
+            this.botton_Upload.Name = "botton_Upload";
+            this.botton_Upload.Size = new System.Drawing.Size(44, 34);
+            this.botton_Upload.TabIndex = 4;
+            this.botton_Upload.UseVisualStyleBackColor = false;
+            this.botton_Upload.Click += new System.EventHandler(this.botton_Upload_Click);
             // 
             // Document_Center
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(243)))), ((int)(((byte)(242)))));
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Document_Center";
             this.Size = new System.Drawing.Size(693, 412);

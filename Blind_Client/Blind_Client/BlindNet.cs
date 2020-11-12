@@ -155,12 +155,17 @@ namespace BlindNet
             }
             if (isRecieving || miniPacket.header == PacketType.MSG)
             {
-                data = null;
+                data = new byte[0];
                 while (true)
                 {
                     byte[] tmp = new byte[BlindNetConst.PACKSIZE];
-                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
-                    new NetworkStream(socket).Flush();
+                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE - data.Length, SocketFlags.None);
+                    using (NetworkStream stream = new NetworkStream(socket))
+                        stream.Flush();
+#if DEBUG
+                    if (tmp[tmp.Length - 1] == 0)
+                        Console.WriteLine("Received less bytes");
+#endif
                     if (rcvNum == 0)
                     {
                         BlindPacket end;

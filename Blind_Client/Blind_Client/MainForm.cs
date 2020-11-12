@@ -175,13 +175,6 @@ namespace Blind_Client
             }
         }
 
-
-
-
-
-
-
-
         private void BlindChatTimer_Tick(object sender, EventArgs e)
         {
             if (GetIdleTime() > WAITTIMESEC * 1000) 
@@ -418,7 +411,5 @@ namespace Blind_Client
             btn.BackColor = BlindColor.Info;
             _selectedBtn = btn;
         }
-
-
     }
 }
