@@ -71,10 +71,11 @@ namespace Blind_Client
 
             //UI
             panel_Fore.BackColor = BlindColor.Primary;
-            Button_DocCenter.ForeColor = btn_ActivateChat.ForeColor = BlindColor.Light;
-            Button_DocCenter.BackColor = btn_ActivateChat.BackColor = BlindColor.Primary;
+            Button_DocCenter.ForeColor = BlindColor.Light;
+            Button_DocCenter.BackColor = BlindColor.Primary;
 
-
+            panel4.BackColor = panel1.BackColor = BlindColor.DarkGreen;
+            btn_ActivateUser.ForeColor = btn_ActivateChat.ForeColor = BlindColor.Light;
 
             this.isMove = false;
             this.panel_Fore.BackColor = Color.LightGray;
@@ -158,7 +159,11 @@ namespace Blind_Client
 
         private void btn_ActivateChat_Click(object sender, EventArgs e)
         {
-            ActivateControl(MainControl.Community);
+            ActivateControl(MainControl.Chat);
+        }
+        private void btn_ActivateUser_Click(object sender, EventArgs e)
+        {
+            ActivateControl(MainControl.User);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -379,7 +384,7 @@ namespace Blind_Client
             btn_minimize.ForeColor = Color.Gray;
         }
 
-        enum MainControl { Document, Community}
+        enum MainControl { Document, Chat, User}
 
         private void ActivateControl(MainControl controlType)
         {
@@ -391,10 +396,18 @@ namespace Blind_Client
                         SetButton(Button_DocCenter);
                     }
                     break;
-                case MainControl.Community:
+                case MainControl.Chat:
                     {
                         _ChatMain.BringToFront();
-                        SetButton(btn_ActivateChat);
+                        _ChatMain.ActivateControl(ChatMain.MainChatControl.Room);
+                        //SetButton(btn_ActivateChat);
+                    }
+                    break;
+                case MainControl.User:
+                    {
+                        _ChatMain.BringToFront();
+                        _ChatMain.ActivateControl(ChatMain.MainChatControl.User);
+                        //SetButton(btn_ActivateUser);
                     }
                     break;
 
@@ -410,6 +423,26 @@ namespace Blind_Client
 
             btn.BackColor = BlindColor.Info;
             _selectedBtn = btn;
+        }
+
+        private void btn_ActivateUser_MouseMove(object sender, MouseEventArgs e)
+        {
+            panel4.BackColor = BlindColor.LightGreen;   
+        }
+
+        private void btn_ActivateChat_MouseMove(object sender, MouseEventArgs e)
+        {
+            panel1.BackColor = BlindColor.LightGreen;
+        }
+
+        private void btn_ActivateChat_MouseLeave(object sender, EventArgs e)
+        {
+            panel1.BackColor = BlindColor.DarkGreen;
+        }
+
+        private void btn_ActivateUser_MouseLeave(object sender, EventArgs e)
+        {
+            panel4.BackColor = BlindColor.DarkGreen;
         }
     }
 }

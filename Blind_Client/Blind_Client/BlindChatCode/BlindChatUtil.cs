@@ -13,13 +13,17 @@ namespace Blind_Client.BlindChatCode
 {
     static public class BlindColor
     {
-        public static Color Primary = Color.FromArgb(78,115, 223);
+        public static Color Primary = Color.FromArgb(94,170, 168);
         public static Color Info = Color.FromArgb(54, 185, 204);
-        public static Color Light = Color.FromArgb(248, 249, 252);
+        public static Color Light = Color.FromArgb(244, 243, 242);
         public static Color Secondary = Color.FromArgb(133, 135, 150);
 
-        public static Color Gray = Color.FromArgb(236, 236, 250);
-        public static Color DarkGray = Color.FromArgb(206, 206, 220);
+        public static Color Gray = Color.FromArgb(244, 243, 242);
+        public static Color DarkGray = Color.FromArgb(234, 233, 232);
+
+        public static Color BrightGreen = Color.FromArgb(183, 230, 222);
+        public static Color LightGreen = Color.FromArgb(163, 210, 202);
+        public static Color DarkGreen = Color.FromArgb(5, 102, 118);
         public static Color LightBlue = Color.FromArgb(99, 116, 223);
         public static Color BrightBlue = Color.FromArgb(119, 136, 223);
         public static Color SkyBlue = Color.FromArgb(200, 205, 250);

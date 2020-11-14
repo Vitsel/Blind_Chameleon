@@ -26,13 +26,12 @@ namespace Blind_Client.BlindChatUI
             InitializeComponent();
             _UserID = UserID;
 
-            lbl_room.BackColor = BlindColor.Light;
-            lbl_room.ForeColor = BlindColor.Primary;
-            btn_Create.BackColor = BlindColor.BrightBlue;
+            lbl_room.ForeColor = BlindColor.Light;
+            btn_Create.BackColor = BlindColor.DarkGreen;
             btn_Create.ForeColor = BlindColor.Light;
-            RoomItem_LayoutPanel.BackColor = BlindColor.Gray;
+            panel1.BackColor = panel3.BackColor = RoomItem_LayoutPanel.BackColor = BlindColor.Gray;
             
-            BlindNetUtil.SetEllipse(btn_Create, 5);
+            BlindNetUtil.SetEllipse(btn_Create, 15);
         }
         public void SetBlindChat(BlindChat chat)
         {
@@ -46,9 +45,9 @@ namespace Blind_Client.BlindChatUI
                 RoomItem_LayoutPanel.Controls[0].Dispose();
             }
             RoomItem_LayoutPanel.Controls.Clear();
-            List<ChatRoom> roomListOrder = BlindChat.roomList.OrderByDescending(x => x.LastMessageTime).ToList();
+            //List<ChatRoom> roomListOrder = BlindChat.roomList.OrderByDescending(x => x.LastMessageTime).ToList();
 
-            foreach(ChatRoom room in roomListOrder)
+            foreach(ChatRoom room in BlindChat.roomList)
             {
                 AddRoom(room);
             }
@@ -58,18 +57,19 @@ namespace Blind_Client.BlindChatUI
             Room_Item roomItem = new Room_Item(room);
             roomItem.Anchor = AnchorStyles.Left|AnchorStyles.Right;
             roomItem.RoomDoubleClickEvent = _BlindChat.OpenMessageRoom;
-            roomItem.Width = this.Width - 14;
+            roomItem.Width = this.Width - 24;
 
             //userItem.UserClickEvent = DisplayUserInfo;
 
             RoomItem_LayoutPanel.Controls.Add(roomItem);
+            RoomItem_LayoutPanel.Controls.SetChildIndex((Control)roomItem, 0);
         }
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
             foreach (Room_Item item in RoomItem_LayoutPanel.Controls)
             {
-                item.Width = this.Width-14;
+                item.Width = this.Width-24;
             }
         }
         public void SendCreateRoom(string text, uint[] array)

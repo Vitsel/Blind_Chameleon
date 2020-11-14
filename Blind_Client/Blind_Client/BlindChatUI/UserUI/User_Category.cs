@@ -19,7 +19,7 @@ namespace Blind_Client.BlindChatUI.UserUI
             InitializeComponent();
             Lbl_Category.Text = department;
             Lbl_Category.ForeColor = BlindColor.Light;
-            Lbl_Category.BackColor = BlindColor.Info;
+            //Lbl_Category.BackColor = BlindColor.Info;
             
             BlindNetUtil.SetEllipse(this, 3);
         }

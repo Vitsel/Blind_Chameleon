@@ -32,14 +32,12 @@ namespace Blind_Client.BlindChatUI.RoomUI
             this.StartPosition = FormStartPosition.Manual;
             _userList = BlindChat.GetUserList(_room.ID);
 
-            panel1.BackColor = lbl_RoomName.BackColor = BlindColor.Primary;
+            btn_Invite.BackColor = btn_close.BackColor = panel1.BackColor = lbl_RoomName.BackColor = BlindColor.DarkGreen;
+
             lbl_RoomName.ForeColor = BlindColor.Light;
-            btn_exit.BackColor = BlindColor.BrightBlue;
-            btn_Invite.BackColor = btn_close.BackColor = BlindColor.Primary;
+            btn_exit.BackColor = BlindColor.LightGreen;
             btn_close.ForeColor = BlindColor.Light;
             panel2.BackColor = BlindColor.Light;
-            lb_UserListBox.BackColor = BlindColor.Gray;
-            lb_UserListBox.ForeColor = BlindColor.Secondary;
             label1.ForeColor = BlindColor.Secondary;
 
             BlindNetUtil.SetEllipse(this, 5);
@@ -59,12 +57,17 @@ namespace Blind_Client.BlindChatUI.RoomUI
         {
             foreach(User user in _userList)
             {
+                Menu_item item = new Menu_item(user.Name);
+                item.Width = flowLayoutPanel1.Width - 54;
                 if (user.ID == UserID)
                 {
-                    lb_UserListBox.Items.Insert(0, user.Name);
+                    flowLayoutPanel1.Controls.Add(item);
+                    flowLayoutPanel1.Controls.SetChildIndex((Control)item, 0);
+                    //lb_UserListBox.Items.Insert(0, user.Name);
                     continue;
                 }
-                lb_UserListBox.Items.Add(user.Name);
+                flowLayoutPanel1.Controls.Add(item);
+                //lb_UserListBox.Items.Add(user.Name);
             }
         }
 

@@ -29,12 +29,22 @@ namespace Blind_Client.BlindChatUI.RoomUI
 
         private void lbl_UserName_MouseMove(object sender, MouseEventArgs e)
         {
-            this.BackColor = BlindColor.DarkGray;
+            this.BackColor = BlindColor.Primary;
         }
 
         private void lbl_UserName_MouseLeave(object sender, EventArgs e)
         {
-            this.BackColor = BlindColor.Gray;
+            this.BackColor = BlindColor.LightGreen;
+        }
+
+        private void btn_Check_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void btn_Check_MouseLeave(object sender, EventArgs e)
+        {
+
         }
 
         public CreateRoom_Item(User user)
@@ -43,12 +53,14 @@ namespace Blind_Client.BlindChatUI.RoomUI
             _User = user;
             _isClicked = false;
 
-            this.BackColor = BlindColor.Gray;
-            panel1.BackColor = BlindColor.DarkGray;
-            btn_Check.BackColor = BlindColor.Light;
+            this.BackColor = BlindColor.LightGreen;
+            panel1.BackColor = BlindColor.Primary;
+            panel2.BackColor = btn_Check.BackColor = BlindColor.Light;
+
             
             BlindNetUtil.SetEllipse(this, 10);
             BlindNetUtil.SetEllipse(panel1, 30);
+            BlindNetUtil.SetEllipse(panel2, 40);
             BlindNetUtil.SetEllipse(btn_Check, 40);
         }
 
@@ -57,7 +69,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
             if (!_isClicked)
             {
                 AddUserCount();
-                btn_Check.BackColor = BlindColor.Info;
+                btn_Check.BackColor = BlindColor.DarkGreen;
             }
             else
             {

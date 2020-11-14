@@ -25,7 +25,7 @@ namespace Blind_Server
         public static BlindServerScoket mainSocket;
         public static BlindServerScoket socket_docCenter;
         public static BlindServerScoket WebDeviceSocket;
-        public static BlindServerScoket chatPortSock;
+        public static BlindServerScoket chatRecvSock, chatSendSock;
         public static BlindServerScoket lockPortSock;
         public static MySqlConnection connection;
 
@@ -43,8 +43,10 @@ namespace Blind_Server
             socket_docCenter = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
             socket_docCenter.BindListen();
 
-            chatPortSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
-            chatPortSock.BindListen();
+            chatRecvSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
+            chatRecvSock.BindListen(); 
+            chatSendSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT+1);
+            chatSendSock.BindListen();
 
             lockPortSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.LOCKPORT);
             lockPortSock.BindListen();

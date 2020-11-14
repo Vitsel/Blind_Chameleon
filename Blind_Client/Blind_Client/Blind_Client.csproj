@@ -154,6 +154,12 @@
     <Compile Include="BlindChatUI\RoomUI\Invitation_Item.Designer.cs">
       <DependentUpon>Invitation_Item.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Menu_item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlindChatUI\RoomUI\Menu_item.Designer.cs">
+      <DependentUpon>Menu_item.cs</DependentUpon>
+    </Compile>
     <Compile Include="BlindChatUI\RoomUI\MessageRoom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -271,6 +277,9 @@
     <EmbeddedResource Include="BlindChatUI\RoomUI\Invitation_Item.resx">
       <DependentUpon>Invitation_Item.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BlindChatUI\RoomUI\Menu_item.resx">
+      <DependentUpon>Menu_item.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BlindChatUI\RoomUI\MessageRoom.resx">
       <DependentUpon>MessageRoom.cs</DependentUpon>
     </EmbeddedResource>
@@ -366,6 +375,63 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chategory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\userinfo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\userinfo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\propertyBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\titleBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\member.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chat1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paperplane.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paperplane1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menuName.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user_one.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user_one1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\message.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\message1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\message2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pencil.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

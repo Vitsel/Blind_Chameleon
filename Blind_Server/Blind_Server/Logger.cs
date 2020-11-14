@@ -72,7 +72,7 @@ namespace BlindLogger
             commander.Parameters.AddWithValue("service", service);
             commander.Parameters.AddWithValue("port", port);
             commander.Parameters.AddWithValue("contents", contents);
-            commander.ExecuteNonQuery();
+            //commander.ExecuteNonQuery();
         }
     }
 

@@ -74,7 +74,10 @@ namespace Blind_Client.BlindChatCode
                 ExecuteWithInvoke(form, delegate
                 {
                     UI._RoomControl.AddRoom(room);
-                    UI._RoomControl.LoadRooms();
+                    //수정
+                    //UI._RoomControl.LoadRooms();                
+
+                    UI._RoomControl.Invalidate();
                 });
             }
         }
@@ -83,22 +86,25 @@ namespace Blind_Client.BlindChatCode
             string sql = $"insert into ChatRoomJoined (ID, roomID, userID, time) values ({roomJoined.ID}, {roomJoined.RoomID}, {roomJoined.UserID}, \'{roomJoined.Time}\');";
             DB.ExecuteNonQuery(sql);
 
-            //ChatMessage message = new ChatMessage();
-            //message.RoomID = roomJoined.RoomID;
-            //message.UserID = 0;
-            //message.Time = roomJoined.Time;
-
-            //User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
-            //message.Message = $"{user.Name}님이 접속하셨습니다.";
-
-            //AddMessage(message);
 
             ExecuteWithInvoke(form, delegate
             {
-                UI._RoomControl.LoadRooms();
+                //수정
+                //UI._RoomControl.LoadRooms();
+                foreach (Room_Item item in UI._RoomControl.RoomItem_LayoutPanel.Controls)
+                {
+                    if (item.ID == roomJoined.RoomID)
+                    {
+                        item.UserCount = BlindChat.GetUserList(roomJoined.RoomID).Count().ToString();
+                        UI._RoomControl.RoomItem_LayoutPanel.Controls.SetChildIndex((Control)item, 0);
+                        UI._RoomControl.RoomItem_LayoutPanel.Invalidate();
+                    }
+                }
+
+
             });
 
-            //UI.AddMember(roomJoined);
+
         }
         public void AddMessage(ChatMessage message)
         {
@@ -121,24 +127,25 @@ namespace Blind_Client.BlindChatCode
             ExecuteWithInvoke(this.form, delegate
             {
                 //UI._RoomControl.LoadRooms();
-                
-                    foreach(Room_Item item in UI._RoomControl.RoomItem_LayoutPanel.Controls)
+
+                foreach (Room_Item item in UI._RoomControl.RoomItem_LayoutPanel.Controls)
+                {
+                    if (item.ID == message.RoomID)
                     {
-                        if(item.ID == message.RoomID)
-                        {
-                            if (BlindChatUtil.GetFormWithName(message.RoomID.ToString()) == null)
-                                item.NewMessage();
-                            else
-                                item.OpenedMessage();
+                        if (BlindChatUtil.GetFormWithName(message.RoomID.ToString()) == null)
+                            item.NewMessage();
+                        else
+                            item.OpenedMessage();
 
-                            item.Time = message.Time;
-                            //item.BringToFront();
+                        DateTime time = DateTime.Parse(message.Time);
 
-                            UI._RoomControl.RoomItem_LayoutPanel.Controls.SetChildIndex((Control)item, 0);
-                            UI._RoomControl.RoomItem_LayoutPanel.Invalidate();
-                        }
+                        item.Time = time.ToString("tt hh:mm");
+
+                        UI._RoomControl.RoomItem_LayoutPanel.Controls.SetChildIndex((Control)item, 0);
+                        UI._RoomControl.RoomItem_LayoutPanel.Invalidate();
                     }
-                
+                }
+
             });
 
 

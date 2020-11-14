@@ -33,27 +33,30 @@
             // 
             // Lbl_Category
             // 
-            this.Lbl_Category.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.Lbl_Category.BackColor = System.Drawing.Color.Transparent;
             this.Lbl_Category.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Lbl_Category.Font = new System.Drawing.Font("KoPub돋움체 Bold", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Lbl_Category.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Lbl_Category.Location = new System.Drawing.Point(0, 0);
             this.Lbl_Category.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_Category.Name = "Lbl_Category";
             this.Lbl_Category.Padding = new System.Windows.Forms.Padding(2);
-            this.Lbl_Category.Size = new System.Drawing.Size(200, 18);
+            this.Lbl_Category.Size = new System.Drawing.Size(229, 30);
             this.Lbl_Category.TabIndex = 0;
             this.Lbl_Category.Text = "Category";
             this.Lbl_Category.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // User_Category
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.BackColor = System.Drawing.Color.Transparent;
+            this.BackgroundImage = global::Blind_Client.Properties.Resources.chategory;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.Lbl_Category);
+            this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "User_Category";
-            this.Size = new System.Drawing.Size(200, 18);
+            this.Size = new System.Drawing.Size(229, 30);
             this.ResumeLayout(false);
 
         }

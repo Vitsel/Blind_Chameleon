@@ -31,34 +31,39 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.Button_DocCenter = new System.Windows.Forms.Button();
-            this.btn_ActivateChat = new System.Windows.Forms.Button();
             this.BlindLockTimer = new System.Windows.Forms.Timer(this.components);
             this.panel_Fore = new System.Windows.Forms.Panel();
             this.btn_minimize = new System.Windows.Forms.Button();
             this.btn_maximize = new System.Windows.Forms.Button();
             this.btn_close = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.btn_ActivateUser = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.btn_ActivateChat = new System.Windows.Forms.Button();
             this.document_Center = new Blind_Client.Document_Center();
             this.ellipseControl1 = new Blind_Client.BlindChatUI.EllipseControl();
             this.ellipseControl2 = new Blind_Client.BlindChatUI.EllipseControl();
             this.ellipseControl3 = new Blind_Client.BlindChatUI.EllipseControl();
             this.tableLayoutPanel1.SuspendLayout();
             this.MainControlPanel.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.panel_Fore.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.MainControlPanel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
@@ -69,19 +74,27 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(799, 411);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(744, 481);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // MainControlPanel
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.MainControlPanel, 3);
             this.MainControlPanel.Controls.Add(this.document_Center);
             this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainControlPanel.Location = new System.Drawing.Point(0, 0);
             this.MainControlPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainControlPanel.Name = "MainControlPanel";
-            this.MainControlPanel.Size = new System.Drawing.Size(799, 341);
+            this.MainControlPanel.Size = new System.Drawing.Size(744, 411);
             this.MainControlPanel.TabIndex = 5;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.Button_DocCenter);
+            this.panel3.Location = new System.Drawing.Point(3, 414);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(366, 64);
+            this.panel3.TabIndex = 7;
             // 
             // Button_DocCenter
             // 
@@ -92,26 +105,11 @@
             this.Button_DocCenter.Location = new System.Drawing.Point(0, 0);
             this.Button_DocCenter.Margin = new System.Windows.Forms.Padding(0);
             this.Button_DocCenter.Name = "Button_DocCenter";
-            this.Button_DocCenter.Size = new System.Drawing.Size(393, 64);
+            this.Button_DocCenter.Size = new System.Drawing.Size(366, 64);
             this.Button_DocCenter.TabIndex = 0;
             this.Button_DocCenter.Text = "문서\r\n중앙화";
             this.Button_DocCenter.UseVisualStyleBackColor = true;
             this.Button_DocCenter.Click += new System.EventHandler(this.Button_DocCenter_Click);
-            // 
-            // btn_ActivateChat
-            // 
-            this.btn_ActivateChat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_ActivateChat.FlatAppearance.BorderSize = 0;
-            this.btn_ActivateChat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_ActivateChat.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_ActivateChat.Location = new System.Drawing.Point(0, 0);
-            this.btn_ActivateChat.Margin = new System.Windows.Forms.Padding(0);
-            this.btn_ActivateChat.Name = "btn_ActivateChat";
-            this.btn_ActivateChat.Size = new System.Drawing.Size(394, 64);
-            this.btn_ActivateChat.TabIndex = 0;
-            this.btn_ActivateChat.Text = "커뮤니티";
-            this.btn_ActivateChat.UseVisualStyleBackColor = true;
-            this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
             // 
             // BlindLockTimer
             // 
@@ -126,7 +124,7 @@
             this.panel_Fore.Location = new System.Drawing.Point(3, 4);
             this.panel_Fore.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel_Fore.Name = "panel_Fore";
-            this.panel_Fore.Size = new System.Drawing.Size(799, 31);
+            this.panel_Fore.Size = new System.Drawing.Size(744, 31);
             this.panel_Fore.TabIndex = 3;
             this.panel_Fore.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_Fore_MouseDown);
             this.panel_Fore.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel_Fore_MouseMove);
@@ -142,7 +140,7 @@
             this.btn_minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_minimize.Font = new System.Drawing.Font("Segoe UI Symbol", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_minimize.ForeColor = System.Drawing.Color.Gray;
-            this.btn_minimize.Location = new System.Drawing.Point(697, 0);
+            this.btn_minimize.Location = new System.Drawing.Point(642, 0);
             this.btn_minimize.Margin = new System.Windows.Forms.Padding(0);
             this.btn_minimize.Name = "btn_minimize";
             this.btn_minimize.Size = new System.Drawing.Size(34, 31);
@@ -163,7 +161,7 @@
             this.btn_maximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_maximize.Font = new System.Drawing.Font("Segoe UI Symbol", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_maximize.ForeColor = System.Drawing.Color.Gray;
-            this.btn_maximize.Location = new System.Drawing.Point(731, 0);
+            this.btn_maximize.Location = new System.Drawing.Point(676, 0);
             this.btn_maximize.Margin = new System.Windows.Forms.Padding(0);
             this.btn_maximize.Name = "btn_maximize";
             this.btn_maximize.Size = new System.Drawing.Size(34, 31);
@@ -185,7 +183,7 @@
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Segoe UI Symbol", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.Gray;
-            this.btn_close.Location = new System.Drawing.Point(765, 0);
+            this.btn_close.Location = new System.Drawing.Point(710, 0);
             this.btn_close.Margin = new System.Windows.Forms.Padding(0);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(34, 31);
@@ -203,24 +201,73 @@
             this.panel2.Location = new System.Drawing.Point(3, 35);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(799, 411);
+            this.panel2.Size = new System.Drawing.Size(744, 481);
             this.panel2.TabIndex = 4;
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel4.BackgroundImage = global::Blind_Client.Properties.Resources.member;
+            this.panel4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel4.Controls.Add(this.btn_ActivateUser);
+            this.panel4.Location = new System.Drawing.Point(375, 414);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(180, 64);
+            this.panel4.TabIndex = 8;
+            // 
+            // btn_ActivateUser
+            // 
+            this.btn_ActivateUser.BackColor = System.Drawing.Color.Transparent;
+            this.btn_ActivateUser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_ActivateUser.FlatAppearance.BorderSize = 0;
+            this.btn_ActivateUser.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btn_ActivateUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btn_ActivateUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ActivateUser.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_ActivateUser.ForeColor = System.Drawing.Color.White;
+            this.btn_ActivateUser.Location = new System.Drawing.Point(0, 0);
+            this.btn_ActivateUser.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_ActivateUser.Name = "btn_ActivateUser";
+            this.btn_ActivateUser.Size = new System.Drawing.Size(180, 64);
+            this.btn_ActivateUser.TabIndex = 0;
+            this.btn_ActivateUser.Text = "멤버";
+            this.btn_ActivateUser.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_ActivateUser.UseVisualStyleBackColor = false;
+            this.btn_ActivateUser.Click += new System.EventHandler(this.btn_ActivateUser_Click);
+            this.btn_ActivateUser.MouseLeave += new System.EventHandler(this.btn_ActivateUser_MouseLeave);
+            this.btn_ActivateUser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btn_ActivateUser_MouseMove);
             // 
             // panel1
             // 
+            this.panel1.BackgroundImage = global::Blind_Client.Properties.Resources.chat1;
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel1.Controls.Add(this.btn_ActivateChat);
-            this.panel1.Location = new System.Drawing.Point(402, 344);
+            this.panel1.Location = new System.Drawing.Point(561, 414);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(394, 64);
+            this.panel1.Size = new System.Drawing.Size(180, 64);
             this.panel1.TabIndex = 6;
             // 
-            // panel3
+            // btn_ActivateChat
             // 
-            this.panel3.Controls.Add(this.Button_DocCenter);
-            this.panel3.Location = new System.Drawing.Point(3, 344);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(393, 64);
-            this.panel3.TabIndex = 7;
+            this.btn_ActivateChat.BackColor = System.Drawing.Color.Transparent;
+            this.btn_ActivateChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_ActivateChat.FlatAppearance.BorderSize = 0;
+            this.btn_ActivateChat.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btn_ActivateChat.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btn_ActivateChat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ActivateChat.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_ActivateChat.ForeColor = System.Drawing.Color.White;
+            this.btn_ActivateChat.Location = new System.Drawing.Point(0, 0);
+            this.btn_ActivateChat.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_ActivateChat.Name = "btn_ActivateChat";
+            this.btn_ActivateChat.Size = new System.Drawing.Size(180, 64);
+            this.btn_ActivateChat.TabIndex = 0;
+            this.btn_ActivateChat.Text = "채팅";
+            this.btn_ActivateChat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_ActivateChat.UseVisualStyleBackColor = false;
+            this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
+            this.btn_ActivateChat.MouseLeave += new System.EventHandler(this.btn_ActivateChat_MouseLeave);
+            this.btn_ActivateChat.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btn_ActivateChat_MouseMove);
             // 
             // document_Center
             // 
@@ -229,7 +276,7 @@
             this.document_Center.Location = new System.Drawing.Point(0, 0);
             this.document_Center.Margin = new System.Windows.Forms.Padding(0);
             this.document_Center.Name = "document_Center";
-            this.document_Center.Size = new System.Drawing.Size(799, 341);
+            this.document_Center.Size = new System.Drawing.Size(744, 411);
             this.document_Center.TabIndex = 1;
             // 
             // ellipseControl1
@@ -252,9 +299,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(805, 450);
+            this.ClientSize = new System.Drawing.Size(750, 520);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel_Fore);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
@@ -265,10 +313,11 @@
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.MainControlPanel.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.panel_Fore.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -290,6 +339,8 @@
         private System.Windows.Forms.Panel MainControlPanel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Button btn_ActivateUser;
     }
 }
 

@@ -113,7 +113,7 @@ namespace Blind_Server
                 DataRow r = ds.Tables[0].Rows[0];
                 User userInfo = (User)GetStructFromDB<User>(r);
 
-                message.Message = $"{userInfo.Name}님이 접속하셨습니다.";
+                message.Message = $"{userInfo.Name}님이 입장하셨습니다.";
                 byte[] _data = BlindNetUtil.StructToByte(message);
                 ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
                 SendChatPacketToParticipants(_packet, message.RoomID);
@@ -196,7 +196,7 @@ namespace Blind_Server
                     if (chat.UserID == userID_DB)
                     {
                         chat.ChatPacketSend(chatPack);
-                        chat.SendReset();
+                        //chat.SendReset();
                         
                     }
                 }
@@ -251,7 +251,7 @@ namespace Blind_Server
                     foreach (DataRow row in ds.Tables[0].Rows)
                     {
                         User userInfo = (User)GetStructFromDB<User>(row);
-                        message.Message = $"{userInfo.Name}님이 접속하셨습니다.";
+                        message.Message = $"{userInfo.Name}님이 입장하셨습니다.";
                     }
                     byte[] _data = BlindNetUtil.StructToByte(message);
                     ChatPacket _packet = BlindChatUtil.ByteToChatPacket(_data, ChatType.Message);
@@ -320,7 +320,7 @@ namespace Blind_Server
             else
             {
                 byte[] packData = BlindNetUtil.StructToByte(chatPacket);
-                chatSock.CryptoSend(packData, PacketType.MSG);
+                sendSock.CryptoSend(packData, PacketType.MSG);
             }
         }
 
@@ -567,10 +567,17 @@ namespace Blind_Server
 
 
 
-        BlindSocket GetChatPortSocket()
+        BlindSocket GetChatRecvSocket()
         {
             BlindSocket socket;
-            socket = _Main.chatPortSock.AcceptWithECDH();
+            socket = _Main.chatRecvSock.AcceptWithECDH();
+
+            return socket;
+        }
+        BlindSocket GetChatSendSocket()
+        {
+            BlindSocket socket;
+            socket = _Main.chatSendSock.AcceptWithECDH();
 
             return socket;
         }

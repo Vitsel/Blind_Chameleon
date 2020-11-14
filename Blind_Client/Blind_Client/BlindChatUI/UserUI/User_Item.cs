@@ -28,6 +28,7 @@ namespace Blind_Client.BlindChatUI.UserUI
             BlindNetUtil.SetEllipse(this, 10);
             
             this.BackColor = BlindColor.Light;
+            Lbl_UserPosition.ForeColor = BlindColor.Primary;
 
             _user = user;
             

@@ -18,7 +18,7 @@ namespace Blind_Server
     }
     public partial class BlindChat
     {
-        private BlindSocket chatSock;
+        private BlindSocket recvSock, sendSock;
         private uint UserID;
         private Logger logger;
 
@@ -36,19 +36,21 @@ namespace Blind_Server
             this.hDB = new MySqlConnection("Server=" + BlindNetConst.DatabaseIP + ";Database=BlindChat;Uid=root;Pwd=kit2020;");
             this.hDB.Open();
 
-            chatSock = GetChatPortSocket();
+            recvSock = GetChatRecvSocket();
+            sendSock = GetChatSendSocket();
 
-            IPEndPoint iep = (IPEndPoint)(chatSock.socket.RemoteEndPoint);
+            IPEndPoint iep = (IPEndPoint)(recvSock.socket.RemoteEndPoint);
             logger = new Logger(UserID, iep.Address.ToString(), LogService.Chat);
 
 
             SetOnline((int)UserStat.Online);
             while (true)
             {
-                byte[] data = chatSock.CryptoReceiveMsg();
+                byte[] data = recvSock.CryptoReceiveMsg();
                 if (data == null)
                 {
-                    chatSock.Close();
+                    recvSock.Close();
+                    sendSock.Close();
                     SetOnline((int)UserStat.Offline);
                     global.ListBlindChat.Remove(this);
                     logger.Log(LogRank.INFO, "BlindChat Disconnected");
