@@ -32,8 +32,8 @@
             this.Button_DocCenter = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
-            this.btn_ActivateChat = new System.Windows.Forms.Button();
             this.document_Center = new Blind_Client.Document_Center();
+            this.btn_ActivateChat = new System.Windows.Forms.Button();
             this.BlindLockTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.MainControlPanel.SuspendLayout();
@@ -80,9 +80,18 @@
             this.MainControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainControlPanel.Location = new System.Drawing.Point(96, 53);
             this.MainControlPanel.Name = "MainControlPanel";
+            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
             this.MainControlPanel.Size = new System.Drawing.Size(601, 304);
             this.MainControlPanel.TabIndex = 3;
-            this.tableLayoutPanel1.SetRowSpan(this.MainControlPanel, 2);
+            // 
+            // document_Center
+            // 
+            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.document_Center.Location = new System.Drawing.Point(0, 0);
+            this.document_Center.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.document_Center.Name = "document_Center";
+            this.document_Center.Size = new System.Drawing.Size(601, 304);
+            this.document_Center.TabIndex = 1;
             // 
             // btn_ActivateChat
             // 
@@ -99,15 +108,6 @@
             // 
             this.BlindLockTimer.Tick += new System.EventHandler(this.BlindChatTimer_Tick);
             // 
-            // document_Center
-            // 
-            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.document_Center.Location = new System.Drawing.Point(0, 0);
-            this.document_Center.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.document_Center.Name = "document_Center";
-            this.document_Center.Size = new System.Drawing.Size(688, 380);
-            this.document_Center.TabIndex = 1;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -117,7 +117,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.Text = "Form1";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);

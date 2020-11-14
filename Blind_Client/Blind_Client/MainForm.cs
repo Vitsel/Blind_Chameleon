@@ -65,7 +65,7 @@ namespace Blind_Client
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.FormClosing += MainForm_FormClosing; //폼 종료되는 것 연결
+            this.FormClosed += MainForm_FormClosed; //폼 종료되는 것 연결
             
             if (!BlindNetUtil.IsConnectedInternet())
             {
@@ -90,8 +90,9 @@ namespace Blind_Client
         {
             VPNClass = new VPN_Class();
             //클라이언트 cid 서버로부터 받아오기
-                //ClientID = "test1";
-            byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientID); // String -> bytes 변환
+            //ClientID = "test1";
+            string SendMsg = ClientID + "," + isInner;  //아이디 + 내부 외부 보내서 외부면 vpn로그남김 (isInner bool형. 디버그했을때 실질적인 값 : true -> "True" | false -> "False")
+            byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(SendMsg); // String -> bytes 변환
             mainSocket.CryptoSend(SendStringToByteGender, PacketType.Response);//서버로 클라이언트 id 보냄
             blindClientCidPacket = mainSocket.CryptoReceive(); // 서버로부터 cid받아옴
             byte[] data = BlindNetUtil.ByteTrimEndNull(blindClientCidPacket.data); // 넑값 지움
@@ -99,7 +100,7 @@ namespace Blind_Client
             Array.Copy(data, 0, tmp, 0, data.Length);
             uint ClintCID = BitConverter.ToUInt32(tmp, 0);
 
-            if (ClintCID.ToString() == "0") //서버에서 아이디를 조회못했을때 0반환
+            if (ClintCID == 0) //서버에서 아이디를 조회못했을때 0반환
             {
                 MessageBox.Show("서버로부터 id를 받지 못하였거나 등록되지 않은 아이디입니다." + Environment.NewLine + "\t           관리자에게 문의하십시요.");
                 mainSocket.Close();
@@ -139,18 +140,15 @@ namespace Blind_Client
             _ChatMain.BringToFront();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             VPNClass.CMD_VPN_Instruction("VPN");
-            if (e.CloseReason != CloseReason.ApplicationExitCall) // application.EXIT 함수 호출했을때. 맨처음 cid 확인후 0 리턴받으면 exit함
-            {
-                WebDevice.MainFormClosingSocketClose();
+
                 //프로그램 종료시 단축키&타이머 해제
                 BlindLockTimer.Enabled = false;
                 UnregisterHotKey(this.Handle, 0);
                 UnregisterHotKey(this.Handle, 1);
                 Application.Exit();
-            }
         }
 
         private void BlindChatTimer_Tick(object sender, EventArgs e)
@@ -232,5 +230,6 @@ namespace Blind_Client
             }
             return lastInPut.dwTime;
         }
+
     }
 }

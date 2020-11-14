@@ -15,6 +15,7 @@ namespace Blind_Client
         ListViewItem selectItem;
         bool isAddDir;
         string prevLabel;
+        bool canceled;
 
         public Document_Center()
         {
@@ -24,6 +25,7 @@ namespace Blind_Client
             selectItem = null;
             isAddDir = false;
             prevLabel = null;
+            canceled = false;
 
             ImageList imageList = new ImageList();
             imageList.Images.Add(Properties.Resources.opened_folder);
@@ -220,7 +222,7 @@ namespace Blind_Client
 
         bool SelectOverwrite(TreeNode sameDir, NodeLabelEditEventArgs e)
         {
-            if (MessageBox.Show("이미 같은 이름의 폴더가 존재합니다.존재합니다. 덮어 쓰시겠습니까?", "폴더 이름 변경", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("이미 같은 이름의 폴더가 존재합니다. 덮어 쓰시겠습니까?", "폴더 이름 변경", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 e.Node.EndEdit(false);
                 if (docCenter.RemoveDir(sameDir))
@@ -228,7 +230,7 @@ namespace Blind_Client
                 else
                 {
                     e.CancelEdit = true;
-                    MessageBox.Show("덮어쓰기에 실패했습니다.");
+                    MessageBox.Show("덮어쓰기에 실패했습니다.", "폴더 덮어쓰기");
                     e.Node.BeginEdit();
                     return false;
                 }
@@ -423,6 +425,7 @@ namespace Blind_Client
                 if (newNode == null)
                 {
                     MessageBox.Show("폴더 생성에 실패했습니다.");
+                    SetVisibleDoing(false);
                     return;
                 }
 
@@ -483,8 +486,8 @@ namespace Blind_Client
                     //listMenu.Items.Add("이동", null, new EventHandler(treeMenu_ChangeName));
                     //listMenu.Items.Add("복사", null, new EventHandler(treeMenu_ChangeName));
 
-                    //if (listview_File.CheckedItems.Count == 1)
-                    //listMenu.Items.Add("이름 변경", null, new EventHandler(treeMenu_ChangeName));
+                    if (listview_File.CheckedItems.Count == 1)
+                        listMenu.Items.Add("이름 변경", null, new EventHandler(listMenu_Rename));
                 }
                 else
                 {
@@ -530,6 +533,84 @@ namespace Blind_Client
                     return;
                 }
             }
+        }
+
+        private void listMenu_Rename(object sender, EventArgs e)
+        {
+            ListViewItem.ListViewSubItem item = selectItem.SubItems[0];
+            int width = selectItem.SubItems[1].Bounds.Left - item.Bounds.Left - 40;
+            text_rename.SetBounds(item.Bounds.X + 40, item.Bounds.Y, width, item.Bounds.Height);
+            text_rename.Text = item.Text;
+            text_rename.Show();
+            text_rename.Focus();
+        }
+
+        private void text_rename_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    canceled = false;
+                    e.Handled = true;
+                    text_rename.Hide();
+                    break;
+                case Keys.Escape:
+                    canceled = true;
+                    e.Handled = true;
+                    text_rename.Hide();
+                    break;
+            }
+        }
+
+        private void text_rename_Leave(object sender, EventArgs e)
+        {
+            if (canceled)
+            {
+                canceled = false;
+                return;
+            }
+
+            if(!isInvalidName(text_rename.Text))
+            {
+                MessageBox.Show("잘못된 이름입니다.");
+                text_rename.Text = string.Empty;
+                return;
+            }
+
+            ListViewItem same = IsInSameFile(text_rename.Text);
+            if(same != null)
+            {
+                if (MessageBox.Show("이미 같은 이름의 파일이 존재합니다. 덮어 쓰시겠습니까?", "파일 이름 변경", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                {
+                    text_rename.Text = string.Empty;
+                    return;
+                }
+                if(!docCenter.RemoveFile((uint)same.Tag))
+                {
+                    MessageBox.Show("오류가 발생했습니다.", "파일 덮어쓰기");
+                    return;
+                }
+            }
+
+            docCenter.RenameFile((uint)selected.Tag, text_rename.Text);
+            text_rename.Hide();
+            selectItem.SubItems[0].Text = text_rename.Text;
+        }
+
+        bool isInvalidName(string name)
+        {
+            char[] invalidChars = new char[] {
+                ':', '\\', '/', '\'', '\"', ' ',
+                '@', '.', ',', '!', '?', '*'
+            };
+
+            if (name == null || name.Length == 0)
+                return false;
+
+            if (name.IndexOfAny(invalidChars) != -1)
+                return false;
+
+            return true;
         }
     }
 }

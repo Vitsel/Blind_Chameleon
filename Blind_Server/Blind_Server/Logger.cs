@@ -6,16 +6,16 @@ namespace BlindLogger
 {
     class Logger
     {
-        string cname;
+        uint cid;
         string cip;
         string sip;
         string service;
         uint port;
         MySqlConnection connection;
 
-        public Logger(string cname, string cip, LogService service)
+        public Logger(uint cid, string cip, LogService service)
         {
-            this.cname = cname;
+            this.cid = cid;
             this.cip = cip;
             this.sip = BlindNetConst.ServerIP;
             switch(service)
@@ -40,6 +40,10 @@ namespace BlindLogger
                     this.service = "ScreenLock";
                     port = BlindNetConst.LOCKPORT;
                     break;
+                case LogService.Login:
+                    this.service = "Login";
+                    port = BlindNetConst.MAINPORT;
+                    break;
             }
             connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = BlindWeb; Uid = logger; Pwd = kit2020");
             connection.Open();
@@ -63,10 +67,10 @@ namespace BlindLogger
                     strRank = "FATAL";
                     break;
             }
-            string command = "INSERT INTO logtable values (0, now(), now(), @rank, @cname, @cip, @sip, @service, @port, @contents);";
+            string command = "INSERT INTO logtable values (0, now(), now(), @rank, @cid, @cip, @sip, @service, @port, @contents);";
             MySqlCommand commander = new MySqlCommand(command, connection);
             commander.Parameters.AddWithValue("rank", strRank);
-            commander.Parameters.AddWithValue("cname", cname);
+            commander.Parameters.AddWithValue("cid", cid);
             commander.Parameters.AddWithValue("cip", cip);
             commander.Parameters.AddWithValue("sip", sip);
             commander.Parameters.AddWithValue("service", service);
@@ -82,7 +86,8 @@ namespace BlindLogger
         DocumentCenter,
         Chat,
         DeviceControl,
-        ScreenLock
+        ScreenLock,
+        Login
     }
 
     public enum LogRank

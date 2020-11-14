@@ -17,26 +17,30 @@ namespace Blind_Client
             
             
             VPN_Class VPN = new VPN_Class();
-            
-            
-            Loop:
-            VPN.CMD_VPN_Instruction("VPN");
-            
-            if (!VPN.VPN_Start())
+
+
+            while (true)
             {
-                if (MessageBox.Show("VPN 연결에 실패하였습니다. 다시시도 하시겠습니까?", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    goto Loop;
-                else
+                VPN.CMD_VPN_Instruction("VPN");
+
+                if (!VPN.VPN_Start())
                 {
-                    VPN.CMD_VPN_Instruction("VPN");
-                    Application.ExitThread();
-                    Environment.Exit(0); //완전종료
+                    if (MessageBox.Show("VPN 연결에 실패하였습니다. 다시시도 하시겠습니까?", "YesOrNo", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    {
+                        VPN.CMD_VPN_Instruction("VPN");
+                        Application.ExitThread();
+                        Environment.Exit(0); //완전종료
+                    }
                 }
+                else
+                    break;
             }
             
 
             isInner = VPN.Network_Position;
-            Application.Run(new MainForm(isInner,VPN.IsInnerClient_Id));//인자값 | 첫번째 : 내부 | 두번째 : 내부(사용자계정명) 외부(VPN 사용자 입력값)
+            Application.Run(new MainForm(isInner,VPN.IsInnerClient_Id));
+            //인자값 | 첫번째 : 내부/외부 판단. (디버그했을때 실질적인 값 : true -> "True" | false -> "False") | 두번째 : 시도한 아이디
+
         }
     }
 }

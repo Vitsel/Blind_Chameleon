@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define PROGRAMMING1
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -13,16 +15,15 @@ using DotRas;//vpn관련
    제작           : 최찬희
    최종 수정일 : 2020-10-30 오후 4:08
    돌아가는 방식 
-    VPN_Start             : 메인에서 시작. 그리고 아래 내용진행
-     -VPN_First_Check : 내부/외부 사용자를 판가름한다. 내부 : 바로 클라이언트 접속  | 외부 : VPN로그인 및 연결 시도
-     -VPN_RegCheck    : VPN연결 프로토콜 L2TP에 필요한 레지 확인
-     -VPN_Create        : VPN 연결 네트워크 생성
-     -VPN_Connection        : VPN 연결 네트워크 연결 시도
+    VPN_Start                  : 메인에서 시작. 그리고 아래 내용진행
+     -VPN_First_Check      : 내부/외부 사용자를 판가름한다. 내부 : 바로 클라이언트 접속  | 외부 : VPN로그인 및 연결 시도
+     -VPN_RegCheck         : VPN연결 프로토콜 L2TP에 필요한 레지 확인
+     -VPN_Create             : VPN 연결 네트워크 생성
+     -VPN_Connection       : VPN 연결 네트워크 연결 시도
 */
 
 namespace Blind_Client
 {
-
     class VPN_Class
     {
         private Vpn_Login VpnLogin_Dialog;
@@ -58,8 +59,8 @@ namespace Blind_Client
 
             if (Type == "VPN")
             {
-                //string instruction_DisConnect = "rasphone -h Blind_VPN";
-                string instruction_DisConnect = "rasdial \"Blind VPN\" /disconnect";
+                string instruction_DisConnect = "rasphone -h Blind_VPN";
+                //string instruction_DisConnect = "rasdial \"Blind_VPN\" /disconnect";
                 string instruction_Remove = "rasphone -r Blind_VPN";
                 pro.StandardInput.Write(instruction_DisConnect + Environment.NewLine); //지정한 명령어 + \r\n
                 Thread.Sleep(1000); //바로삭제하면 완전히 제거가안됨 일정간격 줘야함.
@@ -262,6 +263,9 @@ namespace Blind_Client
             this.VpnConnectionEvent+= new VpnConnectionEventHandler(VpnLogin_Dialog.ConnectionEventChecking);
             bool result = false;
 
+#if PROGRAMMING
+            return VPN_First_Check();
+#endif
             if (VPN_First_Check())
             {
                 if (Network_Position == true && VPN_Connection_IP == "127.0.0.1") //내부일때
@@ -282,6 +286,5 @@ namespace Blind_Client
             }
             return result;
         }
-
     }
 }

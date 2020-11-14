@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 /*
    제작           : 최찬희
-   최종 수정일 : 2020-10-30 오후 4:08
+   최종 수정일 : 2020-11-12 오전 10:14
    돌아가는 방식 (SqlLookup)
      -클라에서 접속한 아이디를 서버로 보낸다 (ClientMsg)
      -데이터를 받으면 받은 데이터를 조회해 cid값을 알아낸다 (CidGenderAdapt)
@@ -27,7 +27,6 @@ namespace Blind_Client.BlindWebDeviceClass
         BlindSocket BS = new BlindSocket();
         BlindPacket BP = new BlindPacket();
         DeviceDriverHelper DDH;
-        public void MainFormClosingSocketClose() { BS.Close(); }
 
         public void Run()
         {
@@ -35,6 +34,8 @@ namespace Blind_Client.BlindWebDeviceClass
             DDH = new DeviceDriverHelper();
             SqlLookup();
         }
+
+        ~BlindWebDevice() { BS.Close(); }
 
         private void SqlLookup()
         {

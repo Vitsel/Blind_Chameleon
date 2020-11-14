@@ -59,7 +59,7 @@ namespace BlindNet
 
         public int CryptoSend(byte[] data, PacketType header)
         {
-            int realSendBytes = 0;
+            int totalSendBytes = 0;
             if (data == null)
                 data = new byte[BlindNetConst.MINIDATASIZE];
             try
@@ -73,17 +73,20 @@ namespace BlindNet
                         int len = (i + BlindNetConst.DATASIZE < data.Length) ? BlindNetConst.DATASIZE : data.Length - i;
                         byte[] tmp = new byte[len];
                         Array.Copy(data, i, tmp, 0, len);
-                        realSendBytes+= CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
+                        int sendBytes = CryptoSendPacket(tmp, (i + len == data.Length) ? PacketType.EOF : PacketType.Sending);
+                        if (sendBytes == 0)
+                            return 0;
+                        totalSendBytes += sendBytes;
                     }
                 }
                 else
-                    realSendBytes=CryptoSendMiniPacket(data, header);
+                    totalSendBytes = CryptoSendMiniPacket(data, header);
             }
             catch (Exception ex)
             {
                 return 0;
             }
-            return realSendBytes;
+            return totalSendBytes;
         }
 
         public int CryptoSendPacket(byte[] data, PacketType header)
@@ -95,6 +98,12 @@ namespace BlindNet
             Array.Copy(data, 0, pack.data, 0, data.Length);
             byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
             realSendBytes = socket.Send(encrypted, BlindNetConst.PACKSIZE, SocketFlags.None);
+            new NetworkStream(socket).Flush();
+
+            byte[] result = new byte[BlindNetConst.MINIPACKSIZE];
+            int rcvNum = socket.Receive(result, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+            if (result[0] != (byte)PacketType.OK)
+                return 0;
             return realSendBytes;
         }
 
@@ -110,6 +119,12 @@ namespace BlindNet
             Array.Copy(data, 0, pack.data, 0, data.Length);
             byte[] encrypted = aes.Encryption(BlindNetUtil.StructToByte(pack));
             realSendBytes = socket.Send(encrypted, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+            new NetworkStream(socket).Flush();
+
+            byte[] result = new byte[BlindNetConst.MINIPACKSIZE];
+            int rcvNum = socket.Receive(result, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+            if (result[0] != (byte)PacketType.OK)
+                return 0;
             return realSendBytes;
         }
 
@@ -122,6 +137,7 @@ namespace BlindNet
             if (!isRecieving)
             {
                 rcvNum = socket.Receive(data, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                new NetworkStream(socket).Flush();
                 if (rcvNum == 0)
                 {
                     BlindPacket end;
@@ -129,6 +145,8 @@ namespace BlindNet
                     end.header = PacketType.Disconnect;
                     return end;
                 }
+                byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                socket.Send(temp, BlindNetConst.MINIDATASIZE, SocketFlags.None);
 
                 decrypted = aes.Decryption(data);
                 miniPacket = BlindNetUtil.ByteToStruct<BlindMiniPacket>(decrypted);
@@ -140,6 +158,7 @@ namespace BlindNet
                 {
                     byte[] tmp = new byte[BlindNetConst.PACKSIZE];
                     rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
+                    new NetworkStream(socket).Flush();
                     if (rcvNum == 0)
                     {
                         BlindPacket end;
@@ -147,11 +166,14 @@ namespace BlindNet
                         end.header = PacketType.Disconnect;
                         return end;
                     }
+                    byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                    socket.Send(tmp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
 
                     data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
                     if (data.Length == BlindNetConst.PACKSIZE)
                         break;
                 }
+
                 decrypted = aes.Decryption(data);
             }
 
@@ -496,13 +518,13 @@ namespace BlindNet
     {
         //public const string ServerIP = "127.0.0.1";
         public const string ServerIP = "10.0.1.6";
-        //public const string ServerIP = "3.92.252.3";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
         public const int LOCKPORT = 55559;
         public const int WebDevicePort = 55560;
+        public const int WebServerPort = 55561;
         public const int MAXQ = 100;
         public const int MINIPACKSIZE = 528;
         public const int MINIDATASIZE = 512;
@@ -513,6 +535,5 @@ namespace BlindNet
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;
         public const int MAXRETRY = 3;
-
     }
 }

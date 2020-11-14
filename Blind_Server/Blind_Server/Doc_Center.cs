@@ -38,6 +38,7 @@ namespace Blind_Server
         public void Run()
         {
             socket = _Main.socket_docCenter.AcceptWithECDH();
+            socket.socket.NoDelay = true;
             isInner = BitConverter.ToBoolean(socket.CryptoReceiveMsg(), 0);
 
             connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = document_center; Uid = root; Pwd = kit2020");
@@ -140,7 +141,7 @@ namespace Blind_Server
                 //    Console.WriteLine("ERROR : [UID : " + uid + "] " + ex.Message);
                 //    return;
                 //}
-             }
+            }
         }
 
         void UpdateRoot()
@@ -309,21 +310,19 @@ namespace Blind_Server
                 uint? dir_id = 0;
                 if (reader.Read())
                 {
-                    path = (string)reader["path"];
+                    path = reader["path"].ToString();
                     dir_id = (uint)reader["dir_id"];
                 }
                 reader.Close();
 
-                if (path == null || dir_id == null)
-                    throw new Exception();
+                commander.CommandText = "DELETE FROM files_info WHERE id = " + id + ";";
+                commander.ExecuteNonQuery();
 
                 FileInfo file = new FileInfo(path);
-                if (!file.Exists)
-                    throw new Exception();
-                file.Delete();
+                if (file.Exists)
+                    file.Delete();
 
-                commander.CommandText = "DELETE FROM files_info WHERE id = " + id + ";";
-                if (commander.ExecuteNonQuery() != 1)
+                if (dir_id == 0)
                     throw new Exception();
 
                 UpdateModDate(dir_id.Value);

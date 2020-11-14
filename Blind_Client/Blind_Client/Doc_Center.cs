@@ -27,6 +27,7 @@ namespace Blind_Client
         {
             socket = new BlindSocket();
             await socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.DocCenterPort);
+            socket.socket.NoDelay = true;
 
             socket.CryptoSend(BitConverter.GetBytes(isInner), PacketType.Info);
             BlindPacket packet = socket.CryptoReceive();
@@ -353,6 +354,12 @@ namespace Blind_Client
             result = (int)(100 / ((double)BlindNetConst.DATASIZE * 100 / size)) + 1;
 
             return result;
+        }
+
+        public bool RenameFile(uint id, string name)
+        {
+            
+            return true;
         }
     }
 
