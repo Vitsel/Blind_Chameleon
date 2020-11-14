@@ -11,6 +11,8 @@ using BlindCryptography;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Diagnostics;
+using BlindLogger;
+using System.Net;
 
 namespace Blind_Server
 {
@@ -22,6 +24,7 @@ namespace Blind_Server
         uint[] gids;
         uint[] accessibleDirs;
         bool isInner;
+        Logger logger;
 
         public Doc_Center(uint uid, params uint[] gids)
         {
@@ -29,6 +32,7 @@ namespace Blind_Server
             this.gids = gids;
             accessibleDirs = null;
             isInner = false;
+            logger = null;
         }
 
         ~Doc_Center()
@@ -41,6 +45,9 @@ namespace Blind_Server
         {
             socket = _Main.socket_docCenter.AcceptWithECDH();
             socket.socket.NoDelay = true;
+            logger = new Logger(uid, ((IPEndPoint)(socket.socket.RemoteEndPoint)).Address.ToString(), LogService.DocumentCenter);
+            logger.Log(LogRank.INFO, "Connected to document center.");
+
             isInner = BitConverter.ToBoolean(socket.CryptoReceiveMsg(), 0);
 
             connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = document_center; Uid = root; Pwd = kit2020");
@@ -155,6 +162,7 @@ namespace Blind_Server
                         CopyDir(BlindNetUtil.ByteToStruct<SrcDstInfo>(packet.data));
                         break;
                     case PacketType.Disconnect:
+                        logger.Log(LogRank.INFO, "Disconnected from document center");
                         return;
                 }
                 //}
@@ -265,6 +273,7 @@ namespace Blind_Server
 
                 di.Create();
                 socket.CryptoSend(BlindNetUtil.StructToByte(dir), PacketType.OK);
+                logger.Log(LogRank.INFO, "Created directory(" + dir.id + ")");
             }
             catch
             {
@@ -314,6 +323,7 @@ namespace Blind_Server
                 RemoveDirTree(id);
                 UpdateModDate(pid);
                 socket.CryptoSend(null, PacketType.OK);
+                logger.Log(LogRank.INFO, "Removed directory(" + id + ")");
             }
             catch (Exception ex)
             {
@@ -349,6 +359,7 @@ namespace Blind_Server
 
                 UpdateModDate(dir_id.Value);
                 socket.CryptoSend(null, PacketType.OK);
+                logger.Log(LogRank.INFO, "Removed file(" + id + ")");
             }
             catch (Exception ex)
             {
@@ -456,6 +467,7 @@ namespace Blind_Server
 
                 UpdateModDate(dir.id);
                 socket.CryptoSend(null, PacketType.OK);
+                logger.Log(LogRank.INFO, "Uploaded file(" + file.id + ")");
             }
             catch (Exception ex)
             {
@@ -505,6 +517,7 @@ namespace Blind_Server
             }
 #endif
             socket.CryptoSend(buffer, PacketType.MSG);
+            logger.Log(LogRank.INFO, "Downloaded file(" + id + ")");
         }
 
         private void DirDownload(uint id)
@@ -550,6 +563,7 @@ namespace Blind_Server
                 }
                 socket.CryptoSend(null, PacketType.OK);
                 socket.CryptoSend(ms.ToArray(), PacketType.MSG);
+                logger.Log(LogRank.INFO, "Downloaded file(" + id + ")");
             }
         }
 

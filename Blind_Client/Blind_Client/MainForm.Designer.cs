@@ -31,26 +31,26 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainControlPanel = new System.Windows.Forms.Panel();
-            this.Button_DocCenter = new System.Windows.Forms.Button();
+            this.document_Center = new Blind_Client.Document_Center();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.btn_ActivateChat = new System.Windows.Forms.Button();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.Button_DocCenter = new System.Windows.Forms.Button();
             this.BlindLockTimer = new System.Windows.Forms.Timer(this.components);
             this.panel_Fore = new System.Windows.Forms.Panel();
             this.btn_minimize = new System.Windows.Forms.Button();
             this.btn_maximize = new System.Windows.Forms.Button();
             this.btn_close = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.document_Center = new Blind_Client.Document_Center();
             this.ellipseControl1 = new Blind_Client.BlindChatUI.EllipseControl();
             this.ellipseControl2 = new Blind_Client.BlindChatUI.EllipseControl();
             this.ellipseControl3 = new Blind_Client.BlindChatUI.EllipseControl();
             this.tableLayoutPanel1.SuspendLayout();
             this.MainControlPanel.SuspendLayout();
-            this.panel_Fore.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel_Fore.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -83,20 +83,23 @@
             this.MainControlPanel.Size = new System.Drawing.Size(799, 341);
             this.MainControlPanel.TabIndex = 5;
             // 
-            // Button_DocCenter
+            // document_Center
             // 
-            this.Button_DocCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Button_DocCenter.FlatAppearance.BorderSize = 0;
-            this.Button_DocCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_DocCenter.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.Button_DocCenter.Location = new System.Drawing.Point(0, 0);
-            this.Button_DocCenter.Margin = new System.Windows.Forms.Padding(0);
-            this.Button_DocCenter.Name = "Button_DocCenter";
-            this.Button_DocCenter.Size = new System.Drawing.Size(393, 64);
-            this.Button_DocCenter.TabIndex = 0;
-            this.Button_DocCenter.Text = "문서\r\n중앙화";
-            this.Button_DocCenter.UseVisualStyleBackColor = true;
-            this.Button_DocCenter.Click += new System.EventHandler(this.Button_DocCenter_Click);
+            this.document_Center.BackColor = System.Drawing.SystemColors.Control;
+            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.document_Center.Location = new System.Drawing.Point(0, 0);
+            this.document_Center.Margin = new System.Windows.Forms.Padding(0);
+            this.document_Center.Name = "document_Center";
+            this.document_Center.Size = new System.Drawing.Size(799, 341);
+            this.document_Center.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btn_ActivateChat);
+            this.panel1.Location = new System.Drawing.Point(402, 344);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(394, 64);
+            this.panel1.TabIndex = 6;
             // 
             // btn_ActivateChat
             // 
@@ -112,6 +115,29 @@
             this.btn_ActivateChat.Text = "커뮤니티";
             this.btn_ActivateChat.UseVisualStyleBackColor = true;
             this.btn_ActivateChat.Click += new System.EventHandler(this.btn_ActivateChat_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.Button_DocCenter);
+            this.panel3.Location = new System.Drawing.Point(3, 344);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(393, 64);
+            this.panel3.TabIndex = 7;
+            // 
+            // Button_DocCenter
+            // 
+            this.Button_DocCenter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Button_DocCenter.FlatAppearance.BorderSize = 0;
+            this.Button_DocCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_DocCenter.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Button_DocCenter.Location = new System.Drawing.Point(0, 0);
+            this.Button_DocCenter.Margin = new System.Windows.Forms.Padding(0);
+            this.Button_DocCenter.Name = "Button_DocCenter";
+            this.Button_DocCenter.Size = new System.Drawing.Size(393, 64);
+            this.Button_DocCenter.TabIndex = 0;
+            this.Button_DocCenter.Text = "문서\r\n중앙화";
+            this.Button_DocCenter.UseVisualStyleBackColor = true;
+            this.Button_DocCenter.Click += new System.EventHandler(this.Button_DocCenter_Click);
             // 
             // BlindLockTimer
             // 
@@ -206,32 +232,6 @@
             this.panel2.Size = new System.Drawing.Size(799, 411);
             this.panel2.TabIndex = 4;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btn_ActivateChat);
-            this.panel1.Location = new System.Drawing.Point(402, 344);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(394, 64);
-            this.panel1.TabIndex = 6;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.Button_DocCenter);
-            this.panel3.Location = new System.Drawing.Point(3, 344);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(393, 64);
-            this.panel3.TabIndex = 7;
-            // 
-            // document_Center
-            // 
-            this.document_Center.BackColor = System.Drawing.SystemColors.Control;
-            this.document_Center.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.document_Center.Location = new System.Drawing.Point(0, 0);
-            this.document_Center.Margin = new System.Windows.Forms.Padding(0);
-            this.document_Center.Name = "document_Center";
-            this.document_Center.Size = new System.Drawing.Size(799, 341);
-            this.document_Center.TabIndex = 1;
-            // 
             // ellipseControl1
             // 
             this.ellipseControl1.CorenerRadius = 5;
@@ -265,10 +265,10 @@
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.MainControlPanel.ResumeLayout(false);
-            this.panel_Fore.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
+            this.panel_Fore.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

@@ -135,9 +135,9 @@ namespace Blind_Client
             //WebDevice = new BlindWebDevice();
             //tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            documentCenter = new Doc_Center(document_Center, isInner);
-            documentCenter.Run();
-            document_Center.docCenter = documentCenter;
+            //documentCenter = new Doc_Center(document_Center, isInner);
+            //documentCenter.Run();
+            //document_Center.docCenter = documentCenter;
             
             _ChatMain = new ChatMain(ClintCID);
             _ChatMain.Dock = DockStyle.Fill;
@@ -148,7 +148,7 @@ namespace Blind_Client
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             //ScreenLocking
-            lockForm = new LockForm(isInner);
+            //lockForm = new LockForm(isInner);
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)

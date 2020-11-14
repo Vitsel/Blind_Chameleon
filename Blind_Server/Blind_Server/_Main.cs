@@ -101,8 +101,8 @@ namespace Blind_Server
             client.blindLock = new BlindLock(cid);
             client.tBlindLock = Task.Factory.StartNew(() => client.blindLock.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            //client.blindWebDevice = new BlindWebDevice();
-            //client.tBlindWebDevice = Task.Factory.StartNew(() => client.blindWebDevice.Run(cid, connection), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
+            client.blindWebDevice = new BlindWebDevice();
+            client.tBlindWebDevice = Task.Factory.StartNew(() => client.blindWebDevice.Run(cid, connection), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             Clients.Add(client);
         }

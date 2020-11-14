@@ -61,30 +61,31 @@
             this.panel1.Controls.Add(this.panel6);
             this.panel1.Controls.Add(this.lbl_UserCount);
             this.panel1.Controls.Add(this.panel2);
-            this.panel1.Location = new System.Drawing.Point(0, 60);
+            this.panel1.Location = new System.Drawing.Point(0, 75);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(278, 395);
+            this.panel1.Size = new System.Drawing.Size(318, 494);
             this.panel1.TabIndex = 0;
             // 
             // CreateRoomIItem_LayoutPanel
             // 
             this.CreateRoomIItem_LayoutPanel.AutoScroll = true;
             this.CreateRoomIItem_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CreateRoomIItem_LayoutPanel.Location = new System.Drawing.Point(0, 20);
+            this.CreateRoomIItem_LayoutPanel.Location = new System.Drawing.Point(0, 25);
             this.CreateRoomIItem_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.CreateRoomIItem_LayoutPanel.Name = "CreateRoomIItem_LayoutPanel";
-            this.CreateRoomIItem_LayoutPanel.Size = new System.Drawing.Size(278, 267);
+            this.CreateRoomIItem_LayoutPanel.Size = new System.Drawing.Size(318, 334);
             this.CreateRoomIItem_LayoutPanel.TabIndex = 2;
             // 
             // panel6
             // 
             this.panel6.Controls.Add(this.panel7);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel6.Location = new System.Drawing.Point(0, 287);
+            this.panel6.Location = new System.Drawing.Point(0, 359);
+            this.panel6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel6.Name = "panel6";
-            this.panel6.Padding = new System.Windows.Forms.Padding(6);
-            this.panel6.Size = new System.Drawing.Size(278, 48);
+            this.panel6.Padding = new System.Windows.Forms.Padding(7, 8, 7, 8);
+            this.panel6.Size = new System.Drawing.Size(318, 60);
             this.panel6.TabIndex = 5;
             // 
             // panel7
@@ -93,18 +94,20 @@
             this.panel7.Controls.Add(this.panel8);
             this.panel7.Controls.Add(this.tb_RoomName);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(6, 6);
+            this.panel7.Location = new System.Drawing.Point(7, 8);
+            this.panel7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel7.Name = "panel7";
-            this.panel7.Padding = new System.Windows.Forms.Padding(8, 8, 8, 3);
-            this.panel7.Size = new System.Drawing.Size(266, 36);
+            this.panel7.Padding = new System.Windows.Forms.Padding(9, 10, 9, 4);
+            this.panel7.Size = new System.Drawing.Size(304, 44);
             this.panel7.TabIndex = 0;
             // 
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.Color.Black;
-            this.panel8.Location = new System.Drawing.Point(8, 31);
+            this.panel8.Location = new System.Drawing.Point(9, 39);
+            this.panel8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(250, 2);
+            this.panel8.Size = new System.Drawing.Size(286, 2);
             this.panel8.TabIndex = 3;
             // 
             // tb_RoomName
@@ -113,21 +116,21 @@
             this.tb_RoomName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tb_RoomName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tb_RoomName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.tb_RoomName.Location = new System.Drawing.Point(8, 8);
-            this.tb_RoomName.Margin = new System.Windows.Forms.Padding(10);
+            this.tb_RoomName.Location = new System.Drawing.Point(9, 10);
+            this.tb_RoomName.Margin = new System.Windows.Forms.Padding(11, 12, 11, 12);
             this.tb_RoomName.Name = "tb_RoomName";
-            this.tb_RoomName.Size = new System.Drawing.Size(250, 22);
+            this.tb_RoomName.Size = new System.Drawing.Size(286, 27);
             this.tb_RoomName.TabIndex = 2;
             // 
             // lbl_UserCount
             // 
             this.lbl_UserCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_UserCount.Font = new System.Drawing.Font("KoPub돋움체 Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_UserCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_UserCount.ForeColor = System.Drawing.Color.DimGray;
             this.lbl_UserCount.Location = new System.Drawing.Point(0, 0);
             this.lbl_UserCount.Margin = new System.Windows.Forms.Padding(0);
             this.lbl_UserCount.Name = "lbl_UserCount";
-            this.lbl_UserCount.Size = new System.Drawing.Size(278, 20);
+            this.lbl_UserCount.Size = new System.Drawing.Size(318, 25);
             this.lbl_UserCount.TabIndex = 4;
             this.lbl_UserCount.Text = "인원 수(1/20)";
             this.lbl_UserCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -136,10 +139,10 @@
             // 
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 335);
+            this.panel2.Location = new System.Drawing.Point(0, 419);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(278, 60);
+            this.panel2.Size = new System.Drawing.Size(318, 75);
             this.panel2.TabIndex = 3;
             // 
             // panel3
@@ -150,8 +153,8 @@
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
-            this.panel3.Padding = new System.Windows.Forms.Padding(0, 10, 5, 5);
-            this.panel3.Size = new System.Drawing.Size(278, 60);
+            this.panel3.Padding = new System.Windows.Forms.Padding(0, 12, 6, 6);
+            this.panel3.Size = new System.Drawing.Size(318, 75);
             this.panel3.TabIndex = 3;
             // 
             // btn_Confirm
@@ -162,10 +165,11 @@
             this.btn_Confirm.FlatAppearance.BorderColor = System.Drawing.Color.DarkKhaki;
             this.btn_Confirm.FlatAppearance.BorderSize = 0;
             this.btn_Confirm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Confirm.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_Confirm.Location = new System.Drawing.Point(133, 10);
+            this.btn_Confirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_Confirm.Location = new System.Drawing.Point(152, 12);
+            this.btn_Confirm.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Confirm.Name = "btn_Confirm";
-            this.btn_Confirm.Size = new System.Drawing.Size(70, 45);
+            this.btn_Confirm.Size = new System.Drawing.Size(80, 57);
             this.btn_Confirm.TabIndex = 2;
             this.btn_Confirm.Text = "확인";
             this.btn_Confirm.UseVisualStyleBackColor = false;
@@ -179,10 +183,11 @@
             this.btn_Cancel.FlatAppearance.BorderColor = System.Drawing.Color.DarkKhaki;
             this.btn_Cancel.FlatAppearance.BorderSize = 0;
             this.btn_Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Cancel.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_Cancel.Location = new System.Drawing.Point(203, 10);
+            this.btn_Cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_Cancel.Location = new System.Drawing.Point(232, 12);
+            this.btn_Cancel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Cancel.Name = "btn_Cancel";
-            this.btn_Cancel.Size = new System.Drawing.Size(70, 45);
+            this.btn_Cancel.Size = new System.Drawing.Size(80, 57);
             this.btn_Cancel.TabIndex = 1;
             this.btn_Cancel.Text = "취소";
             this.btn_Cancel.UseVisualStyleBackColor = false;
@@ -197,7 +202,7 @@
             this.lbl_FormName.Location = new System.Drawing.Point(0, 0);
             this.lbl_FormName.Margin = new System.Windows.Forms.Padding(0);
             this.lbl_FormName.Name = "lbl_FormName";
-            this.lbl_FormName.Size = new System.Drawing.Size(280, 60);
+            this.lbl_FormName.Size = new System.Drawing.Size(321, 75);
             this.lbl_FormName.TabIndex = 0;
             this.lbl_FormName.Text = "대화 상대 선택";
             this.lbl_FormName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -216,9 +221,9 @@
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(280, 457);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(321, 572);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // panel5
@@ -229,16 +234,17 @@
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Margin = new System.Windows.Forms.Padding(0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(280, 60);
+            this.panel5.Size = new System.Drawing.Size(321, 75);
             this.panel5.TabIndex = 2;
             // 
             // panel4
             // 
             this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel4.Controls.Add(this.button1);
-            this.panel4.Location = new System.Drawing.Point(260, 0);
+            this.panel4.Location = new System.Drawing.Point(298, 0);
+            this.panel4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(20, 20);
+            this.panel4.Size = new System.Drawing.Size(23, 25);
             this.panel4.TabIndex = 1;
             // 
             // button1
@@ -248,10 +254,11 @@
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("KoPub돋움체 Bold", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(20, 20);
+            this.button1.Size = new System.Drawing.Size(23, 25);
             this.button1.TabIndex = 0;
             this.button1.Text = "X";
             this.button1.UseVisualStyleBackColor = false;
@@ -259,13 +266,14 @@
             // 
             // CreateRoomForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(284, 461);
+            this.ClientSize = new System.Drawing.Size(325, 576);
             this.Controls.Add(this.tableLayoutPanel1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "CreateRoomForm";
             this.Padding = new System.Windows.Forms.Padding(2);
             this.Text = "CreateRoomForm";

@@ -40,6 +40,8 @@
             this.label_funcType = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label_fName = new System.Windows.Forms.Label();
+            this.button_Download = new System.Windows.Forms.Button();
+            this.botton_Upload = new System.Windows.Forms.Button();
             this.label_percent = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.text_rename = new System.Windows.Forms.TextBox();
@@ -47,8 +49,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.listMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.button_Download = new System.Windows.Forms.Button();
-            this.botton_Upload = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -116,7 +116,7 @@
             // size
             // 
             this.size.Text = "크기";
-            this.size.Width = 92;
+            this.size.Width = 107;
             // 
             // tableLayoutPanel1
             // 
@@ -197,6 +197,39 @@
             this.label_fName.Text = "Path";
             this.label_fName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // button_Download
+            // 
+            this.button_Download.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
+            this.button_Download.Cursor = System.Windows.Forms.Cursors.Default;
+            this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_Download.FlatAppearance.BorderSize = 0;
+            this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Download.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button_Download.ForeColor = System.Drawing.SystemColors.Control;
+            this.button_Download.Image = global::Blind_Client.Properties.Resources.download;
+            this.button_Download.Location = new System.Drawing.Point(646, 3);
+            this.button_Download.Name = "button_Download";
+            this.button_Download.Size = new System.Drawing.Size(44, 34);
+            this.button_Download.TabIndex = 5;
+            this.button_Download.UseVisualStyleBackColor = false;
+            this.button_Download.Click += new System.EventHandler(this.button_Download_Click);
+            // 
+            // botton_Upload
+            // 
+            this.botton_Upload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
+            this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.botton_Upload.FlatAppearance.BorderSize = 0;
+            this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.botton_Upload.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.botton_Upload.ForeColor = System.Drawing.SystemColors.Control;
+            this.botton_Upload.Image = global::Blind_Client.Properties.Resources.upload1;
+            this.botton_Upload.Location = new System.Drawing.Point(596, 3);
+            this.botton_Upload.Name = "botton_Upload";
+            this.botton_Upload.Size = new System.Drawing.Size(44, 34);
+            this.botton_Upload.TabIndex = 4;
+            this.botton_Upload.UseVisualStyleBackColor = false;
+            this.botton_Upload.Click += new System.EventHandler(this.botton_Upload_Click);
+            // 
             // label_percent
             // 
             this.label_percent.AutoSize = true;
@@ -259,39 +292,6 @@
             this.listMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.listMenu.Name = "listMenu";
             this.listMenu.Size = new System.Drawing.Size(61, 4);
-            // 
-            // button_Download
-            // 
-            this.button_Download.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
-            this.button_Download.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button_Download.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_Download.FlatAppearance.BorderSize = 0;
-            this.button_Download.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Download.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button_Download.ForeColor = System.Drawing.SystemColors.Control;
-            this.button_Download.Image = global::Blind_Client.Properties.Resources.download;
-            this.button_Download.Location = new System.Drawing.Point(646, 3);
-            this.button_Download.Name = "button_Download";
-            this.button_Download.Size = new System.Drawing.Size(44, 34);
-            this.button_Download.TabIndex = 5;
-            this.button_Download.UseVisualStyleBackColor = false;
-            this.button_Download.Click += new System.EventHandler(this.button_Download_Click);
-            // 
-            // botton_Upload
-            // 
-            this.botton_Upload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(118)))));
-            this.botton_Upload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.botton_Upload.FlatAppearance.BorderSize = 0;
-            this.botton_Upload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.botton_Upload.Font = new System.Drawing.Font("KoPub돋움체 Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.botton_Upload.ForeColor = System.Drawing.SystemColors.Control;
-            this.botton_Upload.Image = global::Blind_Client.Properties.Resources.upload1;
-            this.botton_Upload.Location = new System.Drawing.Point(596, 3);
-            this.botton_Upload.Name = "botton_Upload";
-            this.botton_Upload.Size = new System.Drawing.Size(44, 34);
-            this.botton_Upload.TabIndex = 4;
-            this.botton_Upload.UseVisualStyleBackColor = false;
-            this.botton_Upload.Click += new System.EventHandler(this.botton_Upload_Click);
             // 
             // Document_Center
             // 
