@@ -36,6 +36,10 @@ namespace Blind_Client.BlindChatCode
             this.UI = UI;
             DB = new BlindChatDB(this._UserID);
         }
+        ~BlindChat()
+        {
+            chatSock.Close();
+        }
 
         private bool Start = false;
         public void Run()
@@ -53,23 +57,12 @@ namespace Blind_Client.BlindChatCode
             chatSock = new BlindSocket();
             chatSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
 
-            {
-                user = new User();
-                user.ID = _UserID;
-                packet = BlindChatUtil.StructToChatPacket(user);
-                ChatPacketSend(packet);
-            }
-
-            packet = ChatPacketReceive();
-            user = BlindChatUtil.ChatPacketToStruct<User>(packet);
-            _UserID = user.ID;
-
             syncTime = DB.GetAllTime();
             packet = BlindChatUtil.StructToChatPacket(syncTime);
             ChatPacketSend(packet);
 
 
-            string sql;
+            //string sql;
             while (true)
             {
                 packet = ChatPacketReceive();
@@ -106,14 +99,15 @@ namespace Blind_Client.BlindChatCode
                     {
                         LoadList();
                         LoadUI();
+#if DEBUG
                         MessageBox.Show("데이터 로드 완료");
+#endif 
                     }
                     Start = true;
                 }
-                else if(packet.Type == ChatType.Invitation)
+                else if(packet.Type == ChatType.Exit)
                 {
-
-                    //UI._RoomControl.RoomItem_LayoutPanel.Controls.Add();
+                    ExecuteExit(packet);
                 }
                 else
                 {

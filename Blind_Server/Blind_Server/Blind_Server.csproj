@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="BlindChat\BlindChat.cs" />
     <Compile Include="BlindChat\BlindChatDef.cs" />
+    <Compile Include="BlindOpenner.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="BlindLock.cs" />
     <Compile Include="BlindNet.cs" />

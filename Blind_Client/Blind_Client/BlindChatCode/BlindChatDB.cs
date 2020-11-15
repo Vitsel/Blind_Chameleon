@@ -21,7 +21,10 @@ namespace Blind_Client.BlindChatCode
         {
             this.userID = userID;
         }
+        ~BlindChatDB()
+        {
 
+        }
         public ChatTimeStamp GetAllTime()
         {
             ChatTimeStamp chatTimeStamp = new ChatTimeStamp();
@@ -176,8 +179,9 @@ namespace Blind_Client.BlindChatCode
                     "FOREIGN KEY(\'UserID\') REFERENCES \'User\'(\'ID\')" +
                     "); ";
                 ExecuteNonQuery(sql);
-
+#if DEBUG
                 MessageBox.Show("DB가 새로 생성되었습니다.");
+#endif
             }
             else
             {

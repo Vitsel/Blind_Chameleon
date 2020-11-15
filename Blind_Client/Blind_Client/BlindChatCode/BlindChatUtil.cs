@@ -1,15 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Blind_Client.BlindChatUI;
 using BlindNet;
 
 namespace Blind_Client.BlindChatCode
 {
+    static public class BlindColor
+    {
+        public static Color Primary = Color.FromArgb(78,115, 223);
+        public static Color Info = Color.FromArgb(54, 185, 204);
+        public static Color Light = Color.FromArgb(248, 249, 252);
+        public static Color Secondary = Color.FromArgb(133, 135, 150);
+
+        public static Color Gray = Color.FromArgb(236, 236, 250);
+        public static Color DarkGray = Color.FromArgb(206, 206, 220);
+        public static Color LightBlue = Color.FromArgb(99, 116, 223);
+        public static Color BrightBlue = Color.FromArgb(119, 136, 223);
+        public static Color SkyBlue = Color.FromArgb(200, 205, 250);
+        public static Color Black = Color.FromArgb(20, 20, 20);
+    }
+
     static public class BlindChatUtil
     {
+        public static Form GetFormWithName(string formName)
+        {
+            foreach (Form openForm in Application.OpenForms)
+            {
+                if (openForm.Name == formName)
+                    return openForm;
+            }
+            return null;
+        }
+
         public static T ChatPacketToStruct<T>(ChatPacket chatPack) where T : struct
         {
             byte[] chatPackByte = new byte[Marshal.SizeOf(typeof(T))];
@@ -39,10 +67,10 @@ namespace Blind_Client.BlindChatCode
             byte[] data = BlindNetUtil.StructToByte(room);
             return BlindChatUtil.ByteToChatPacket(data, ChatType.Room);
         }
-        public static ChatPacket StructToChatPacket(ChatRoomJoined roomJoined)
+        public static ChatPacket StructToChatPacket(ChatRoomJoined roomJoined, ChatType type = ChatType.RoomJoined)
         {
             byte[] data = BlindNetUtil.StructToByte(roomJoined);
-            return BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
+            return BlindChatUtil.ByteToChatPacket(data, type);
         }
         public static ChatPacket StructToChatPacket(ChatMessage message)
         {
@@ -97,7 +125,8 @@ namespace Blind_Client.BlindChatCode
 
         //chat functions.. ex) quit chat, create chat
         NewRoom = 7,
-        Invitation = 8
+        Invitation = 8,
+        Exit = 9
     }
 
     public enum UserStat

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using Blind_Client.BlindChatUI.RoomUI;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI
 {
@@ -24,6 +25,14 @@ namespace Blind_Client.BlindChatUI
         {
             InitializeComponent();
             _UserID = UserID;
+
+            lbl_room.BackColor = BlindColor.Light;
+            lbl_room.ForeColor = BlindColor.Primary;
+            btn_Create.BackColor = BlindColor.BrightBlue;
+            btn_Create.ForeColor = BlindColor.Light;
+            RoomItem_LayoutPanel.BackColor = BlindColor.Gray;
+            
+            BlindNetUtil.SetEllipse(btn_Create, 5);
         }
         public void SetBlindChat(BlindChat chat)
         {
@@ -49,6 +58,7 @@ namespace Blind_Client.BlindChatUI
             Room_Item roomItem = new Room_Item(room);
             roomItem.Anchor = AnchorStyles.Left|AnchorStyles.Right;
             roomItem.RoomDoubleClickEvent = _BlindChat.OpenMessageRoom;
+            roomItem.Width = this.Width - 14;
 
             //userItem.UserClickEvent = DisplayUserInfo;
 
@@ -59,7 +69,7 @@ namespace Blind_Client.BlindChatUI
             base.OnResize(e);
             foreach (Room_Item item in RoomItem_LayoutPanel.Controls)
             {
-                item.Width = this.Width;
+                item.Width = this.Width-14;
             }
         }
         public void SendCreateRoom(string text, uint[] array)

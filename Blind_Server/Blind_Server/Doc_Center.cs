@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define PROGRAMMING
+
+using System;
 using System.Text;
 using System.Runtime.InteropServices;
 using MySql.Data.MySqlClient;
@@ -9,6 +11,8 @@ using BlindCryptography;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Diagnostics;
+using BlindLogger;
+using System.Net;
 
 namespace Blind_Server
 {
@@ -20,6 +24,7 @@ namespace Blind_Server
         uint[] gids;
         uint[] accessibleDirs;
         bool isInner;
+        Logger logger;
 
         public Doc_Center(uint uid, params uint[] gids)
         {
@@ -27,6 +32,7 @@ namespace Blind_Server
             this.gids = gids;
             accessibleDirs = null;
             isInner = false;
+            logger = null;
         }
 
         ~Doc_Center()
@@ -39,6 +45,9 @@ namespace Blind_Server
         {
             socket = _Main.socket_docCenter.AcceptWithECDH();
             socket.socket.NoDelay = true;
+            logger = new Logger(uid, ((IPEndPoint)(socket.socket.RemoteEndPoint)).Address.ToString(), LogService.DocumentCenter);
+            logger.Log(LogRank.INFO, "Connected to document center.");
+
             isInner = BitConverter.ToBoolean(socket.CryptoReceiveMsg(), 0);
 
             connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = document_center; Uid = root; Pwd = kit2020");
@@ -132,7 +141,28 @@ namespace Blind_Server
                             GetDirSize(BitConverter.ToUInt32(tmp, 0));
                             break;
                         }
+                    case PacketType.DocRenameFile:
+                        {
+                            byte[] data = BlindNetUtil.ByteTrimEndNull(packet.data);
+                            byte[] tmp = new byte[4];
+                            Array.Copy(data, 0, tmp, 0, data.Length);
+                            RenameFile(BitConverter.ToUInt32(tmp, 0));
+                            break;
+                        }
+                    case PacketType.DocMoveFile:
+                        MoveFile(BlindNetUtil.ByteToStruct<SrcDstInfo>(packet.data));
+                        break;
+                    case PacketType.DocMoveDir:
+                        MoveDir(BlindNetUtil.ByteToStruct<SrcDstInfo>(packet.data));
+                        break;
+                    case PacketType.DocCopyFile:
+                        CopyFile(BlindNetUtil.ByteToStruct<SrcDstInfo>(packet.data));
+                        break;
+                    case PacketType.DocCopyDir:
+                        CopyDir(BlindNetUtil.ByteToStruct<SrcDstInfo>(packet.data));
+                        break;
                     case PacketType.Disconnect:
+                        logger.Log(LogRank.INFO, "Disconnected from document center");
                         return;
                 }
                 //}
@@ -243,6 +273,7 @@ namespace Blind_Server
 
                 di.Create();
                 socket.CryptoSend(BlindNetUtil.StructToByte(dir), PacketType.OK);
+                logger.Log(LogRank.INFO, "Created directory(" + dir.id + ")");
             }
             catch
             {
@@ -292,6 +323,7 @@ namespace Blind_Server
                 RemoveDirTree(id);
                 UpdateModDate(pid);
                 socket.CryptoSend(null, PacketType.OK);
+                logger.Log(LogRank.INFO, "Removed directory(" + id + ")");
             }
             catch (Exception ex)
             {
@@ -327,6 +359,7 @@ namespace Blind_Server
 
                 UpdateModDate(dir_id.Value);
                 socket.CryptoSend(null, PacketType.OK);
+                logger.Log(LogRank.INFO, "Removed file(" + id + ")");
             }
             catch (Exception ex)
             {
@@ -368,6 +401,7 @@ namespace Blind_Server
         {
             File_Info file = BlindNetUtil.ByteToStruct<File_Info>(socket.CryptoReceiveMsg());
             Debug.WriteLine("Start FileUpload \"{0}\"", file.name);
+            MySqlCommand commander = null;
             try
             {
                 string command = "SELECT path FROM files_info WHERE dir_id = " + dir.id + " AND name = '" + file.name + "';";
@@ -379,7 +413,7 @@ namespace Blind_Server
                 if (dataset.Tables[0].Rows.Count != 0)
                 {
                     command = "UPDATE files_info SET modified_date = NOW() WHERE dir_id = " + dir.id + " AND name = '" + file.name + "';";
-                    MySqlCommand commander = new MySqlCommand(command, connection);
+                    commander = new MySqlCommand(command, connection);
                     if (commander.ExecuteNonQuery() != 1)
                         throw new Exception();
 
@@ -390,7 +424,7 @@ namespace Blind_Server
                 {
                     command = "INSERT INTO files_info VALUES (" + 0 + ", " + dir.id + ", '" + file.name + "', DEFAULT, UPPER('" + file.type + "'), " +
                         file.size + ", NULL);";
-                    MySqlCommand commander = new MySqlCommand(command, connection);
+                    commander = new MySqlCommand(command, connection);
                     if (commander.ExecuteNonQuery() != 1)
                         throw new Exception();
                 }
@@ -399,6 +433,13 @@ namespace Blind_Server
                 byte[] data = socket.CryptoReceiveMsg();
                 Debug.WriteLine("[FileUpload] End leceiving {0} bytes", data.Length);
 
+                command = "SELECT MAX(id) FROM files_info;";
+                commander = new MySqlCommand(command, connection);
+                MySqlDataReader reader = commander.ExecuteReader();
+                reader.Read();
+                file.id = (uint)reader["MAX(id)"];
+                reader.Close();
+
                 if (path == null)
                 {
                     command = "SELECT path FROM directorys_info WHERE id = " + dir.id + ";";
@@ -406,13 +447,6 @@ namespace Blind_Server
                     adapter.Fill(dataset);
                     if (dataset.Tables[0].Rows.Count != 1)
                         throw new Exception();
-
-                    command = "SELECT MAX(id) FROM files_info;";
-                    MySqlCommand commander = new MySqlCommand(command, connection);
-                    MySqlDataReader reader = commander.ExecuteReader();
-                    reader.Read();
-                    file.id = (uint)reader["MAX(id)"];
-                    reader.Close();
 
                     path = (string)dataset.Tables[0].Rows[0]["path"] + file.id + ".blind";
                     command = "UPDATE files_info SET path = '" + RemakePath(path, false) + "' WHERE dir_id = " + dir.id + " AND name = '" + file.name + "';";
@@ -424,6 +458,7 @@ namespace Blind_Server
                 data = EncryptFile(data);
                 if (data == null)
                     throw new Exception();
+                data = BlindNetUtil.MergeArray(BitConverter.GetBytes(file.id), data);
 
                 FileInfo fi = new FileInfo(path);
                 FileStream fs = fi.OpenWrite();
@@ -432,6 +467,7 @@ namespace Blind_Server
 
                 UpdateModDate(dir.id);
                 socket.CryptoSend(null, PacketType.OK);
+                logger.Log(LogRank.INFO, "Uploaded file(" + file.id + ")");
             }
             catch (Exception ex)
             {
@@ -439,7 +475,7 @@ namespace Blind_Server
             }
         }
 
-        private async void FileDownload(uint id)
+        private void FileDownload(uint id)
         {
             string command = "SELECT name, path FROM files_info WHERE id = " + id + ";";
             MySqlDataAdapter adapter = new MySqlDataAdapter(command, connection);
@@ -452,8 +488,10 @@ namespace Blind_Server
                 return;
             }
             string fileName = (string)dataset.Tables[0].Rows[0]["name"];
-            if (!isInner)
-                fileName = Path.GetFileNameWithoutExtension(fileName) + ".blind";
+
+#if !PROGRAMMING
+            fileName = Path.GetFileNameWithoutExtension(fileName) + ".blind";
+#endif
             socket.CryptoSend(Encoding.UTF8.GetBytes(fileName), PacketType.Info);
 
             FileInfo file = new FileInfo((string)dataset.Tables[0].Rows[0]["path"]);
@@ -464,9 +502,10 @@ namespace Blind_Server
             }
             FileStream fs = file.OpenRead();
             byte[] buffer = new byte[fs.Length];
-            await fs.ReadAsync(buffer, 0, (int)fs.Length);
+            fs.Read(buffer, 0, (int)fs.Length);
             fs.Close();
 
+#if PROGRAMMING
             if (isInner)
             {
                 buffer = DecryptFile(buffer);
@@ -476,10 +515,12 @@ namespace Blind_Server
                     return;
                 }
             }
+#endif
             socket.CryptoSend(buffer, PacketType.MSG);
+            logger.Log(LogRank.INFO, "Downloaded file(" + id + ")");
         }
 
-        private async void DirDownload(uint id)
+        private void DirDownload(uint id)
         {
             List<Dictionary<string, string>> fileList = new List<Dictionary<string, string>>();
             GetArchiveFileList(id, fileList);
@@ -503,23 +544,26 @@ namespace Blind_Server
                 {
                     foreach (var file in fileList)
                     {
+#if PROGRAMMING
                         if (isInner)
                         {
                             using (var entryStream = archive.CreateEntry(file["NAME"]).Open())
                             using (var fileStream = File.OpenRead(file["PATH"]))
                             {
                                 byte[] data = new byte[fileStream.Length];
-                                await fileStream.ReadAsync(data, 0, data.Length);
+                                fileStream.Read(data, 0, data.Length);
                                 data = DecryptFile(data);
-                                await entryStream.WriteAsync(data, 0, data.Length);
+                                entryStream.Write(data, 0, data.Length);
                             }
                         }
                         else
-                            archive.CreateEntryFromFile(file["PATH"], file["NAME"]);
+#endif
+                        archive.CreateEntryFromFile(file["PATH"], file["NAME"]);
                     }
                 }
                 socket.CryptoSend(null, PacketType.OK);
                 socket.CryptoSend(ms.ToArray(), PacketType.MSG);
+                logger.Log(LogRank.INFO, "Downloaded file(" + id + ")");
             }
         }
 
@@ -575,6 +619,21 @@ namespace Blind_Server
             }
         }
 
+        private void RenameFile(uint id)
+        {
+            string name = Encoding.UTF8.GetString(socket.CryptoReceiveMsg());
+
+            string command = "UPDATE files_info SET name = '" + name + "', type = '" +
+                Path.GetExtension(name).Replace(".", "") + "' WHERE id = " + id + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            if (commander.ExecuteNonQuery() != 1)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+            socket.CryptoSend(null, PacketType.OK);
+        }
+
         private void GetArchiveFileList(uint id, List<Dictionary<string, string>> list)
         {
             string command = "SELECT id, name, path FROM files_info WHERE dir_id = " + id + ";";
@@ -584,8 +643,9 @@ namespace Blind_Server
 
             foreach (DataRow row in data.Tables[0].Rows)
             {
-                if (!isInner)
-                    row["name"] = Path.GetFileNameWithoutExtension((string)row["name"]) + ".blind";
+#if !PROGRAMMING
+                row["name"] = Path.GetFileNameWithoutExtension((string)row["name"]) + ".blind";
+#endif
                 string name = GetFilePath((uint)row["id"]);
                 name = Path.GetDirectoryName(name) + "\\" + row["name"];
                 list.Add(new Dictionary<string, string>() {
@@ -644,8 +704,11 @@ namespace Blind_Server
 
         private byte[] DecryptFile(byte[] data)
         {
-            string command = "SELECT _key, iv FROM crypto_key WHERE apply_date <= '" + DateTime.Now.ToString("yyyy-MM-dd") +
-                "' AND expire_date > '" + DateTime.Now.ToString("yyyy-MM-dd") + "'; ";
+            byte[] fileData = new byte[data.Length - 8];
+            Array.Copy(data, 8, fileData, 0, fileData.Length);
+            uint encryptDate = BitConverter.ToUInt32(data, 4);
+            string command = "SELECT _key, iv FROM crypto_key WHERE apply_date <= '" + encryptDate +
+                "' AND expire_date > '" + encryptDate + "'; ";
             MySqlDataAdapter adapter = new MySqlDataAdapter(command, connection);
             DataSet dataset = new DataSet();
             adapter.Fill(dataset);
@@ -654,7 +717,7 @@ namespace Blind_Server
             Cryptography.AES256 aes256 = new Cryptography.AES256((byte[])(dataset.Tables[0].Rows[0]["_key"]), (byte[])(dataset.Tables[0].Rows[0]["iv"]));
             try
             {
-                return aes256.Decryption(data);
+                return aes256.Decryption(fileData);
             }
             catch (Exception ex)
             {
@@ -674,7 +737,8 @@ namespace Blind_Server
             Cryptography.AES256 aes256 = new Cryptography.AES256((byte[])(dataset.Tables[0].Rows[0]["_key"]), (byte[])(dataset.Tables[0].Rows[0]["iv"]));
             try
             {
-                return aes256.Encryption(data);
+                uint timestemp = uint.Parse(DateTime.Now.ToString("yyyyMMdd"));
+                return BlindNetUtil.MergeArray(BitConverter.GetBytes(timestemp), aes256.Encryption(data));
             }
             catch (Exception ex)
             {
@@ -743,6 +807,356 @@ namespace Blind_Server
             if ((uint)(dataset.Tables[0].Rows[0]["parent_id"]) != 0)
                 UpdateModDate((uint)(dataset.Tables[0].Rows[0]["parent_id"]));
         }
+
+        void MoveFile(SrcDstInfo info)
+        {
+            string command = "SELECT name, path FROM files_info WHERE id = " + info.id + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            MySqlDataReader reader = commander.ExecuteReader();
+            if (!reader.Read())
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string fileName = reader["name"].ToString();
+            FileInfo file = new FileInfo(reader["path"].ToString());
+            reader.Close();
+            if (!file.Exists)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            command = "SELECT path FROM directorys_info WHERE id = " + info.dstDir + ";";
+            commander = new MySqlCommand(command, connection);
+            var result = commander.ExecuteScalar();
+            if (result == null)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string newFile = result.ToString() + file.Name;
+            file.MoveTo(newFile);
+            newFile = RemakePath(newFile, false);
+
+            int count = 1;
+            string newFileName = fileName;
+            while (IsInSameName(newFileName, info.dstDir, false))
+                newFileName = fileName + "(" + count++ + ")";
+
+            command = "UPDATE files_info SET name = '" + newFileName + "', dir_id = " + info.dstDir + ", path = '" + newFile + "' WHERE id = " + info.id + ";";
+            commander = new MySqlCommand(command, connection);
+            if (commander.ExecuteNonQuery() != 1)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+            socket.CryptoSend(null, PacketType.OK);
+
+            UpdateModDate(info.srcDir);
+            UpdateModDate(info.dstDir);
+            return;
+        }
+
+        void MoveDir(SrcDstInfo info)
+        {
+            string command = "SELECT name, path FROM directorys_info WHERE id = " + info.id + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            MySqlDataReader reader = commander.ExecuteReader();
+            if (!reader.Read())
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string dirName = reader["name"].ToString();
+            DirectoryInfo dir = new DirectoryInfo(reader["path"].ToString());
+            reader.Close();
+            if (!dir.Exists)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            command = "SELECT path FROM directorys_info WHERE id = " + info.dstDir + ";";
+            commander = new MySqlCommand(command, connection);
+            var dstDir = commander.ExecuteScalar();
+            if (dstDir == null)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string newDir = dstDir.ToString() + dir.Name;
+            dir.MoveTo(newDir);
+
+            newDir = RemakePath(newDir, true);
+            RefreshPath(info.id, newDir);
+
+            int count = 1;
+            string newDirName = dirName;
+            while (IsInSameName(newDirName, info.dstDir, true))
+                newDirName = dirName + "(" + count++ + ")";
+            command = "UPDATE directorys_info SET name = '" + newDirName + "', parent_id = " + info.dstDir + ", path = '" + newDir + "' WHERE id = " + info.id + ";";
+            commander = new MySqlCommand(command, connection);
+            if (commander.ExecuteNonQuery() != 1)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+            socket.CryptoSend(null, PacketType.OK);
+
+            UpdateModDate(info.srcDir);
+            UpdateModDate(info.dstDir);
+            return;
+        }
+
+        bool IsInSameName(string name, uint dirID, bool isDir)
+        {
+            string command = string.Empty;
+            if (isDir)
+                command = "SELECT COUNT(*) FROM directorys_info WHERE parent_id = " + dirID + " AND name = '" + name + "';";
+            else
+                command = "SELECT COUNT(*) FROM files_info WHERE dir_id = " + dirID + " AND name = '" + name + "';";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            if (uint.Parse(commander.ExecuteScalar().ToString()) > 0)
+                return true;
+            return false;
+        }
+
+        void RefreshPath(uint dir, string newPath)
+        {
+            string command = "SELECT id, name FROM files_info WHERE dir_id = " + dir + ";";
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command, connection);
+            DataSet dataset = new DataSet();
+            adapter.Fill(dataset);
+
+            foreach (DataRow row in dataset.Tables[0].Rows)
+            {
+                command = "UPDATE files_info SET path = '" + newPath + Path.GetFileName(row["name"].ToString()) + "' WHERE id = " + row["id"].ToString() + ";";
+                MySqlCommand commander = new MySqlCommand(command, connection);
+                commander.ExecuteNonQuery();
+            }
+
+            command = "SELECT id FROM directorys_info WHERE parent_id = " + dir + ";";
+            adapter = new MySqlDataAdapter(command, connection);
+            dataset = new DataSet();
+            adapter.Fill(dataset);
+
+            foreach (DataRow row in dataset.Tables[0].Rows)
+            {
+                command = "UPDATE directorys_info SET path = '" + newPath + Path.GetFileName(row["id"].ToString()) + "' WHERE id = " + row["id"].ToString() + ";";
+                MySqlCommand commander = new MySqlCommand(command, connection);
+                commander.ExecuteNonQuery();
+                RefreshPath((uint)row["id"], newPath + RemakePath(Path.GetFileName(row["id"].ToString()), true));
+            }
+        }
+
+        void CopyFile(SrcDstInfo info)
+        {
+            string command = "SELECT name, path FROM files_info WHERE id = " + info.id + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            MySqlDataReader reader = commander.ExecuteReader();
+            if (!reader.Read())
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string fileName = reader["name"].ToString();
+            FileInfo file = new FileInfo(reader["path"].ToString());
+            reader.Close();
+            if (!file.Exists)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            uint newFileID = MakeNewFile(fileName, info.dstDir, (uint)file.Length);
+            if (newFileID == 0)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            command = "SELECT path FROM directorys_info WHERE id = " + info.dstDir + ";";
+            commander = new MySqlCommand(command, connection);
+            var dstDir = commander.ExecuteScalar();
+            if (dstDir == null)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string newFile = dstDir.ToString() + newFileID + ".blind";
+            file.CopyTo(newFile);
+
+            socket.CryptoSend(null, PacketType.OK);
+
+            UpdateModDate(info.dstDir);
+            return;
+        }
+
+        uint MakeNewFile(string name, uint did, uint size)
+        {
+            string command = "SELECT path FROM directorys_info WHERE id = " + did + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            string dirPath = commander.ExecuteScalar().ToString();
+
+            int count = 1;
+            string newFileName = name;
+            while (IsInSameName(newFileName, did, false))
+                newFileName = name + "(" + count++ + ")";
+
+            command = "INSERT INTO files_info VALUES(0, @dir_id, '" + newFileName + "', now(), '" +
+                Path.GetExtension(name).Replace(".", "") + "', @size, null)";
+            commander = new MySqlCommand(command, connection);
+            commander.Parameters.AddWithValue("dir_id", did);
+            commander.Parameters.AddWithValue("size", size);
+            if (commander.ExecuteNonQuery() != 1)
+            {
+                return 0;
+            }
+
+            uint newFileID = GetLastID();
+            string newFile = dirPath + newFileID + ".blind";
+            newFile = RemakePath(newFile, false);
+            command = "UPDATE files_info SET path = '" + newFile + "' WHERE id = " + newFileID + ";";
+            commander = new MySqlCommand(command, connection);
+            commander.ExecuteNonQuery();
+
+            return newFileID;
+        }
+
+        uint GetLastID(bool isDir = false)
+        {
+            string command;
+            if (isDir)
+                command = "SELECT MAX(id) FROM directorys_info;";
+            else
+                command = "SELECT MAX(id) FROM files_info;";
+
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            uint id = (uint)(commander.ExecuteScalar());
+            return id;
+        }
+
+        void CopyDir(SrcDstInfo info)
+        {
+            string command = "SELECT name, path FROM directorys_info WHERE id = " + info.id + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            MySqlDataReader reader = commander.ExecuteReader();
+            if (!reader.Read())
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string dirName = reader["name"].ToString();
+            DirectoryInfo dir = new DirectoryInfo(reader["path"].ToString());
+            reader.Close();
+            if (!dir.Exists)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            command = "SELECT path FROM directorys_info WHERE id = " + info.dstDir + ";";
+            commander = new MySqlCommand(command, connection);
+            var dstDir = commander.ExecuteScalar();
+            if (dstDir == null)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            uint newDirID = MakeNewDir(dirName, info.dstDir);
+            if (newDirID == 0)
+            {
+                socket.CryptoSend(null, PacketType.Fail);
+                return;
+            }
+
+            string newDirPath = dstDir.ToString() + newDirID;
+            DirectoryInfo newDir = new DirectoryInfo(newDirPath);
+            newDir.Create();
+            DirCopyTo(info.id, newDirID);
+
+            //RefreshPath(info.id, newDir);
+
+
+            socket.CryptoSend(null, PacketType.OK);
+
+            UpdateModDate(info.dstDir);
+            return;
+        }
+
+        uint MakeNewDir(string name, uint pid)
+        {
+            int count = 1;
+            string newDirName = name;
+            while (IsInSameName(newDirName, pid, true))
+                newDirName = name + "(" + count++ + ")";
+
+            string command = "INSERT INTO directorys_info VALUES(0, '" + newDirName + "', @parent_id,  now(), null)";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            commander.Parameters.AddWithValue("parent_id", pid);
+            if (commander.ExecuteNonQuery() != 1)
+            {
+                return 0;
+            }
+
+            command = "SELECT path FROM directorys_info WHERE id = " + pid + ";";
+            commander = new MySqlCommand(command, connection);
+            string dstPath = commander.ExecuteScalar().ToString();
+
+            uint newDirID = GetLastID(true);
+            string newDirPath = dstPath + newDirID;
+            newDirPath = RemakePath(newDirPath, true);
+
+            command = "UPDATE directorys_info SET path = '" + newDirPath + "' WHERE id = " + newDirID + ";";
+            commander = new MySqlCommand(command, connection);
+            if (commander.ExecuteNonQuery() != 1)
+            {
+                return 0;
+            }
+
+            return newDirID;
+        }
+
+        void DirCopyTo(uint srcID, uint dstID)
+        {
+            string command = "SELECT name, path FROM files_info WHERE dir_id = " + srcID + ";";
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command, connection);
+            DataSet dataset = new DataSet();
+            adapter.Fill(dataset);
+
+            command = "SELECT path FROM directorys_info WHERE id = " + dstID + ";";
+            MySqlCommand commander = new MySqlCommand(command, connection);
+            string dstPath = commander.ExecuteScalar().ToString();
+
+            foreach(DataRow row in dataset.Tables[0].Rows)
+            {
+                FileInfo file = new FileInfo(row["path"].ToString());
+                uint newFileID = MakeNewFile(row["name"].ToString(), dstID, (uint)file.Length);
+                file.CopyTo(dstPath + newFileID + ".blind");
+            }
+
+            command = "SELECT name, id FROM directorys_info WHERE parent_id = " + srcID + ";";
+            adapter = new MySqlDataAdapter(command, connection);
+            dataset = new DataSet();
+            adapter.Fill(dataset);
+
+            foreach (DataRow row in dataset.Tables[0].Rows)
+            {
+                uint newDirID = MakeNewDir(row["name"].ToString(), dstID);
+                DirectoryInfo dir = new DirectoryInfo(dstPath + newDirID);
+                dir.Create();
+                DirCopyTo((uint)row["id"], newDirID);
+            }
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -767,5 +1181,20 @@ namespace Blind_Server
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 10)]
         public string type;
         public uint size;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    struct SrcDstInfo
+    {
+        public uint srcDir;
+        public uint id;
+        public uint dstDir;
+
+        public SrcDstInfo(uint src, uint id, uint dst)
+        {
+            srcDir = src;
+            this.id = id;
+            dstDir = dst;
+        }
     }
 }

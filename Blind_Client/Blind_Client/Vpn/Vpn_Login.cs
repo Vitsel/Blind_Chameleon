@@ -24,6 +24,7 @@ namespace Blind_Client
         public Vpn_Login()
         {
             InitializeComponent();
+            pictureBox1.Parent = panel1;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -104,7 +105,5 @@ namespace Blind_Client
             if (e.KeyChar == (char)Keys.Enter)
                 Vpn_Login_Button_Click(sender, e);
         }
-
-
     }
 }

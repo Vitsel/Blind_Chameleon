@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using BlindNet;
 using Org.BouncyCastle.Crypto.Signers;
 using MySql.Data.MySqlClient;
+using BlindLogger;
+using System.Windows.Forms;
+using System.Net;
 
 namespace Blind_Server
 {
@@ -16,7 +19,8 @@ namespace Blind_Server
     public partial class BlindChat
     {
         private BlindSocket chatSock;
-        private int UserID;
+        private uint UserID;
+        private Logger logger;
 
         MySqlConnection hDB;
         //private Queue<ChatPacket> ChatMessageQueue;
@@ -34,6 +38,11 @@ namespace Blind_Server
 
             chatSock = GetChatPortSocket();
 
+            IPEndPoint iep = (IPEndPoint)(chatSock.socket.RemoteEndPoint);
+            logger = new Logger(UserID, iep.Address.ToString(), LogService.Chat);
+
+
+            SetOnline((int)UserStat.Online);
             while (true)
             {
                 byte[] data = chatSock.CryptoReceiveMsg();
@@ -42,23 +51,20 @@ namespace Blind_Server
                     chatSock.Close();
                     SetOnline((int)UserStat.Offline);
                     global.ListBlindChat.Remove(this);
-                    Console.WriteLine("disconnected");
+                    logger.Log(LogRank.INFO, "BlindChat Disconnected");
                     return;
                 }
 
                 ChatPacket chatPacket = BlindNetUtil.ByteToStruct<ChatPacket>(data);
-                if(chatPacket.Type == ChatType.User)
-                {
-                    //클라이언트에서 서버에 user구조체를 보내는것은 자신의 userID를 등록할 때 뿐
-                    SetClientUserID(chatPacket);
-                }
-                else if(chatPacket.Type == ChatType.Time)
+                if(chatPacket.Type == ChatType.Time)
                 {
                     ClientUpdateData(chatPacket);
+                    logger.Log(LogRank.INFO, "Chat Data Synchronized");
                 }
                 else if(chatPacket.Type == ChatType.NewRoom)
                 {
                     ExecuteNewRoom(chatPacket);
+                    logger.Log(LogRank.INFO, "Created New Chat Room");
                 }
                 else if(chatPacket.Type == ChatType.Message)
                 {
@@ -68,9 +74,9 @@ namespace Blind_Server
                 {
                     ExecuteInvitation(chatPacket);
                 }
-                else if(chatPacket.Type == ChatType.Invitation)
+                else if(chatPacket.Type == ChatType.Exit)
                 {
-
+                    ExecuteExit(chatPacket);
                 }
 
             }
@@ -79,11 +85,12 @@ namespace Blind_Server
 
 
 
-        public BlindChat()
+        public BlindChat(uint cid)
         {
             global.ListBlindChat.Add(this);
+            UserID = cid;
         }
-        public BlindChat(MySqlConnection hDB)
+        public BlindChat(MySqlConnection hDB, uint cid)
         {
             global.ListBlindChat.Add(this);
             this.hDB = hDB;

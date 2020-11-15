@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Blind_Client.BlindChatUI;
 
 namespace BlindNet
 {
@@ -146,6 +147,7 @@ namespace BlindNet
                     return end;
                 }
                 byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                temp[0] = (byte)PacketType.OK;
                 socket.Send(temp, BlindNetConst.MINIDATASIZE, SocketFlags.None);
 
                 decrypted = aes.Decryption(data);
@@ -153,12 +155,17 @@ namespace BlindNet
             }
             if (isRecieving || miniPacket.header == PacketType.MSG)
             {
-                data = null;
+                data = new byte[0];
                 while (true)
                 {
                     byte[] tmp = new byte[BlindNetConst.PACKSIZE];
-                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
-                    new NetworkStream(socket).Flush();
+                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE - data.Length, SocketFlags.None);
+                    using (NetworkStream stream = new NetworkStream(socket))
+                        stream.Flush();
+#if DEBUG
+                    if (tmp[tmp.Length - 1] == 0)
+                        Console.WriteLine("Received less bytes");
+#endif
                     if (rcvNum == 0)
                     {
                         BlindPacket end;
@@ -166,12 +173,17 @@ namespace BlindNet
                         end.header = PacketType.Disconnect;
                         return end;
                     }
-                    byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
-                    socket.Send(tmp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
 
                     data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
                     if (data.Length == BlindNetConst.PACKSIZE)
+                    {
+                        byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                        temp[0] = (byte)PacketType.OK;
+                        socket.Send(temp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                        using (NetworkStream stream = new NetworkStream(socket))
+                            stream.Flush();
                         break;
+                    }
                 }
 
                 decrypted = aes.Decryption(data);
@@ -345,6 +357,12 @@ namespace BlindNet
 
     static class BlindNetUtil
     {
+        public static void SetEllipse(Control obj, int radius = 10)
+        {
+            EllipseControl objEllipse = new EllipseControl();
+            objEllipse.TargetControl = obj;
+            objEllipse.CorenerRadius = radius;
+        }
         static public bool IsConnectedInternet()
         {
             const string NCSI_TEST_URL = "http://www.msftncsi.com/ncsi.txt";
@@ -511,20 +529,26 @@ namespace BlindNet
         DocFileDownload = 17,   //문서중앙화 파일 다운로드
         DocDirDownload = 18,     //문서중앙화 폴더 다운로드
         DocGetFileSize = 19,    //문서중앙화 파일 사이즈 가져오기
-        DocGetDirSize = 20     //문서중앙화 폴더 사이즈 가져오기
+        DocGetDirSize = 20,    //문서중앙화 폴더 사이즈 가져오기
+        DocRenameFile = 21,  //문서중앙화 파일 이름 변경
+        DocMoveFile = 22,   //문서중앙화 파일 이동
+        DocMoveDir = 23,    //문서중앙화 폴더 이동
+        DocCopyFile = 24,   //문서중앙화 파일 복사
+        DocCopyDir = 25     //문서중앙화 폴더 복사
     }
 
     static class BlindNetConst
     {
-        //public const string ServerIP = "127.0.0.1";
-        public const string ServerIP = "10.0.1.6";
+        public const string ServerIP = "127.0.0.1";
+        //public const string ServerIP = "3.92.252.3";
         public const string DatabaseIP = "54.84.228.2";
+
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
         public const int LOCKPORT = 55559;
         public const int WebDevicePort = 55560;
-        public const int WebServerPort = 55561;
+        public const int OPENNERPORT = 55561;
         public const int MAXQ = 100;
         public const int MINIPACKSIZE = 528;
         public const int MINIDATASIZE = 512;

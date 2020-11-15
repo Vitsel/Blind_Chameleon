@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
+using BlindNet;
 
 namespace Blind_Client.BlindChatUI.UserUI
 {
@@ -16,6 +17,9 @@ namespace Blind_Client.BlindChatUI.UserUI
         public User_Info()
         {
             InitializeComponent();
+            BlindNetUtil.SetEllipse(this, 10);
+            
+            this.BackColor = BlindColor.Gray;
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)

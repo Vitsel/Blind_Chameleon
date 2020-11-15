@@ -1,4 +1,5 @@
 ﻿using Blind_Client.BlindChatCode;
+using BlindNet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,21 +14,43 @@ namespace Blind_Client.BlindChatUI.RoomUI
 {
     public partial class Room_Menu : Form
     {
+        private uint UserID;
         private ChatRoom _room;
         private List<User> _userList = new List<User>();
         private Invitation_Form invForm;
-        public Room_Menu(ChatRoom room)
+        private bool isMove;
+        private Point fPt;
+
+        public Room_Menu(uint userID, ChatRoom room)
         {
             InitializeComponent();
+
+            this.isMove = false;
             this._room = room;
+            this.UserID = userID;
             this.lbl_RoomName.Text = room.Name;
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.StartPosition = FormStartPosition.Manual;
             _userList = BlindChat.GetUserList(_room.ID);
+
+            panel1.BackColor = lbl_RoomName.BackColor = BlindColor.Primary;
+            lbl_RoomName.ForeColor = BlindColor.Light;
+            btn_exit.BackColor = BlindColor.BrightBlue;
+            btn_Invite.BackColor = btn_close.BackColor = BlindColor.Primary;
+            btn_close.ForeColor = BlindColor.Light;
+            panel2.BackColor = BlindColor.Light;
+            lb_UserListBox.BackColor = BlindColor.Gray;
+            lb_UserListBox.ForeColor = BlindColor.Secondary;
+            label1.ForeColor = BlindColor.Secondary;
+
+            BlindNetUtil.SetEllipse(this, 5);
+            BlindNetUtil.SetEllipse(panel5, 5);
+            BlindNetUtil.SetEllipse(btn_Invite, 20);
         }
 
         private void btn_Invite_Click(object sender, EventArgs e)
         {
             invForm = new Invitation_Form(_room.ID);
+            invForm.Location = new Point(this.Location.X, this.Location.Y);
             invForm.Show();
             Close();
         }
@@ -36,8 +59,43 @@ namespace Blind_Client.BlindChatUI.RoomUI
         {
             foreach(User user in _userList)
             {
+                if (user.ID == UserID)
+                {
+                    lb_UserListBox.Items.Insert(0, user.Name);
+                    continue;
+                }
                 lb_UserListBox.Items.Add(user.Name);
             }
+        }
+
+        private void btn_exit_Click(object sender, EventArgs e)
+        {
+            BlindChat.ExitRoom(UserID, _room.ID);
+            Close();
+        }
+
+        private void lbl_FormName_MouseDown(object sender, MouseEventArgs e)
+        {
+            isMove = true;
+            fPt = new Point(e.X, e.Y);
+        }
+
+        private void lbl_FormName_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMove && (e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (fPt.X - e.X), this.Top - (fPt.Y - e.Y));
+            }
+        }
+
+        private void lbl_FormName_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMove = false;
+        }
+
+        private void btn_close_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -154,6 +154,7 @@ namespace BlindNet
                     return end;
                 }
                 byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                temp[0] = (byte)PacketType.OK;
                 socket.Send(temp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
 
                 decrypted = aes.Decryption(data);
@@ -161,16 +162,16 @@ namespace BlindNet
             }
             if (isRecieving || miniPacket.header == PacketType.MSG)
             {
-                data = null;
+                data = new byte[0];
                 while (true)
                 {
                     byte[] tmp = new byte[BlindNetConst.PACKSIZE];
-                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
+                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE - data.Length, SocketFlags.None);
                     using (NetworkStream stream = new NetworkStream(socket))
                         stream.Flush();
 #if DEBUG
                     if (tmp[tmp.Length-1] == 0)
-                        Console.WriteLine("Received {0}/{1} bytes", BlindNetUtil.ByteTrimEndNull(tmp).Length, BlindNetConst.PACKSIZE);
+                        Console.WriteLine("Received less bytes");
 #endif
                     if (rcvNum == 0)
                     {
@@ -179,14 +180,21 @@ namespace BlindNet
                         end.header = PacketType.Disconnect;
                         return end;
                     }
-                    byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
-                    socket.Send(tmp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
-                    using (NetworkStream stream = new NetworkStream(socket))
-                        stream.Flush();
 
                     data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
                     if (data.Length == BlindNetConst.PACKSIZE)
+                    {
+                        byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                        temp[0] = (byte)PacketType.OK;
+                        socket.Send(temp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                        using (NetworkStream stream = new NetworkStream(socket))
+                            stream.Flush();
                         break;
+                    }
+#if DEBUG
+                    else
+                        Console.WriteLine("Data is {0} bytes", data.Length);
+#endif
                 }
 
 #if DEBUG
@@ -537,7 +545,12 @@ namespace BlindNet
         DocFileDownload = 17,   //문서중앙화 파일 다운로드
         DocDirDownload = 18,     //문서중앙화 폴더 다운로드
         DocGetFileSize = 19,    //문서중앙화 파일 사이즈 가져오기
-        DocGetDirSize = 20     //문서중앙화 폴더 사이즈 가져오기
+        DocGetDirSize = 20,    //문서중앙화 폴더 사이즈 가져오기
+        DocRenameFile = 21,  //문서중앙화 파일 이름 변경
+        DocMoveFile = 22,   //문서중앙화 파일 이동
+        DocMoveDir = 23,    //문서중앙화 폴더 이동
+        DocCopyFile = 24,   //문서중앙화 파일 복사
+        DocCopyDir = 25     //문서중앙화 폴더 복사
     }
 
     static class BlindNetConst
@@ -550,6 +563,7 @@ namespace BlindNet
         public const int CHATPORT = 55557;
         public const int LOCKPORT = 55559;
         public const int WebDevicePort = 55560;
+        public const int OPENNERPORT = 55561;
         public const int MAXQ = 100;
         public const int MINIPACKSIZE = 528;
         public const int MINIDATASIZE = 512;

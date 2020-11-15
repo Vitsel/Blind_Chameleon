@@ -9,8 +9,10 @@ using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using Blind_Client.BlindChatUI;
 using Blind_Client.BlindLock;
-using Blind_Client.BlindWebDeviceClass;
+using Blind_Client.DeviceDriver;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 
 namespace Blind_Client
 {
@@ -30,7 +32,12 @@ namespace Blind_Client
         [DllImport("user32.dll")]
         private static extern int UnregisterHotKey(IntPtr hwnd, int id);
         const int WM_HOTKEY = 0x0312;
-        const uint WAITTIMESEC = 15;
+        const uint WAITTIMESEC = 60;
+
+        private bool isMove;
+        private Point fPt;
+        private Button _selectedBtn;
+
 
         bool isInner;
         public string ClientID = "";
@@ -50,8 +57,8 @@ namespace Blind_Client
 
 
         VPN_Class VPNClass;
-        BlindWebDevice WebDevice;
-        Task tWebDevice;
+        DeviceDriverHelper deviceDriver;
+        Task tDeviceDriver;
         
         public MainForm(bool isInner,string ClientID)
         {
@@ -61,6 +68,18 @@ namespace Blind_Client
             this.ClientID = ClientID;
             mainSocket = new BlindSocket();
             _uiSyncContext = SynchronizationContext.Current;
+
+            //UI
+            panel_Fore.BackColor = BlindColor.Primary;
+            Button_DocCenter.ForeColor = btn_ActivateChat.ForeColor = BlindColor.Light;
+            Button_DocCenter.BackColor = btn_ActivateChat.BackColor = BlindColor.Primary;
+
+
+
+            this.isMove = false;
+            this.panel_Fore.BackColor = Color.LightGray;
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -84,6 +103,8 @@ namespace Blind_Client
             BlindLockTimer.Enabled = true;
             RegisterHotKey(this.Handle, 0, KeyModifiers.Windows, Keys.L);
             RegisterHotKey(this.Handle, 1, KeyModifiers.Alt, Keys.L);
+
+            ActivateControl(MainControl.Document);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -111,10 +132,7 @@ namespace Blind_Client
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
-
-            WebDevice = new BlindWebDevice();
-            tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
-
+          
             documentCenter = new Doc_Center(document_Center, isInner);
             documentCenter.Run();
             document_Center.docCenter = documentCenter;
@@ -122,22 +140,27 @@ namespace Blind_Client
             _ChatMain = new ChatMain(ClintCID);
             _ChatMain.Dock = DockStyle.Fill;
             MainControlPanel.Controls.Add(_ChatMain);
+
             //Func
             chat = new BlindChat(ClintCID, ref _ChatMain, this);
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             //ScreenLocking
             lockForm = new LockForm(isInner);
+
+            deviceDriver = new DeviceDriverHelper();
+            tDeviceDriver = Task.Factory.StartNew(() => deviceDriver.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
         {
-            document_Center.BringToFront();
+            ActivateControl(MainControl.Document);
         }
 
         private void btn_ActivateChat_Click(object sender, EventArgs e)
         {
-            _ChatMain.BringToFront();
+            ActivateControl(MainControl.Community);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -165,11 +188,55 @@ namespace Blind_Client
             }
         }
 
+        private const int cGrip = 20;
+        private const int cCaption = 40;
+
         protected override void WndProc(ref Message m)
         {
-            base.WndProc(ref m);
             switch (m.Msg)
             {
+                case 0x84:
+                    {
+                        Point pos = new Point(m.LParam.ToInt32());
+                        pos = this.PointToClient(pos);
+                        if (pos.Y < cCaption)
+                        {
+                            m.Result = (IntPtr)2;
+                            return;
+                        }
+                        if (pos.X >= this.ClientSize.Width - cGrip && pos.Y >= this.ClientSize.Height - cGrip)
+                        {
+                            m.Result = (IntPtr)17;
+                            return;
+                        }
+                        if(pos.X <= cGrip && pos.Y>=this.ClientSize.Height - cGrip)
+                        {
+                            m.Result = (IntPtr)16;
+                            return;
+                        }
+                        if (pos.X <= cGrip)
+                        {
+                            m.Result = (IntPtr)10;
+                            return;
+                        }
+                        if(pos.X>=ClientSize.Width - cGrip)
+                        {
+                            m.Result = (IntPtr)11;
+                            return;
+                        }
+                        if(pos.Y <= cGrip)
+                        {
+                            m.Result = (IntPtr)12;
+                            return;
+                        }
+                        if(pos.Y >= this.ClientSize.Height - cGrip)
+                        {
+                            m.Result = (IntPtr)15;
+                            return;
+                        }
+                    }
+                    break;
+
                 case WM_HOTKEY:
                     {
                         if (m.WParam == (IntPtr)0x0)
@@ -196,6 +263,14 @@ namespace Blind_Client
                     }
                     break;
             }
+            base.WndProc(ref m);
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Rectangle rc = new Rectangle(ClientSize.Width - cGrip, ClientSize.Height - cGrip, cGrip, cGrip);
+            ControlPaint.DrawSizeGrip(e.Graphics, BackColor, rc);
+
+            base.OnPaint(e);
         }
 
         public enum KeyModifiers
@@ -231,5 +306,106 @@ namespace Blind_Client
             return lastInPut.dwTime;
         }
 
+        //UI
+        private void btn_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btn_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btn_maximize_Click(object sender, EventArgs e)
+        {
+            if(WindowState == FormWindowState.Maximized)
+                this.WindowState = FormWindowState.Normal;
+            else
+                this.WindowState = FormWindowState.Maximized;
+        }
+
+
+        private void panel_Fore_MouseDown(object sender, MouseEventArgs e)
+        {
+            isMove = true;
+            fPt = new Point(e.X, e.Y);
+        }
+
+        private void panel_Fore_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMove && (e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                Location = new Point(this.Left - (fPt.X - e.X), this.Top - (fPt.Y - e.Y));
+            }
+        }
+
+        private void panel_Fore_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMove = false;
+        }
+
+        private void btn_close_MouseMove(object sender, MouseEventArgs e)
+        {
+            btn_close.ForeColor = Color.Black;
+        }
+
+        private void btn_close_MouseLeave(object sender, EventArgs e)
+        {
+            btn_close.ForeColor = Color.Gray;
+        }
+
+        private void btn_maximize_MouseMove(object sender, MouseEventArgs e)
+        {
+            btn_maximize.ForeColor = Color.Black;
+        }
+
+        private void btn_maximize_MouseLeave(object sender, EventArgs e)
+        {
+            btn_maximize.ForeColor = Color.Gray;
+        }
+
+        private void btn_minimize_MouseMove(object sender, MouseEventArgs e)
+        {
+            btn_minimize.ForeColor = Color.Black;
+        }
+
+        private void btn_minimize_MouseLeave(object sender, EventArgs e)
+        {
+            btn_minimize.ForeColor = Color.Gray;
+        }
+
+        enum MainControl { Document, Community}
+
+        private void ActivateControl(MainControl controlType)
+        {
+            switch (controlType)
+            {
+                case MainControl.Document:
+                    {
+                        document_Center.BringToFront();
+                        SetButton(Button_DocCenter);
+                    }
+                    break;
+                case MainControl.Community:
+                    {
+                        _ChatMain.BringToFront();
+                        SetButton(btn_ActivateChat);
+                    }
+                    break;
+
+            }
+        }
+
+        private void SetButton(Button btn)
+        {
+            if (_selectedBtn != null)
+            {
+                _selectedBtn.BackColor = BlindColor.Primary;
+            }
+
+            btn.BackColor = BlindColor.Info;
+            _selectedBtn = btn;
+        }
     }
 }

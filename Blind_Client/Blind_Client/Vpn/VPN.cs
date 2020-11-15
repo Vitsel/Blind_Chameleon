@@ -1,4 +1,4 @@
-﻿#define PROGRAMMING1
+#define PROGRAMMING
 
 using System;
 using System.Collections.Generic;
@@ -90,7 +90,7 @@ namespace Blind_Client
             else //외부일때
             {
                 Network_Position = false;
-                VPN_Connection_IP = "54.235.49.150";
+                VPN_Connection_IP = "54.235.49.150"; //vpn 서버 아이피
 
                 VpnLogin_Dialog.ShowDialog();
                 if (ClientExitChecking == true) //창닫기 버튼 눌렀을때

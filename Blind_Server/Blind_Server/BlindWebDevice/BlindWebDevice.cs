@@ -20,27 +20,38 @@ namespace Blind_Server
 {
     class BlindWebDevice
     {
-        private BlindSocket BS;
-        private Logger logger;
-        public void Run(uint ClientCID,MySqlConnection connection)
-        {
-            BS = _Main.WebDeviceSocket.AcceptWithECDH();
-            IPEndPoint iep = (IPEndPoint)(BS.socket.RemoteEndPoint);
-            logger = new Logger(ClientCID, iep.Address.ToString(), LogService.DeviceControl);
-            SqlLookup(ClientCID,connection);
+        public BlindSocket BS;
+        public Logger logger;
+        public MySqlConnection connection;
+        public MySqlCommand Command;
+        private uint cid = 0;
 
+        public BlindWebDevice(uint Cid)
+        {
+            cid = Cid;
         }
 
-        private void SqlLookup(uint ClientCID, MySqlConnection connection)
+        public void Run()
         {
+            BS = _Main.WebDeviceSocket.AcceptWithECDH();
+            connection = new MySqlConnection(@"server=54.84.228.2; database=BlindWeb; user=root; password=kit2020");
+            connection.Open();
+            IPEndPoint iep = (IPEndPoint)(BS.socket.RemoteEndPoint);
+            logger = new Logger(cid, iep.Address.ToString(), LogService.DeviceControl);
+
             string ClientSendResultValue = "NULL";
             string QueryResultBackupValue = "";
+            string UsbValue = "";
+            string CamValue = "";
             while (true)
             {
-                string DeviceUsbQuery = "SELECT cusb from blindDevice where cid=" + ClientCID+";"; //USB
-                string DeviceCamQuery = "SELECT ccamera from blindDevice where cid=" +ClientCID + ";"; //CAM
-                MySqlCommand CidUsbCommand = new MySqlCommand(DeviceUsbQuery, connection);//검색할 쿼리, 연결된 쿼리
-                MySqlCommand CidCamCommand = new MySqlCommand(DeviceCamQuery, connection);//검색할 쿼리, 연결된 쿼리
+                string DeviceUsbQuery = "SELECT cusb from blindDevice where cid=" + cid + ";"; //USB
+                Command = new MySqlCommand(DeviceUsbQuery, connection);//검색할 쿼리, 연결된 쿼리
+                UsbValue = Command.ExecuteScalar().ToString();
+                string DeviceCamQuery = "SELECT ccamera from blindDevice where cid=" + cid + ";"; //CAM
+                Command = new MySqlCommand(DeviceCamQuery, connection);//검색할 쿼리, 연결된 쿼리
+                CamValue = Command.ExecuteScalar().ToString();
+
 
                 /* USB가 1번째 CAM이 2번째라고 했을때 10진수로 값을 정해서 보냄 (0은 차단 1은 허용)
                  * USB 1 CAM 1 = 11 (USB는 허용 CAM도 허용인 경우) -> 값 11 클라 전송
@@ -50,34 +61,35 @@ namespace Blind_Server
                 */
 
                 ClientSendResultValue = "";
-                if (CidUsbCommand.ExecuteScalar().ToString() == "True" && CidCamCommand.ExecuteScalar().ToString() == "True")
+                if (UsbValue == "True" && CamValue == "True")
                     ClientSendResultValue = "11";
-                else if (CidUsbCommand.ExecuteScalar().ToString() == "True" && CidCamCommand.ExecuteScalar().ToString() == "False")
+                else if (UsbValue == "True" && CamValue == "False")
                     ClientSendResultValue = "10";
-                else if (CidUsbCommand.ExecuteScalar().ToString() == "False" && CidCamCommand.ExecuteScalar().ToString() == "True")
+                else if (UsbValue == "False" && CamValue == "True")
                     ClientSendResultValue = "01";
-                else if (CidUsbCommand.ExecuteScalar().ToString() == "False" && CidCamCommand.ExecuteScalar().ToString() == "False")
+                else if (UsbValue == "False" && CamValue == "False")
                     ClientSendResultValue = "00";
 
                 if (QueryResultBackupValue != ClientSendResultValue)
                 {
                     QueryResultBackupValue = ClientSendResultValue;
-                    if(ClientSendResultValue == "11")
-                        logger.Log(LogRank.INFO, "DeviceControl(USB:Allow | CAM:Allow) cid: " + ClientCID);
+                    if (ClientSendResultValue == "11")
+                        logger.Log(LogRank.INFO, "DeviceControl(USB:Allow | CAM:Allow) cid: " + cid);
                     else if (ClientSendResultValue == "10")
-                        logger.Log(LogRank.INFO, "DeviceControl(USB:Allow | CAM:Deny) cid: " + ClientCID);
+                        logger.Log(LogRank.INFO, "DeviceControl(USB:Allow | CAM:Deny) cid: " + cid);
                     else if (ClientSendResultValue == "01")
-                        logger.Log(LogRank.INFO, "DeviceControl(USB:Deny | CAM:Allow) cid: " + ClientCID);
+                        logger.Log(LogRank.INFO, "DeviceControl(USB:Deny | CAM:Allow) cid: " + cid);
                     else if (ClientSendResultValue == "00")
-                        logger.Log(LogRank.INFO, "DeviceControl(USB:Deny | CAM:Deny) cid: " + ClientCID);
+                        logger.Log(LogRank.INFO, "DeviceControl(USB:Deny | CAM:Deny) cid: " + cid);
+                   }
 
-                    byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientSendResultValue);// 변환 바이트 -> string = default,GetString | string -> 바이트 = utf8,GetBytes
-                    if (BS.CryptoSend(SendStringToByteGender, PacketType.Sending) == 0)
-                        break;
-                }
-                Thread.Sleep(1000);
+                byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientSendResultValue);// 변환 바이트 -> string = default,GetString | string -> 바이트 = utf8,GetBytes
+
+                if (BS.CryptoSend(SendStringToByteGender, PacketType.Response) == 0)
+                    break;
             }
         }
+
 
     }
 }

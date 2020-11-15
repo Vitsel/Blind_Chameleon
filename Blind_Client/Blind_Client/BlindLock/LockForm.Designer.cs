@@ -33,12 +33,15 @@
             this.tbl_InfoLayout = new System.Windows.Forms.TableLayoutPanel();
             this.btn_Escape = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.tb_Password = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.btn_Unlock = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlindLockPic)).BeginInit();
             this.tbl_InfoLayout.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -78,20 +81,21 @@
             this.tbl_InfoLayout.Controls.Add(this.btn_Escape, 0, 0);
             this.tbl_InfoLayout.Controls.Add(this.panel1, 0, 1);
             this.tbl_InfoLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbl_InfoLayout.Location = new System.Drawing.Point(603, 0);
-            this.tbl_InfoLayout.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.tbl_InfoLayout.Location = new System.Drawing.Point(600, 0);
+            this.tbl_InfoLayout.Margin = new System.Windows.Forms.Padding(0);
             this.tbl_InfoLayout.Name = "tbl_InfoLayout";
+            this.tbl_InfoLayout.Padding = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.tbl_InfoLayout.RowCount = 3;
             this.tbl_InfoLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbl_InfoLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tbl_InfoLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tbl_InfoLayout.Size = new System.Drawing.Size(197, 450);
+            this.tbl_InfoLayout.Size = new System.Drawing.Size(200, 450);
             this.tbl_InfoLayout.TabIndex = 1;
             // 
             // btn_Escape
             // 
             this.btn_Escape.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Escape.Location = new System.Drawing.Point(119, 3);
+            this.btn_Escape.Location = new System.Drawing.Point(116, 3);
             this.btn_Escape.Name = "btn_Escape";
             this.btn_Escape.Size = new System.Drawing.Size(75, 42);
             this.btn_Escape.TabIndex = 1;
@@ -101,35 +105,54 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.tb_Password);
+            this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.btn_Unlock);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 125);
+            this.panel1.Location = new System.Drawing.Point(6, 125);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(197, 200);
+            this.panel1.Size = new System.Drawing.Size(188, 200);
             this.panel1.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.tb_Password);
+            this.panel3.Controls.Add(this.panel2);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 76);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(188, 92);
+            this.panel3.TabIndex = 4;
             // 
             // tb_Password
             // 
             this.tb_Password.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tb_Password.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tb_Password.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_Password.Location = new System.Drawing.Point(0, 138);
+            this.tb_Password.Location = new System.Drawing.Point(3, 48);
             this.tb_Password.Name = "tb_Password";
-            this.tb_Password.Size = new System.Drawing.Size(197, 30);
+            this.tb_Password.Size = new System.Drawing.Size(191, 30);
             this.tb_Password.TabIndex = 2;
             this.tb_Password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_Password_KeyDown);
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Black;
+            this.panel2.Location = new System.Drawing.Point(3, 78);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(191, 2);
+            this.panel2.TabIndex = 3;
+            // 
             // btn_Unlock
             // 
-            this.btn_Unlock.BackColor = System.Drawing.Color.White;
+            this.btn_Unlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.btn_Unlock.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btn_Unlock.FlatAppearance.BorderSize = 0;
             this.btn_Unlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Unlock.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Unlock.Location = new System.Drawing.Point(0, 168);
+            this.btn_Unlock.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.btn_Unlock.Name = "btn_Unlock";
-            this.btn_Unlock.Size = new System.Drawing.Size(197, 32);
+            this.btn_Unlock.Size = new System.Drawing.Size(188, 32);
             this.btn_Unlock.TabIndex = 1;
             this.btn_Unlock.Text = "UnLock";
             this.btn_Unlock.UseVisualStyleBackColor = false;
@@ -151,7 +174,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.BlindLockPic)).EndInit();
             this.tbl_InfoLayout.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -163,7 +187,9 @@
         private System.Windows.Forms.TableLayoutPanel tbl_InfoLayout;
         private System.Windows.Forms.Button btn_Escape;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox tb_Password;
         private System.Windows.Forms.Button btn_Unlock;
+        private System.Windows.Forms.Panel panel3;
     }
 }
