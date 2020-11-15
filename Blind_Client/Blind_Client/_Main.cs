@@ -24,6 +24,7 @@ namespace Blind_Client
             ProcessFileExtReg(true);
 
             VPN_Class VPN = new VPN_Class();
+
             while (true)
             {
                 VPN.CMD_VPN_Instruction("VPN");
@@ -40,7 +41,6 @@ namespace Blind_Client
                 else
                     break;
             }
-
 
             bool isInner = VPN.Network_Position;
             isInner = true;

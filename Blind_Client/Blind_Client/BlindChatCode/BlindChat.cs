@@ -67,7 +67,7 @@ namespace Blind_Client.BlindChatCode
             ChatPacketSend(packet);
 
 
-            string sql;
+            //string sql;
             while (true)
             {
                 packet = ChatPacketReceive();

@@ -40,6 +40,10 @@ namespace BlindLogger
                     this.service = "ScreenLock";
                     port = BlindNetConst.LOCKPORT;
                     break;
+                case LogService.Login:
+                    this.service = "Login";
+                    port = BlindNetConst.MAINPORT;
+                    break;
             }
             connection = new MySqlConnection("Server = " + BlindNetConst.DatabaseIP + "; Port = 3306; Database = BlindWeb; Uid = logger; Pwd = kit2020");
             connection.Open();
@@ -82,7 +86,8 @@ namespace BlindLogger
         DocumentCenter,
         Chat,
         DeviceControl,
-        ScreenLock
+        ScreenLock,
+        Login
     }
 
     public enum LogRank

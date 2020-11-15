@@ -2,23 +2,64 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using DeviceDriver;
-namespace Blind_Client
+using DeviceDrivers;
+using BlindNet;
+namespace Blind_Client.DeviceDriver
 {
-    public class DeviceDriverHelper
+    public partial class DeviceDriverHelper
     {
+        private BlindSocket BS;
+        private BlindPacket BP;
+
         private string ApplyWay = "null";
         private bool usbBlockApply = false;
         private bool camBlockApply = false;
+        public List<DEVICE_INFO> HardwareList;
+        public HH_Lib hwh;
 
-        HH_Lib hwh = new HH_Lib(); // 장치관리자 라이브러리관련 객체 생성
-        List<DEVICE_INFO> HardwareList;
+        ~DeviceDriverHelper()
+        {
+            BS.Close();
+        }
+
+        public DeviceDriverHelper()
+        {
+            hwh= new HH_Lib(); // 장치관리자 라이브러리관련 객체 생성
+        }
+
+        public void Run()
+        {
+            BS = new BlindSocket();
+            BP = new BlindPacket();
+            BS.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.WebDevicePort);
+
+            while (true)
+            {
+                try
+                {
+                    BP = BS.CryptoReceive();// 아이디에 따른 장치제어 결과 받아옴
+                }
+                catch
+                {
+                    break;
+                }
+                BP.data = BlindNetUtil.ByteTrimEndNull(BP.data);
+                string ReceiveByteToStringGender = Encoding.Default.GetString(BP.data);// 변환 바이트 -> string = default,GetString | string -> 바이트 = utf8,GetBytes
+
+                //11 : USB,CAM 차단 | 10: USB만 차단 | 01: 웹캠만 차단 | 00 : 모두허용
+                DeviceToggle(ReceiveByteToStringGender);
+
+                Thread.Sleep(1000);
+            }
+        }
 
         public void DeviceToggle(string ApplyWay)
         {
+            
             /*
              ApplyWay(적용방식) 앞숫자 : USB 뒷숫자 : CAM   | 0 : 허용  1: 차단
             값: 11 (USB,CAM 허용) | 값: 10 (USB만 허용) | 값 : 01 (CAM만 허용) | 값 : 00 (모두 허용)

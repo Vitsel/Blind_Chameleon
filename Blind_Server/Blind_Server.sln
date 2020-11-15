@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blind_Server", "Blind_Server\Blind_Server.csproj", "{1AEC1454-B1E7-466F-B5D2-82CFFC965494}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoKeyGen", "CryptoKeyGen\CryptoKeyGen.csproj", "{782A2A4B-F13E-404C-8DD9-8509256DDFDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoKeyGen", "CryptoKeyGen\CryptoKeyGen.csproj", "{782A2A4B-F13E-404C-8DD9-8509256DDFDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMainServer", "WebMainServer\WebMainServer.csproj", "{8155C6D1-3C3C-4CEA-B7EB-7961DB64FBF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebVpnClient", "WebVpnClient\WebVpnClient.csproj", "{742277AE-5D11-4836-BEF5-1889CB9C54BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{782A2A4B-F13E-404C-8DD9-8509256DDFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{782A2A4B-F13E-404C-8DD9-8509256DDFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{782A2A4B-F13E-404C-8DD9-8509256DDFDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8155C6D1-3C3C-4CEA-B7EB-7961DB64FBF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8155C6D1-3C3C-4CEA-B7EB-7961DB64FBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8155C6D1-3C3C-4CEA-B7EB-7961DB64FBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8155C6D1-3C3C-4CEA-B7EB-7961DB64FBF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{742277AE-5D11-4836-BEF5-1889CB9C54BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{742277AE-5D11-4836-BEF5-1889CB9C54BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{742277AE-5D11-4836-BEF5-1889CB9C54BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{742277AE-5D11-4836-BEF5-1889CB9C54BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

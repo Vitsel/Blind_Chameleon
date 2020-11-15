@@ -60,6 +60,9 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>drapes.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotRas">
       <HintPath>Vpn\DotRas.dll</HintPath>
@@ -221,9 +224,8 @@
       <DependentUpon>LockForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BlindNet.cs" />
-    <Compile Include="BlindWebDevice\BlindWebDevice.cs" />
     <Compile Include="Cryptography.cs" />
-    <Compile Include="DeviceDriver\DeviceDriver.cs" />
+    <Compile Include="DeviceDriver\DeviceDrivers.cs" />
     <Compile Include="DeviceDriver\DeviceDriverHelper.cs" />
     <Compile Include="Document_Center.cs">
       <SubType>UserControl</SubType>
@@ -337,6 +339,9 @@
     <EmbeddedResource Include="Resources\opened-folder.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="drapes.ico" />
+    <Content Include="Resources\BlindLockBack.gif" />
+    <None Include="Resources\VpnLogo.png" />
     <EmbeddedResource Include="Resources\adduser1.png" />
     <EmbeddedResource Include="Resources\BlindLockBack.gif" />
   </ItemGroup>

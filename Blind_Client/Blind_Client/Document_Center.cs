@@ -7,6 +7,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using BlindNet;
 using Blind_Client.BlindChatUI;
 using System.Drawing;
+using Blind_Client.BlindChatCode;
 
 namespace Blind_Client
 {
@@ -50,6 +51,7 @@ namespace Blind_Client
             listview_File.Columns[1].Width = 120;
             listview_File.Columns[2].Width = 85;
             listview_File.Columns[3].Width = 100;
+
 
             SetVisibleDoing(false);
             progressBar.Step = 1;
@@ -567,7 +569,6 @@ namespace Blind_Client
             text_rename.Text = item.Text;
             text_rename.Show();
             text_rename.Focus();
-
             prevExt = Path.GetExtension(selectItem.Text);
         }
 
@@ -596,8 +597,9 @@ namespace Blind_Client
                 return;
             }
 
-            if (Path.GetExtension(text_rename.Text) == string.Empty)
-                text_rename.Text += prevExt;
+            if(!isInvalidName(text_rename.Text))
+                if (Path.GetExtension(text_rename.Text) == string.Empty)
+                    text_rename.Text += prevExt;
 
             if (!isInvalidName(text_rename.Text))
             {
@@ -605,6 +607,25 @@ namespace Blind_Client
                 text_rename.Text = string.Empty;
                 return;
             }
+
+            ListViewItem same = IsInSameFile(text_rename.Text);
+            if(same != null)
+            {
+                if (MessageBox.Show("이미 같은 이름의 파일이 존재합니다. 덮어 쓰시겠습니까?", "파일 이름 변경", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                {
+                    text_rename.Text = string.Empty;
+                    return;
+                }
+                if(!docCenter.RemoveFile((uint)same.Tag))
+                {
+                    MessageBox.Show("오류가 발생했습니다.", "파일 덮어쓰기");
+                    return;
+                }
+            }
+
+            docCenter.RenameFile((uint)selected.Tag, text_rename.Text);
+            text_rename.Hide();
+            selectItem.SubItems[0].Text = text_rename.Text;
 
             if (!OverWriteTest(text_rename.Text))
                 return;
@@ -621,6 +642,8 @@ namespace Blind_Client
         bool isInvalidName(string name)
         {
             char[] invalidChars = new char[] {
+                ':', '\\', '/', '\'', '\"', ' ',
+                '@', '.', ',', '!', '?', '*',
                 ':', '\\', '/', '\'', '\"',
                 '@', ',', '!', '?', '*'
             };
@@ -732,7 +755,7 @@ namespace Blind_Client
 
         private void listview_File_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
-            SolidBrush brush = new SolidBrush(Color.FromArgb(163, 210, 202));
+            SolidBrush brush = new SolidBrush(Color.FromArgb(244, 243, 242));
             e.Graphics.FillRectangle(brush, e.Bounds);
             if (e.ColumnIndex == 0)
                 e.Graphics.DrawImage(Properties.Resources.ColumnHeaderL, new Point(e.Bounds.X, e.Bounds.Y));

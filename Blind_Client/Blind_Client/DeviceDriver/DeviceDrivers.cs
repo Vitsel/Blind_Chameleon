@@ -15,7 +15,7 @@ using System.Windows.Forms;
 * LOG:      Who?    When?       What?
 * (v)1.0.0  WJF     11/26/07    Original Implementation
 */
-namespace DeviceDriver
+namespace DeviceDrivers
 {
     #region Unmanaged
 

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Blind_Client.BlindChatCode;
 using Blind_Client.BlindChatUI;
 using Blind_Client.BlindLock;
-using Blind_Client.BlindWebDeviceClass;
+using Blind_Client.DeviceDriver;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -57,8 +57,8 @@ namespace Blind_Client
 
 
         VPN_Class VPNClass;
-        BlindWebDevice WebDevice;
-        Task tWebDevice;
+        DeviceDriverHelper deviceDriver;
+        Task tDeviceDriver;
         
         public MainForm(bool isInner,string ClientID)
         {
@@ -85,7 +85,7 @@ namespace Blind_Client
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.FormClosing += MainForm_FormClosing; //폼 종료되는 것 연결
+            this.FormClosed += MainForm_FormClosed; //폼 종료되는 것 연결
             
             if (!BlindNetUtil.IsConnectedInternet())
             {
@@ -112,8 +112,9 @@ namespace Blind_Client
         {
             VPNClass = new VPN_Class();
             //클라이언트 cid 서버로부터 받아오기
-                //ClientID = "test1";
-            byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(ClientID); // String -> bytes 변환
+            //ClientID = "test1";
+            string SendMsg = ClientID + "," + isInner;  //아이디 + 내부 외부 보내서 외부면 vpn로그남김 (isInner bool형. 디버그했을때 실질적인 값 : true -> "True" | false -> "False")
+            byte[] SendStringToByteGender = Encoding.UTF8.GetBytes(SendMsg); // String -> bytes 변환
             mainSocket.CryptoSend(SendStringToByteGender, PacketType.Response);//서버로 클라이언트 id 보냄
             blindClientCidPacket = mainSocket.CryptoReceive(); // 서버로부터 cid받아옴
             byte[] data = BlindNetUtil.ByteTrimEndNull(blindClientCidPacket.data); // 넑값 지움
@@ -132,10 +133,7 @@ namespace Blind_Client
             //각 기능 객체 및 Task 생성
             TaskScheduler scheduler = TaskScheduler.Default;
             token = new CancellationTokenSource();
-
-            //WebDevice = new BlindWebDevice();
-            //tWebDevice = Task.Factory.StartNew(() => WebDevice.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
-
+          
             documentCenter = new Doc_Center(document_Center, isInner);
             documentCenter.Run();
             document_Center.docCenter = documentCenter;
@@ -150,6 +148,10 @@ namespace Blind_Client
 
             //ScreenLocking
             lockForm = new LockForm(isInner);
+
+            deviceDriver = new DeviceDriverHelper();
+            tDeviceDriver = Task.Factory.StartNew(() => deviceDriver.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
+
         }
 
         private void Button_DocCenter_Click(object sender, EventArgs e)
@@ -166,18 +168,15 @@ namespace Blind_Client
             ActivateControl(MainControl.User);
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             VPNClass.CMD_VPN_Instruction("VPN");
-            if (e.CloseReason != CloseReason.ApplicationExitCall) // application.EXIT 함수 호출했을때. 맨처음 cid 확인후 0 리턴받으면 exit함
-            {
-                WebDevice.MainFormClosingSocketClose();
+
                 //프로그램 종료시 단축키&타이머 해제
                 BlindLockTimer.Enabled = false;
                 UnregisterHotKey(this.Handle, 0);
                 UnregisterHotKey(this.Handle, 1);
                 Application.Exit();
-            }
         }
 
         private void BlindChatTimer_Tick(object sender, EventArgs e)
@@ -311,9 +310,6 @@ namespace Blind_Client
             }
             return lastInPut.dwTime;
         }
-
-
-
 
         //UI
         private void btn_close_Click(object sender, EventArgs e)

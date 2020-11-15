@@ -28,6 +28,7 @@ namespace Blind_Server
         public static BlindServerScoket chatRecvSock, chatSendSock;
         public static BlindServerScoket lockPortSock;
         public static MySqlConnection connection;
+        private static Logger logger;
 
         static void Main(string[] args)
         {
@@ -57,6 +58,8 @@ namespace Blind_Server
             WebDeviceSocket = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.WebDevicePort);
             WebDeviceSocket.BindListen();
 
+
+            
             while (true)
             {
                 BlindSocket client = mainSocket.AcceptWithECDH();
@@ -72,12 +75,24 @@ namespace Blind_Server
 
             //로그인 인증
             uint cid;
-            byte[] cName = socket.CryptoReceiveMsg();// 아이디 받음
-            if (Encoding.UTF8.GetString(cName) != "\0")
-                cid = GetClientID(Encoding.UTF8.GetString(cName)); // 바이트 -> 스트링
+            byte[] ClientReceiveMsg = socket.CryptoReceiveMsg();// 아이디,isinner 받음. (bool형. 디버그했을때 실질적인 값 : true -> "True" | false -> "False")
+            string ClientGenderMsg = Encoding.UTF8.GetString(ClientReceiveMsg); // 바이트 -> 스트링
+
+            if (Encoding.UTF8.GetString(ClientReceiveMsg) != "\0")
+                cid = GetClientID(ClientGenderMsg.Split(',')[0].ToString()); //[0] -> dkdlel 
             else
                 cid = 0;
+
+            logger = new Logger(cid, iep.Address.ToString(), LogService.Login);
+            if (cid != 0)
+                logger.Log(LogRank.INFO, "[Login Success] " + "Login ID : \"" + ClientGenderMsg.Split(',')[0].ToString() + "\" " +
+                    "VPN Whether: \"" + (ClientGenderMsg.Split(',')[1].ToString() == "True" ? "True" : "False") + "\"");
+            else
+                logger.Log(LogRank.WARN, "[Login Fail] " + "Login ID : \"" + ClientGenderMsg.Split(',')[0].ToString() + "\" " +
+                    "VPN Whether: \"" + (ClientGenderMsg.Split(',')[1].ToString() == "True" ? "True" : "False") + "\"");
+
             socket.CryptoSend(BitConverter.GetBytes(cid), PacketType.Response);//cid 보냄
+            
             if (cid == 0)
             {
                 socket.Close();
@@ -103,8 +118,8 @@ namespace Blind_Server
             client.blindLock = new BlindLock(cid);
             client.tBlindLock = Task.Factory.StartNew(() => client.blindLock.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
-            //client.blindWebDevice = new BlindWebDevice();
-            //client.tBlindWebDevice = Task.Factory.StartNew(() => client.blindWebDevice.Run(cid, connection), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
+            client.blindWebDevice = new BlindWebDevice(cid);
+            client.tBlindWebDevice = Task.Factory.StartNew(() => client.blindWebDevice.Run(), client.token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             Clients.Add(client);
         }
