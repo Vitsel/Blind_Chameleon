@@ -23,13 +23,11 @@ namespace Blind_Client
         public Vpn_Login()
         {
             InitializeComponent();
-            //this.LoadingBitmap = Image.FromFile("Vpn\\UI\\loading.gif");
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             pictureBox_Loading.Image = Properties.Resources.Loading;
-            //this.pictureBox_Loading.Image = LoadingBitmap;
             panel1.BackColor = Color.FromArgb(5, 102, 118);
             panel_Login.BackColor = Color.FromArgb(5, 102, 118);
             panel_Connect.BackColor = Color.FromArgb(5, 102, 118);
@@ -110,5 +108,7 @@ namespace Blind_Client
             if (e.KeyChar == (char)Keys.Enter)
                 Vpn_Login_Button_Click(sender, e);
         }
+
+
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using BlindNet;
 using Blind_Client.BlindChatUI;
 using System.Drawing;
+using Blind_Client.BlindChatCode;
 
 namespace Blind_Client
 {
@@ -50,6 +51,7 @@ namespace Blind_Client
             listview_File.Columns[1].Width = 120;
             listview_File.Columns[2].Width = 85;
             listview_File.Columns[3].Width = 100;
+
 
             SetVisibleDoing(false);
             progressBar.Step = 1;
@@ -753,7 +755,7 @@ namespace Blind_Client
 
         private void listview_File_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
-            SolidBrush brush = new SolidBrush(Color.FromArgb(163, 210, 202));
+            SolidBrush brush = new SolidBrush(Color.FromArgb(244, 243, 242));
             e.Graphics.FillRectangle(brush, e.Bounds);
             if (e.ColumnIndex == 0)
                 e.Graphics.DrawImage(Properties.Resources.ColumnHeaderL, new Point(e.Bounds.X, e.Bounds.Y));

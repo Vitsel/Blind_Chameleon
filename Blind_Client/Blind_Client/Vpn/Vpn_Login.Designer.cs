@@ -29,25 +29,26 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Vpn_Login));
+            this.label1 = new System.Windows.Forms.Label();
             this.VPN_ID = new System.Windows.Forms.TextBox();
             this.VPN_PW = new System.Windows.Forms.TextBox();
-            this.Vpn_EventTimer = new System.Windows.Forms.Timer(this.components);
             this.VPNConnectingExitbutton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.BLIND = new System.Windows.Forms.Label();
             this.panel_Connect = new System.Windows.Forms.Panel();
             this.panel_Login = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox_Login = new System.Windows.Forms.PictureBox();
+            this.pictureBox_Exit = new System.Windows.Forms.PictureBox();
+            this.Vpn_Login_Button = new System.Windows.Forms.Button();
+            this.EXIT_button = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.EXIT_button = new System.Windows.Forms.Button();
-            this.Vpn_Login_Button = new System.Windows.Forms.Button();
-            this.pictureBox_Login = new System.Windows.Forms.PictureBox();
-            this.pictureBox_Exit = new System.Windows.Forms.PictureBox();
             this.pictureBox_ConnectingExit = new System.Windows.Forms.PictureBox();
             this.pictureBox_Loading = new System.Windows.Forms.PictureBox();
+            this.Vpn_EventTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panel_Connect.SuspendLayout();
             this.panel_Login.SuspendLayout();
@@ -56,6 +57,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_ConnectingExit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Loading)).BeginInit();
             this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("KoPub돋움체 Medium", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(49, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 23);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "ID";
             // 
             // VPN_ID
             // 
@@ -80,10 +92,6 @@
             this.VPN_PW.Size = new System.Drawing.Size(215, 18);
             this.VPN_PW.TabIndex = 2;
             this.VPN_PW.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.VPN_PW_Press);
-            // 
-            // Vpn_EventTimer
-            // 
-            this.Vpn_EventTimer.Tick += new System.EventHandler(this.Vpn_EventTimer_Tick);
             // 
             // VPNConnectingExitbutton
             // 
@@ -139,12 +147,12 @@
             this.panel_Connect.Controls.Add(this.label2);
             this.panel_Connect.Location = new System.Drawing.Point(0, 78);
             this.panel_Connect.Name = "panel_Connect";
-            this.panel_Connect.Size = new System.Drawing.Size(332, 238);
+            this.panel_Connect.Size = new System.Drawing.Size(332, 232);
             this.panel_Connect.TabIndex = 10;
             // 
             // panel_Login
             // 
-            this.panel_Login.BackColor = System.Drawing.Color.Transparent;
+            this.panel_Login.BackColor = System.Drawing.Color.Gray;
             this.panel_Login.Controls.Add(this.pictureBox_Login);
             this.panel_Login.Controls.Add(this.pictureBox_Exit);
             this.panel_Login.Controls.Add(this.label1);
@@ -157,19 +165,54 @@
             this.panel_Login.Controls.Add(this.panel2);
             this.panel_Login.Location = new System.Drawing.Point(0, 3);
             this.panel_Login.Name = "panel_Login";
-            this.panel_Login.Size = new System.Drawing.Size(332, 238);
+            this.panel_Login.Size = new System.Drawing.Size(332, 245);
             this.panel_Login.TabIndex = 8;
             // 
-            // label1
+            // pictureBox_Login
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("KoPub돋움체 Medium", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(49, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 23);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "ID";
+            this.pictureBox_Login.BackgroundImage = global::Blind_Client.Properties.Resources.icon_send;
+            this.pictureBox_Login.Location = new System.Drawing.Point(83, 169);
+            this.pictureBox_Login.Name = "pictureBox_Login";
+            this.pictureBox_Login.Size = new System.Drawing.Size(48, 48);
+            this.pictureBox_Login.TabIndex = 11;
+            this.pictureBox_Login.TabStop = false;
+            // 
+            // pictureBox_Exit
+            // 
+            this.pictureBox_Exit.BackgroundImage = global::Blind_Client.Properties.Resources.icon_exit;
+            this.pictureBox_Exit.Location = new System.Drawing.Point(189, 168);
+            this.pictureBox_Exit.Name = "pictureBox_Exit";
+            this.pictureBox_Exit.Size = new System.Drawing.Size(48, 48);
+            this.pictureBox_Exit.TabIndex = 12;
+            this.pictureBox_Exit.TabStop = false;
+            // 
+            // Vpn_Login_Button
+            // 
+            this.Vpn_Login_Button.BackColor = System.Drawing.Color.SkyBlue;
+            this.Vpn_Login_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Vpn_Login_Button.Font = new System.Drawing.Font("휴먼매직체", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Vpn_Login_Button.ForeColor = System.Drawing.SystemColors.Control;
+            this.Vpn_Login_Button.Location = new System.Drawing.Point(83, 169);
+            this.Vpn_Login_Button.Name = "Vpn_Login_Button";
+            this.Vpn_Login_Button.Size = new System.Drawing.Size(46, 46);
+            this.Vpn_Login_Button.TabIndex = 3;
+            this.Vpn_Login_Button.Text = "LOGIN";
+            this.Vpn_Login_Button.UseVisualStyleBackColor = false;
+            this.Vpn_Login_Button.Click += new System.EventHandler(this.Vpn_Login_Button_Click);
+            // 
+            // EXIT_button
+            // 
+            this.EXIT_button.BackColor = System.Drawing.Color.SkyBlue;
+            this.EXIT_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EXIT_button.Font = new System.Drawing.Font("휴먼매직체", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.EXIT_button.ForeColor = System.Drawing.SystemColors.Control;
+            this.EXIT_button.Location = new System.Drawing.Point(189, 168);
+            this.EXIT_button.Name = "EXIT_button";
+            this.EXIT_button.Size = new System.Drawing.Size(48, 48);
+            this.EXIT_button.TabIndex = 13;
+            this.EXIT_button.Text = "EXIT";
+            this.EXIT_button.UseVisualStyleBackColor = false;
+            this.EXIT_button.Click += new System.EventHandler(this.EXIT_button_Click);
             // 
             // panel3
             // 
@@ -198,52 +241,6 @@
             this.panel2.Size = new System.Drawing.Size(215, 3);
             this.panel2.TabIndex = 10;
             // 
-            // EXIT_button
-            // 
-            this.EXIT_button.BackColor = System.Drawing.Color.SkyBlue;
-            this.EXIT_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.EXIT_button.Font = new System.Drawing.Font("휴먼매직체", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.EXIT_button.ForeColor = System.Drawing.SystemColors.Control;
-            this.EXIT_button.Location = new System.Drawing.Point(189, 168);
-            this.EXIT_button.Name = "EXIT_button";
-            this.EXIT_button.Size = new System.Drawing.Size(48, 48);
-            this.EXIT_button.TabIndex = 13;
-            this.EXIT_button.Text = "EXIT";
-            this.EXIT_button.UseVisualStyleBackColor = false;
-            this.EXIT_button.Click += new System.EventHandler(this.EXIT_button_Click);
-            // 
-            // Vpn_Login_Button
-            // 
-            this.Vpn_Login_Button.BackColor = System.Drawing.Color.SkyBlue;
-            this.Vpn_Login_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Vpn_Login_Button.Font = new System.Drawing.Font("휴먼매직체", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.Vpn_Login_Button.ForeColor = System.Drawing.SystemColors.Control;
-            this.Vpn_Login_Button.Location = new System.Drawing.Point(83, 169);
-            this.Vpn_Login_Button.Name = "Vpn_Login_Button";
-            this.Vpn_Login_Button.Size = new System.Drawing.Size(46, 46);
-            this.Vpn_Login_Button.TabIndex = 3;
-            this.Vpn_Login_Button.Text = "LOGIN";
-            this.Vpn_Login_Button.UseVisualStyleBackColor = false;
-            this.Vpn_Login_Button.Click += new System.EventHandler(this.Vpn_Login_Button_Click);
-            // 
-            // pictureBox_Login
-            // 
-            this.pictureBox_Login.BackgroundImage = global::Blind_Client.Properties.Resources.icon_send;
-            this.pictureBox_Login.Location = new System.Drawing.Point(83, 169);
-            this.pictureBox_Login.Name = "pictureBox_Login";
-            this.pictureBox_Login.Size = new System.Drawing.Size(48, 48);
-            this.pictureBox_Login.TabIndex = 11;
-            this.pictureBox_Login.TabStop = false;
-            // 
-            // pictureBox_Exit
-            // 
-            this.pictureBox_Exit.BackgroundImage = global::Blind_Client.Properties.Resources.icon_exit;
-            this.pictureBox_Exit.Location = new System.Drawing.Point(189, 168);
-            this.pictureBox_Exit.Name = "pictureBox_Exit";
-            this.pictureBox_Exit.Size = new System.Drawing.Size(48, 48);
-            this.pictureBox_Exit.TabIndex = 12;
-            this.pictureBox_Exit.TabStop = false;
-            // 
             // pictureBox_ConnectingExit
             // 
             this.pictureBox_ConnectingExit.BackgroundImage = global::Blind_Client.Properties.Resources.icon_exit;
@@ -262,14 +259,20 @@
             this.pictureBox_Loading.TabIndex = 15;
             this.pictureBox_Loading.TabStop = false;
             // 
+            // Vpn_EventTimer
+            // 
+            this.Vpn_EventTimer.Interval = 1000;
+            this.Vpn_EventTimer.Tick += new System.EventHandler(this.Vpn_EventTimer_Tick);
+            // 
             // Vpn_Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(332, 322);
+            this.ClientSize = new System.Drawing.Size(332, 309);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel_Connect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Vpn_Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BlindClient";
@@ -291,7 +294,6 @@
         #endregion
         private System.Windows.Forms.TextBox VPN_ID;
         private System.Windows.Forms.TextBox VPN_PW;
-        private System.Windows.Forms.Timer Vpn_EventTimer;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button VPNConnectingExitbutton;
         private System.Windows.Forms.Label label2;
@@ -308,5 +310,6 @@
         private System.Windows.Forms.PictureBox pictureBox_Loading;
         private System.Windows.Forms.PictureBox pictureBox_Login;
         private System.Windows.Forms.PictureBox pictureBox_Exit;
+        private System.Windows.Forms.Timer Vpn_EventTimer;
     }
 }

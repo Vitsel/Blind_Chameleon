@@ -41,20 +41,20 @@
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 19);
+            this.panel1.Location = new System.Drawing.Point(0, 24);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(6);
-            this.panel1.Size = new System.Drawing.Size(343, 39);
+            this.panel1.Padding = new System.Windows.Forms.Padding(7, 8, 7, 8);
+            this.panel1.Size = new System.Drawing.Size(392, 48);
             this.panel1.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Font = new System.Drawing.Font("KoPub돋움체 Medium", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label1.Location = new System.Drawing.Point(6, 6);
+            this.label1.Location = new System.Drawing.Point(7, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(331, 27);
+            this.label1.Size = new System.Drawing.Size(378, 32);
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
@@ -65,31 +65,31 @@
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.panel2.Size = new System.Drawing.Size(343, 19);
+            this.panel2.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.panel2.Size = new System.Drawing.Size(392, 24);
             this.panel2.TabIndex = 2;
             // 
             // lbl_userName
             // 
             this.lbl_userName.Dock = System.Windows.Forms.DockStyle.Left;
             this.lbl_userName.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_userName.Location = new System.Drawing.Point(6, 0);
+            this.lbl_userName.Location = new System.Drawing.Point(4, 0);
             this.lbl_userName.Name = "lbl_userName";
-            this.lbl_userName.Size = new System.Drawing.Size(45, 19);
+            this.lbl_userName.Size = new System.Drawing.Size(51, 24);
             this.lbl_userName.TabIndex = 0;
             this.lbl_userName.Text = "label1";
             // 
             // Message_Item
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(8, 3, 0, 3);
+            this.Margin = new System.Windows.Forms.Padding(9, 4, 0, 4);
             this.Name = "Message_Item";
-            this.Size = new System.Drawing.Size(343, 58);
+            this.Size = new System.Drawing.Size(392, 72);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);

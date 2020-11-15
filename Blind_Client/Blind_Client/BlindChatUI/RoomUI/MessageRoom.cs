@@ -31,19 +31,21 @@ namespace Blind_Client.BlindChatUI.RoomUI
             _room = room;
             _messageList = messageList;
             this.Name = room.ID.ToString();
-            this.lbl_ID.Text = "#" + room.ID.ToString();
             this.Text = this.lbl_Title.Text = _room.Name;
+            if(lbl_Title.Text.Length > 8)
+            {
+                lbl_Title.Text = lbl_Title.Text.Substring(0, 8) + "...";
+            }
             this.StartPosition = FormStartPosition.Manual;
 
-            panel1.BackColor = lbl_Title.BackColor = lbl_ID.BackColor = btn_menu.BackColor = button1.BackColor = BlindColor.Primary;
-            lbl_Title.ForeColor = lbl_ID.ForeColor = button1.ForeColor = BlindColor.Light;
+            panel1.BackColor = lbl_Title.BackColor = btn_menu.BackColor = button1.BackColor = BlindColor.DarkGreen;
+            lbl_Title.ForeColor = button1.ForeColor = BlindColor.Light;
             panel4.BackColor = btn_Send.ForeColor = BlindColor.Light;
-            btn_Send.BackColor = BlindColor.BrightBlue;
+            btn_Send.BackColor = BlindColor.DarkGreen;
             panel5.BackColor = tb_Message.BackColor = BlindColor.Light;
-            message_LayoutPanel.BackColor = BlindColor.Gray;
+            message_LayoutPanel.BackColor = BlindColor.DarkGray;
             
             BlindNetUtil.SetEllipse(this, 5);
-            BlindNetUtil.SetEllipse(panel2, 5);
             //BlindNetUtil.SetEllipse(btn_Send, 5);
             BlindNetUtil.SetEllipse(panel4, 5);
             BlindNetUtil.SetEllipse(btn_menu, 20);

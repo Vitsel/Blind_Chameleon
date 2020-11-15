@@ -1,4 +1,4 @@
-#define PROGRAMMING1
+#define PROGRAMMING
 
 using System;
 using System.Collections.Generic;

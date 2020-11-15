@@ -30,18 +30,21 @@ namespace Blind_Client.BlindChatUI.RoomUI
             _UserCount = 0;
             _userList = BlindChat.GetUserList(this._roomID);
 
-            btn_Invite.BackColor = btn_Cancel.BackColor = BlindColor.BrightBlue;
-            label1.BackColor = btn_close.BackColor = BlindColor.Light;
-            label1.ForeColor = btn_close.ForeColor = BlindColor.Primary;
-            btn_Invite.ForeColor = btn_Cancel.ForeColor = BlindColor.Light;
-            lbl_UserCount.ForeColor = BlindColor.Secondary;
-            this.BackColor = BlindColor.Light;
+            btn_Invite.BackColor = btn_Cancel.BackColor = BlindColor.DarkGreen;
+            lbl_UserCount.BackColor = label1.BackColor = btn_close.BackColor = BlindColor.DarkGreen;
+            lbl_UserCount.ForeColor = label1.ForeColor = BlindColor.Light;
+            btn_Cancel.ForeColor = btn_Invite.ForeColor = BlindColor.Light;
+
+            panel5.BackColor = BlindColor.Light;
+            panel4.BackColor = BlindColor.Gray;
+
             InvitationItem_LayoutPanel.BackColor = BlindColor.Gray;
             
             BlindNetUtil.SetEllipse(this, 5);
             BlindNetUtil.SetEllipse(panel5, 5);
-            BlindNetUtil.SetEllipse(btn_Invite, 10);
-            BlindNetUtil.SetEllipse(btn_Cancel, 10);
+
+            BlindNetUtil.SetEllipse(btn_Invite, 15);
+            BlindNetUtil.SetEllipse(btn_Cancel, 15);
         }
 
         private void btn_Invite_Click(object sender, EventArgs e)
@@ -73,7 +76,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
         }
         public void LoadUserCount()
         {
-            lbl_UserCount.Text = $"인원 수({_UserCount + _userList.Count}/20)";
+            lbl_UserCount.Text = $"{_UserCount + _userList.Count}/20";
         }
         private void Invitation_Form_Load(object sender, EventArgs e)
         {
@@ -84,6 +87,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
                 {
                     //방 멤버에 없는 사용자 UI출력
                     CreateRoom_Item item = new CreateRoom_Item(user);
+                    item.Width = InvitationItem_LayoutPanel.Width - 28;
                     item.AddUserCount = AddUserCount;
                     item.SubUserCount = SubUserCount;
                     item.LoadUserCount = LoadUserCount;

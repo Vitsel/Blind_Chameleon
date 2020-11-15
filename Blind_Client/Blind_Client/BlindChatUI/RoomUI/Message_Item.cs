@@ -41,25 +41,25 @@ namespace Blind_Client.BlindChatUI.RoomUI
 
             if(direction == MessageDirection.right)
             {
-                panel1.BackColor = label1.BackColor = BlindColor.SkyBlue;
+                panel1.BackColor = label1.BackColor = BlindColor.Primary;
                 lbl_userName.Text = "";
+                BlindNetUtil.SetEllipse(panel1, 10);
             }
             else if(direction == MessageDirection.middle)
             {
-                panel1.BackColor = Color.Transparent;
-                label1.BackColor = BlindColor.DarkGray;
-                label1.ForeColor = BlindColor.Secondary;
-                
+                label1.BackColor = panel1.BackColor = BlindColor.LightGreen;
+                label1.ForeColor = BlindColor.Black;
                 lbl_userName.Text = "";
+                BlindNetUtil.SetEllipse(panel1, 20);
             }
             else
             {
-                label1.BackColor = panel1.BackColor = BlindColor.DarkGray;
+                label1.BackColor = panel1.BackColor = BlindColor.LightGreen;
                 lbl_userName.Dock = DockStyle.Left;
                 panel1.Location = new Point(0, lbl_userName.Height);
+                BlindNetUtil.SetEllipse(panel1, 10);
             }
             lbl_userName.ForeColor = BlindColor.Black;
-            BlindNetUtil.SetEllipse(panel1, 10);
             
         }
 
@@ -73,10 +73,10 @@ namespace Blind_Client.BlindChatUI.RoomUI
                 Graphics g = this.CreateGraphics();
                 SizeF TextSize = g.MeasureString(_message.Message, label1.Font, this.Width - BubbleIndent - 12); // indent 뺀거
 
-                this.Height = (int)TextSize.Height + 12;     //패딩
+                this.Height = (int)TextSize.Height + 12 + 4;     //패딩
                 lbl_userName.Height = panel2.Height = 17;
 
-                panel1.Width = (int)TextSize.Width + 12;    //패딩
+                panel1.Width = (int)TextSize.Width + 12 + 4;    //패딩
                 panel1.Height = (int)TextSize.Height + 12;   //패딩
 
                 if (direction == MessageDirection.right)

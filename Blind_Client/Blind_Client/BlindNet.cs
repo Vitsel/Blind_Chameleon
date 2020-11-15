@@ -546,9 +546,11 @@ namespace BlindNet
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
+        public const int OPENNERPORT = 55558;
         public const int LOCKPORT = 55559;
         public const int WebDevicePort = 55560;
-        public const int OPENNERPORT = 55561;
+        public const int WebInterlockPort = 55561;
+        public const int WebTcpPort = 55562;
         public const int MAXQ = 100;
         public const int MINIPACKSIZE = 528;
         public const int MINIDATASIZE = 512;

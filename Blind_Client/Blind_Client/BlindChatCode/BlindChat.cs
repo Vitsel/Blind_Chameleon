@@ -16,7 +16,7 @@ namespace Blind_Client.BlindChatCode
         private uint _UserID;
         public uint UserID { get { return _UserID; } }
         static private BlindChatDB DB;
-        private static BlindSocket chatSock;
+        private static BlindSocket recvSock, sendSock;
         private MainForm form;
         private ChatMain UI;
         public static List<User> userList = new List<User>();
@@ -38,7 +38,8 @@ namespace Blind_Client.BlindChatCode
         }
         ~BlindChat()
         {
-            chatSock.Close();
+            recvSock.Close();
+            sendSock.Close();
         }
 
         private bool Start = false;
@@ -54,8 +55,12 @@ namespace Blind_Client.BlindChatCode
 
             DB.Open();
 
-            chatSock = new BlindSocket();
-            chatSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
+            sendSock = new BlindSocket();
+            sendSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
+
+            recvSock = new BlindSocket();
+            recvSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.CHATPORT+1);
+
 
             syncTime = DB.GetAllTime();
             packet = BlindChatUtil.StructToChatPacket(syncTime);

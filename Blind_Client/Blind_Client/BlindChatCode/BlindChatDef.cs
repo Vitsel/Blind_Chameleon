@@ -27,7 +27,7 @@ namespace Blind_Client.BlindChatCode
         public void LoadRoomList()
         {
             roomList.Clear();
-            string sql = $"select * from ChatRoom;";
+            string sql = $"select * from ChatRoom order by LastMessageTime asc;";
             SQLiteDataReader rdr = DB.ExecuteSelect(sql);
 
             while (rdr.Read())
@@ -133,15 +133,16 @@ namespace Blind_Client.BlindChatCode
             else
             {
                 byte[] packData = BlindNetUtil.StructToByte(chatPack);
-                chatSock.CryptoSend(packData, PacketType.MSG);
+                sendSock.CryptoSend(packData, PacketType.MSG);
             }
         }
         public ChatPacket ChatPacketReceive()
         {
-            byte[] data = chatSock.CryptoReceiveMsg();
+            byte[] data = recvSock.CryptoReceiveMsg();
             if (data == null)
             {
-                chatSock.Close();
+                recvSock.Close();
+                sendSock.Close();
                 MessageBox.Show("disconnected");
             }
             ChatPacket chatPack = BlindNetUtil.ByteToStruct<ChatPacket>(data);
