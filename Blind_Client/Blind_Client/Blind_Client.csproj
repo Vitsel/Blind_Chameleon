@@ -328,7 +328,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\BlindLockBack.gif" />
-    <None Include="Resources\VpnLogo.png" />
+    <Content Include="Resources\icon_exit.png" />
+    <Content Include="Resources\icon_send.png" />
+    <Content Include="Resources\icon_wait.png" />
+    <Content Include="Resources\Loading.gif" />
     <EmbeddedResource Include="Resources\adduser1.png" />
     <EmbeddedResource Include="Resources\BlindLockBack.gif" />
   </ItemGroup>
@@ -368,6 +371,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\file.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

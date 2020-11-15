@@ -1,4 +1,4 @@
-#define PROGRAMMING
+#define PROGRAMMING1
 
 using System;
 using System.Collections.Generic;
@@ -156,7 +156,7 @@ namespace Blind_Client
 
                 dialer.DialAsync(); //비동기로 연결시도
 
-                VpnLogin_Dialog.panel_Connection.Show();//로딩창 표시
+                VpnLogin_Dialog.panel_Connect.Show();//로딩창 표시
                 VpnLogin_Dialog.ShowDialog();
                 if (ClientExitChecking == true) //사용자가 나가기를 눌렀거나 연결에 실패한경우
                 {
