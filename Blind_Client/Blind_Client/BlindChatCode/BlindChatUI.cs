@@ -132,11 +132,6 @@ namespace Blind_Client.BlindChatCode
                 {
                     if (item.ID == message.RoomID)
                     {
-                        if (BlindChatUtil.GetFormWithName(message.RoomID.ToString()) == null)
-                            item.NewMessage();
-                        else
-                            item.OpenedMessage();
-
                         DateTime time = DateTime.Parse(message.Time);
 
                         item.Time = time.ToString("tt hh:mm");

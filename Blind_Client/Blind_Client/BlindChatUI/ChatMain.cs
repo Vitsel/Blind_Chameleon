@@ -37,7 +37,7 @@ namespace Blind_Client.BlindChatUI
 
             this.UserID = UserID;
 
-            
+            this.BackColor = BlindColor.Gray;
 
             _UserControl = new Control_User(UserID);
             _UserControl.Dock = DockStyle.Fill;

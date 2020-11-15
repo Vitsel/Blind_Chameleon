@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btn_close = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -38,6 +37,7 @@
             this.btn_Invite = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btn_close = new System.Windows.Forms.Button();
             this.lbl_UserCount = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -57,25 +57,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(318, 60);
             this.panel1.TabIndex = 0;
-            // 
-            // btn_close
-            // 
-            this.btn_close.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btn_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btn_close.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_close.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btn_close.FlatAppearance.BorderSize = 0;
-            this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_close.Font = new System.Drawing.Font("KoPub돋움체 Bold", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_close.Image = global::Blind_Client.Properties.Resources.backArrow;
-            this.btn_close.Location = new System.Drawing.Point(0, 0);
-            this.btn_close.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_close.Name = "btn_close";
-            this.btn_close.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-            this.btn_close.Size = new System.Drawing.Size(40, 60);
-            this.btn_close.TabIndex = 1;
-            this.btn_close.UseVisualStyleBackColor = false;
-            this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // label1
             // 
@@ -179,15 +160,35 @@
             this.panel5.Size = new System.Drawing.Size(318, 498);
             this.panel5.TabIndex = 2;
             // 
+            // btn_close
+            // 
+            this.btn_close.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btn_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_close.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_close.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btn_close.FlatAppearance.BorderSize = 0;
+            this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_close.Font = new System.Drawing.Font("KoPub돋움체 Bold", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_close.Image = global::Blind_Client.Properties.Resources.backArrow;
+            this.btn_close.Location = new System.Drawing.Point(0, 0);
+            this.btn_close.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_close.Name = "btn_close";
+            this.btn_close.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.btn_close.Size = new System.Drawing.Size(40, 60);
+            this.btn_close.TabIndex = 1;
+            this.btn_close.UseVisualStyleBackColor = false;
+            this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
+            // 
             // lbl_UserCount
             // 
             this.lbl_UserCount.Dock = System.Windows.Forms.DockStyle.Right;
             this.lbl_UserCount.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_UserCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lbl_UserCount.Image = global::Blind_Client.Properties.Resources.message1;
+            this.lbl_UserCount.Image = global::Blind_Client.Properties.Resources.message3;
             this.lbl_UserCount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lbl_UserCount.Location = new System.Drawing.Point(226, 0);
             this.lbl_UserCount.Name = "lbl_UserCount";
+            this.lbl_UserCount.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.lbl_UserCount.Size = new System.Drawing.Size(92, 60);
             this.lbl_UserCount.TabIndex = 0;
             this.lbl_UserCount.Text = "0/20";

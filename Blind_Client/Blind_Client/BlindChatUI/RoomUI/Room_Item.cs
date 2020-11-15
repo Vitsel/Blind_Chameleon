@@ -34,14 +34,6 @@ namespace Blind_Client.BlindChatUI.RoomUI
             _Room = Room;
         }
 
-        public void NewMessage()
-        {
-            btn_NewMessage.BackColor = Color.Red;
-        }
-        public void OpenedMessage()
-        {
-            btn_NewMessage.BackColor = Color.Transparent;
-        }
         private void lbl_Name_Click(object sender, EventArgs e)
         {
             if(RoomClickEvent != null)
@@ -71,7 +63,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
             {
                 this.lbl_Time.Text = messageTime.ToString("MM:dd");
             }
-            lbl_userCount.Text = BlindChat.GetUserList(_Room.ID).Count().ToString() ;
+            lbl_userCount.Text = BlindChat.GetUserList(_Room.ID).Count().ToString() + "    |";
         }
 
         private void lbl_Name_MouseMove(object sender, MouseEventArgs e)
@@ -88,7 +80,6 @@ namespace Blind_Client.BlindChatUI.RoomUI
         {
             if (RoomDoubleClickEvent != null)
             {
-                OpenedMessage();
                 RoomDoubleClickEvent(_Room);
             }
         }

@@ -49,18 +49,19 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
-            this.panel1.Size = new System.Drawing.Size(160, 436);
+            this.panel1.Size = new System.Drawing.Size(200, 428);
             this.panel1.TabIndex = 0;
             // 
             // UserItem_LayoutPanel
             // 
             this.UserItem_LayoutPanel.AutoScroll = true;
+            this.UserItem_LayoutPanel.BackColor = System.Drawing.Color.Transparent;
             this.UserItem_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UserItem_LayoutPanel.Location = new System.Drawing.Point(14, 0);
             this.UserItem_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.UserItem_LayoutPanel.Name = "UserItem_LayoutPanel";
             this.UserItem_LayoutPanel.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.UserItem_LayoutPanel.Size = new System.Drawing.Size(146, 436);
+            this.UserItem_LayoutPanel.Size = new System.Drawing.Size(186, 428);
             this.UserItem_LayoutPanel.TabIndex = 1;
             // 
             // panel3
@@ -68,21 +69,21 @@
             this.panel3.Controls.Add(this.UserInfo_LayoutPanel);
             this.panel3.Controls.Add(this.panel1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 62);
+            this.panel3.Location = new System.Drawing.Point(0, 70);
             this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
             this.panel3.Padding = new System.Windows.Forms.Padding(0, 0, 2, 2);
-            this.panel3.Size = new System.Drawing.Size(457, 438);
+            this.panel3.Size = new System.Drawing.Size(457, 430);
             this.panel3.TabIndex = 3;
             // 
             // UserInfo_LayoutPanel
             // 
             this.UserInfo_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UserInfo_LayoutPanel.Location = new System.Drawing.Point(160, 0);
+            this.UserInfo_LayoutPanel.Location = new System.Drawing.Point(200, 0);
             this.UserInfo_LayoutPanel.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.UserInfo_LayoutPanel.Name = "UserInfo_LayoutPanel";
             this.UserInfo_LayoutPanel.Padding = new System.Windows.Forms.Padding(2, 0, 10, 0);
-            this.UserInfo_LayoutPanel.Size = new System.Drawing.Size(295, 436);
+            this.UserInfo_LayoutPanel.Size = new System.Drawing.Size(255, 428);
             this.UserInfo_LayoutPanel.TabIndex = 1;
             // 
             // panel2
@@ -93,8 +94,8 @@
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(12, 7, 5, 5);
-            this.panel2.Size = new System.Drawing.Size(457, 62);
+            this.panel2.Padding = new System.Windows.Forms.Padding(12, 7, 5, 10);
+            this.panel2.Size = new System.Drawing.Size(457, 70);
             this.panel2.TabIndex = 2;
             // 
             // panel4
@@ -106,7 +107,7 @@
             this.panel4.Location = new System.Drawing.Point(12, 7);
             this.panel4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(137, 50);
+            this.panel4.Size = new System.Drawing.Size(137, 53);
             this.panel4.TabIndex = 0;
             // 
             // lbl_user
@@ -116,7 +117,7 @@
             this.lbl_user.Font = new System.Drawing.Font("KoPub돋움체 Bold", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_user.Location = new System.Drawing.Point(0, 0);
             this.lbl_user.Name = "lbl_user";
-            this.lbl_user.Size = new System.Drawing.Size(137, 50);
+            this.lbl_user.Size = new System.Drawing.Size(137, 53);
             this.lbl_user.TabIndex = 1;
             this.lbl_user.Text = "사용자";
             this.lbl_user.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

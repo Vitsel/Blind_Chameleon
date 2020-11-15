@@ -35,7 +35,7 @@ namespace Blind_Client.BlindChatUI.RoomUI
             btn_Invite.BackColor = btn_close.BackColor = panel1.BackColor = lbl_RoomName.BackColor = BlindColor.DarkGreen;
 
             lbl_RoomName.ForeColor = BlindColor.Light;
-            btn_exit.BackColor = BlindColor.LightGreen;
+            btn_exit.BackColor = BlindColor.DarkGreen;
             btn_close.ForeColor = BlindColor.Light;
             panel2.BackColor = BlindColor.Light;
             label1.ForeColor = BlindColor.Secondary;

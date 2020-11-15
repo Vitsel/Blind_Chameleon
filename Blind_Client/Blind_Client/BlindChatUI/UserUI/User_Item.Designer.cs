@@ -43,7 +43,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(2);
-            this.panel1.Size = new System.Drawing.Size(235, 50);
+            this.panel1.Size = new System.Drawing.Size(235, 40);
             this.panel1.TabIndex = 0;
             // 
             // Lbl_UserName
@@ -53,7 +53,8 @@
             this.Lbl_UserName.Location = new System.Drawing.Point(2, 2);
             this.Lbl_UserName.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_UserName.Name = "Lbl_UserName";
-            this.Lbl_UserName.Size = new System.Drawing.Size(172, 46);
+            this.Lbl_UserName.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.Lbl_UserName.Size = new System.Drawing.Size(172, 36);
             this.Lbl_UserName.TabIndex = 0;
             this.Lbl_UserName.Text = "label1";
             this.Lbl_UserName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -71,7 +72,7 @@
             this.Lbl_UserPosition.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_UserPosition.Name = "Lbl_UserPosition";
             this.Lbl_UserPosition.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-            this.Lbl_UserPosition.Size = new System.Drawing.Size(59, 46);
+            this.Lbl_UserPosition.Size = new System.Drawing.Size(59, 36);
             this.Lbl_UserPosition.TabIndex = 1;
             this.Lbl_UserPosition.Text = "label1";
             this.Lbl_UserPosition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -88,7 +89,7 @@
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "User_Item";
-            this.Size = new System.Drawing.Size(235, 50);
+            this.Size = new System.Drawing.Size(235, 40);
             this.Load += new System.EventHandler(this.User_Item_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

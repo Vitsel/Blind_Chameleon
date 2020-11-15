@@ -31,7 +31,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_Name = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lbl_PositionText = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
             this.lbl_DepartmentText = new System.Windows.Forms.Label();
@@ -44,10 +43,11 @@
             this.panel13 = new System.Windows.Forms.Panel();
             this.panel16 = new System.Windows.Forms.Panel();
             this.lbl_BirthText = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
             this.panel18 = new System.Windows.Forms.Panel();
             this.panel19 = new System.Windows.Forms.Panel();
+            this.lbl_PositionText = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lbl_Department = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -65,9 +65,9 @@
             this.panel11.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
+            this.panel18.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
-            this.panel18.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -88,11 +88,11 @@
             // lbl_Name
             // 
             this.lbl_Name.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Name.Font = new System.Drawing.Font("KoPub돋움체 Medium", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_Name.Font = new System.Drawing.Font("KoPub돋움체 Bold", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_Name.ForeColor = System.Drawing.Color.White;
             this.lbl_Name.Location = new System.Drawing.Point(0, 0);
             this.lbl_Name.Name = "lbl_Name";
-            this.lbl_Name.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.lbl_Name.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.lbl_Name.Size = new System.Drawing.Size(380, 62);
             this.lbl_Name.TabIndex = 0;
             this.lbl_Name.Text = "-";
@@ -117,7 +117,7 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 62);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(10, 0, 5, 0);
             this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -129,27 +129,15 @@
             this.tableLayoutPanel1.TabIndex = 1;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
-            // lbl_PositionText
-            // 
-            this.lbl_PositionText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_PositionText.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbl_PositionText.ForeColor = System.Drawing.Color.White;
-            this.lbl_PositionText.Location = new System.Drawing.Point(0, 0);
-            this.lbl_PositionText.Name = "lbl_PositionText";
-            this.lbl_PositionText.Size = new System.Drawing.Size(250, 44);
-            this.lbl_PositionText.TabIndex = 5;
-            this.lbl_PositionText.Text = "-";
-            this.lbl_PositionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // panel10
             // 
             this.panel10.Controls.Add(this.panel9);
             this.panel10.Controls.Add(this.lbl_DepartmentText);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel10.Location = new System.Drawing.Point(122, 54);
+            this.panel10.Location = new System.Drawing.Point(127, 54);
             this.panel10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(250, 42);
+            this.panel10.Size = new System.Drawing.Size(245, 42);
             this.panel10.TabIndex = 14;
             // 
             // panel9
@@ -168,7 +156,7 @@
             this.lbl_DepartmentText.ForeColor = System.Drawing.Color.White;
             this.lbl_DepartmentText.Location = new System.Drawing.Point(0, 0);
             this.lbl_DepartmentText.Name = "lbl_DepartmentText";
-            this.lbl_DepartmentText.Size = new System.Drawing.Size(250, 42);
+            this.lbl_DepartmentText.Size = new System.Drawing.Size(245, 42);
             this.lbl_DepartmentText.TabIndex = 9;
             this.lbl_DepartmentText.Text = "-";
             this.lbl_DepartmentText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -178,10 +166,10 @@
             this.panel11.Controls.Add(this.panel14);
             this.panel11.Controls.Add(this.lbl_PhoneText);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel11.Location = new System.Drawing.Point(122, 104);
+            this.panel11.Location = new System.Drawing.Point(127, 104);
             this.panel11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(250, 42);
+            this.panel11.Size = new System.Drawing.Size(245, 42);
             this.panel11.TabIndex = 15;
             // 
             // panel14
@@ -200,7 +188,7 @@
             this.lbl_PhoneText.ForeColor = System.Drawing.Color.White;
             this.lbl_PhoneText.Location = new System.Drawing.Point(0, 0);
             this.lbl_PhoneText.Name = "lbl_PhoneText";
-            this.lbl_PhoneText.Size = new System.Drawing.Size(250, 42);
+            this.lbl_PhoneText.Size = new System.Drawing.Size(245, 42);
             this.lbl_PhoneText.TabIndex = 8;
             this.lbl_PhoneText.Text = "-";
             this.lbl_PhoneText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -210,10 +198,10 @@
             this.panel12.Controls.Add(this.panel15);
             this.panel12.Controls.Add(this.lbl_EmailText);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel12.Location = new System.Drawing.Point(122, 154);
+            this.panel12.Location = new System.Drawing.Point(127, 154);
             this.panel12.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(250, 42);
+            this.panel12.Size = new System.Drawing.Size(245, 42);
             this.panel12.TabIndex = 16;
             // 
             // panel15
@@ -232,7 +220,7 @@
             this.lbl_EmailText.ForeColor = System.Drawing.Color.White;
             this.lbl_EmailText.Location = new System.Drawing.Point(0, 0);
             this.lbl_EmailText.Name = "lbl_EmailText";
-            this.lbl_EmailText.Size = new System.Drawing.Size(250, 42);
+            this.lbl_EmailText.Size = new System.Drawing.Size(245, 42);
             this.lbl_EmailText.TabIndex = 7;
             this.lbl_EmailText.Text = "-";
             this.lbl_EmailText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -242,10 +230,10 @@
             this.panel13.Controls.Add(this.panel16);
             this.panel13.Controls.Add(this.lbl_BirthText);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel13.Location = new System.Drawing.Point(122, 204);
+            this.panel13.Location = new System.Drawing.Point(127, 204);
             this.panel13.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(250, 42);
+            this.panel13.Size = new System.Drawing.Size(245, 42);
             this.panel13.TabIndex = 17;
             // 
             // panel16
@@ -264,10 +252,41 @@
             this.lbl_BirthText.ForeColor = System.Drawing.Color.White;
             this.lbl_BirthText.Location = new System.Drawing.Point(0, 0);
             this.lbl_BirthText.Name = "lbl_BirthText";
-            this.lbl_BirthText.Size = new System.Drawing.Size(250, 42);
+            this.lbl_BirthText.Size = new System.Drawing.Size(245, 42);
             this.lbl_BirthText.TabIndex = 6;
             this.lbl_BirthText.Text = "-";
             this.lbl_BirthText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panel18
+            // 
+            this.panel18.Controls.Add(this.panel19);
+            this.panel18.Controls.Add(this.lbl_PositionText);
+            this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel18.Location = new System.Drawing.Point(127, 3);
+            this.panel18.Name = "panel18";
+            this.panel18.Size = new System.Drawing.Size(245, 44);
+            this.panel18.TabIndex = 19;
+            // 
+            // panel19
+            // 
+            this.panel19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.panel19.Location = new System.Drawing.Point(0, 39);
+            this.panel19.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.panel19.Name = "panel19";
+            this.panel19.Size = new System.Drawing.Size(251, 5);
+            this.panel19.TabIndex = 11;
+            // 
+            // lbl_PositionText
+            // 
+            this.lbl_PositionText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_PositionText.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_PositionText.ForeColor = System.Drawing.Color.White;
+            this.lbl_PositionText.Location = new System.Drawing.Point(0, 0);
+            this.lbl_PositionText.Name = "lbl_PositionText";
+            this.lbl_PositionText.Size = new System.Drawing.Size(245, 44);
+            this.lbl_PositionText.TabIndex = 5;
+            this.lbl_PositionText.Text = "-";
+            this.lbl_PositionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel3
             // 
@@ -291,32 +310,13 @@
             this.panel4.Size = new System.Drawing.Size(387, 500);
             this.panel4.TabIndex = 4;
             // 
-            // panel18
-            // 
-            this.panel18.Controls.Add(this.panel19);
-            this.panel18.Controls.Add(this.lbl_PositionText);
-            this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel18.Location = new System.Drawing.Point(122, 3);
-            this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(250, 44);
-            this.panel18.TabIndex = 19;
-            // 
-            // panel19
-            // 
-            this.panel19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.panel19.Location = new System.Drawing.Point(0, 39);
-            this.panel19.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.panel19.Name = "panel19";
-            this.panel19.Size = new System.Drawing.Size(251, 5);
-            this.panel19.TabIndex = 11;
-            // 
             // panel5
             // 
             this.panel5.BackgroundImage = global::Blind_Client.Properties.Resources.propertyBack;
             this.panel5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel5.Controls.Add(this.lbl_Department);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel5.Location = new System.Drawing.Point(8, 54);
+            this.panel5.Location = new System.Drawing.Point(13, 54);
             this.panel5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(108, 42);
@@ -326,10 +326,11 @@
             // 
             this.lbl_Department.BackColor = System.Drawing.Color.Transparent;
             this.lbl_Department.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Department.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_Department.Font = new System.Drawing.Font("KoPub돋움체 Bold", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_Department.ForeColor = System.Drawing.Color.White;
             this.lbl_Department.Location = new System.Drawing.Point(0, 0);
             this.lbl_Department.Name = "lbl_Department";
+            this.lbl_Department.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lbl_Department.Size = new System.Drawing.Size(108, 42);
             this.lbl_Department.TabIndex = 1;
             this.lbl_Department.Text = "부서";
@@ -341,7 +342,7 @@
             this.panel6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel6.Controls.Add(this.lbl_Phone);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(8, 104);
+            this.panel6.Location = new System.Drawing.Point(13, 104);
             this.panel6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(108, 42);
@@ -351,10 +352,11 @@
             // 
             this.lbl_Phone.BackColor = System.Drawing.Color.Transparent;
             this.lbl_Phone.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Phone.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_Phone.Font = new System.Drawing.Font("KoPub돋움체 Bold", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_Phone.ForeColor = System.Drawing.Color.White;
             this.lbl_Phone.Location = new System.Drawing.Point(0, 0);
             this.lbl_Phone.Name = "lbl_Phone";
+            this.lbl_Phone.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lbl_Phone.Size = new System.Drawing.Size(108, 42);
             this.lbl_Phone.TabIndex = 2;
             this.lbl_Phone.Text = "전화";
@@ -366,7 +368,7 @@
             this.panel7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel7.Controls.Add(this.lbl_Birth);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(8, 204);
+            this.panel7.Location = new System.Drawing.Point(13, 204);
             this.panel7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(108, 42);
@@ -376,10 +378,11 @@
             // 
             this.lbl_Birth.BackColor = System.Drawing.Color.Transparent;
             this.lbl_Birth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Birth.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_Birth.Font = new System.Drawing.Font("KoPub돋움체 Bold", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_Birth.ForeColor = System.Drawing.Color.White;
             this.lbl_Birth.Location = new System.Drawing.Point(0, 0);
             this.lbl_Birth.Name = "lbl_Birth";
+            this.lbl_Birth.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lbl_Birth.Size = new System.Drawing.Size(108, 42);
             this.lbl_Birth.TabIndex = 4;
             this.lbl_Birth.Text = "생년월일";
@@ -391,7 +394,7 @@
             this.panel8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel8.Controls.Add(this.lbl_Email);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(8, 154);
+            this.panel8.Location = new System.Drawing.Point(13, 154);
             this.panel8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(108, 42);
@@ -401,10 +404,11 @@
             // 
             this.lbl_Email.BackColor = System.Drawing.Color.Transparent;
             this.lbl_Email.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Email.Font = new System.Drawing.Font("KoPub돋움체 Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_Email.Font = new System.Drawing.Font("KoPub돋움체 Bold", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_Email.ForeColor = System.Drawing.Color.White;
             this.lbl_Email.Location = new System.Drawing.Point(0, 0);
             this.lbl_Email.Name = "lbl_Email";
+            this.lbl_Email.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lbl_Email.Size = new System.Drawing.Size(108, 42);
             this.lbl_Email.TabIndex = 3;
             this.lbl_Email.Text = "이메일";
@@ -416,7 +420,7 @@
             this.panel17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel17.Controls.Add(this.lbl_Position);
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel17.Location = new System.Drawing.Point(8, 3);
+            this.panel17.Location = new System.Drawing.Point(13, 3);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(108, 44);
             this.panel17.TabIndex = 18;
@@ -425,10 +429,11 @@
             // 
             this.lbl_Position.BackColor = System.Drawing.Color.Transparent;
             this.lbl_Position.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Position.Font = new System.Drawing.Font("KoPub돋움체 Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbl_Position.Font = new System.Drawing.Font("KoPub돋움체 Bold", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbl_Position.ForeColor = System.Drawing.Color.White;
             this.lbl_Position.Location = new System.Drawing.Point(0, 0);
             this.lbl_Position.Name = "lbl_Position";
+            this.lbl_Position.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lbl_Position.Size = new System.Drawing.Size(108, 44);
             this.lbl_Position.TabIndex = 0;
             this.lbl_Position.Text = "직급";
@@ -461,9 +466,9 @@
             this.panel11.ResumeLayout(false);
             this.panel12.ResumeLayout(false);
             this.panel13.ResumeLayout(false);
+            this.panel18.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
-            this.panel18.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel7.ResumeLayout(false);

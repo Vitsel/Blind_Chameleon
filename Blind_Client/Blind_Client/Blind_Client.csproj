@@ -433,6 +433,27 @@
   <ItemGroup>
     <None Include="Resources\pencil.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_emp32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_chat32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_document32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\message3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pencil1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

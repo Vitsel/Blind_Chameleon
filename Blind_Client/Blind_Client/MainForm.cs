@@ -72,8 +72,8 @@ namespace Blind_Client
             //UI
             panel_Fore.BackColor = BlindColor.Primary;
             Button_DocCenter.ForeColor = BlindColor.Light;
-            Button_DocCenter.BackColor = BlindColor.Primary;
 
+            panel3.BackColor = BlindColor.Primary;
             panel4.BackColor = panel1.BackColor = BlindColor.DarkGreen;
             btn_ActivateUser.ForeColor = btn_ActivateChat.ForeColor = BlindColor.Light;
 
@@ -393,7 +393,7 @@ namespace Blind_Client
                 case MainControl.Document:
                     {
                         document_Center.BringToFront();
-                        SetButton(Button_DocCenter);
+                        //SetButton(Button_DocCenter);
                     }
                     break;
                 case MainControl.Chat:
@@ -421,7 +421,7 @@ namespace Blind_Client
                 _selectedBtn.BackColor = BlindColor.Primary;
             }
 
-            btn.BackColor = BlindColor.Info;
+            btn.BackColor = BlindColor.Primary;
             _selectedBtn = btn;
         }
 
@@ -443,6 +443,16 @@ namespace Blind_Client
         private void btn_ActivateUser_MouseLeave(object sender, EventArgs e)
         {
             panel4.BackColor = BlindColor.DarkGreen;
+        }
+
+        private void Button_DocCenter_MouseMove(object sender, MouseEventArgs e)
+        {
+            panel3.BackColor = BlindColor.LightGreen;
+        }
+
+        private void Button_DocCenter_MouseLeave(object sender, EventArgs e)
+        {
+            panel3.BackColor = BlindColor.Primary;
         }
     }
 }

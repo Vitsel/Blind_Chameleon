@@ -39,7 +39,7 @@
             this.Function_LayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.Function_LayoutPanel.Name = "Function_LayoutPanel";
             this.Function_LayoutPanel.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.Function_LayoutPanel.Size = new System.Drawing.Size(800, 625);
+            this.Function_LayoutPanel.Size = new System.Drawing.Size(800, 620);
             this.Function_LayoutPanel.TabIndex = 1;
             // 
             // ChatMain
@@ -51,6 +51,7 @@
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "ChatMain";
+            this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.Size = new System.Drawing.Size(800, 625);
             this.Load += new System.EventHandler(this.ChatMain_Load);
             this.ResumeLayout(false);

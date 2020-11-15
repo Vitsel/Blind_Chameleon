@@ -39,7 +39,7 @@
             this.Lbl_Category.Location = new System.Drawing.Point(0, 0);
             this.Lbl_Category.Margin = new System.Windows.Forms.Padding(0);
             this.Lbl_Category.Name = "Lbl_Category";
-            this.Lbl_Category.Padding = new System.Windows.Forms.Padding(2);
+            this.Lbl_Category.Padding = new System.Windows.Forms.Padding(8, 2, 2, 2);
             this.Lbl_Category.Size = new System.Drawing.Size(229, 30);
             this.Lbl_Category.TabIndex = 0;
             this.Lbl_Category.Text = "Category";

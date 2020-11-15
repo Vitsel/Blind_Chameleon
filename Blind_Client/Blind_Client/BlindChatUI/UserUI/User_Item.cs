@@ -27,7 +27,7 @@ namespace Blind_Client.BlindChatUI.UserUI
             Lbl_UserName.Cursor = Cursors.Hand;
             BlindNetUtil.SetEllipse(this, 10);
             
-            this.BackColor = BlindColor.Light;
+            this.BackColor = BlindColor.Gray;
             Lbl_UserPosition.ForeColor = BlindColor.Primary;
 
             _user = user;
@@ -52,12 +52,12 @@ namespace Blind_Client.BlindChatUI.UserUI
 
         private void Lbl_UserName_MouseMove(object sender, MouseEventArgs e)
         {
-            panel1.BackColor = BlindColor.Gray;
+            panel1.BackColor = BlindColor.DarkGray;
         }
 
         private void Lbl_UserName_MouseLeave(object sender, EventArgs e)
         {
-            panel1.BackColor = BlindColor.Light;
+            panel1.BackColor = BlindColor.Gray;
         }
 
         private void User_Item_Load(object sender, EventArgs e)
