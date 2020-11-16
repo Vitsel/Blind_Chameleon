@@ -20,23 +20,26 @@ namespace Blind_Client
         public VpnClientExitEventHandler VpnClientExitEvent; //자식 -> 클라
         bool VpnLoginCheck =false;
         bool ConnectionEventCheck= false;
-        
         public Vpn_Login()
         {
             InitializeComponent();
-            pictureBox1.Parent = panel1;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            pictureBox_Loading.Image = Properties.Resources.Loading;
+            panel1.BackColor = Color.FromArgb(5, 102, 118);
+            panel_Login.BackColor = Color.FromArgb(5, 102, 118);
+            panel_Connect.BackColor = Color.FromArgb(5, 102, 118);
+            panel_Connect.BackColor = Color.FromArgb(5, 102, 118);
+            VPN_ID.BackColor = Color.FromArgb(5, 102, 118);
+            VPN_PW.BackColor = Color.FromArgb(5, 102, 118);
             VPN_Class VPN = new VPN_Class();
             VPN_ID.Focus();
-            progressBar_VPNState.Style = ProgressBarStyle.Marquee;
-            progressBar_VPNState.Maximum = 0;
-            progressBar_VPNState.Maximum = 100;
-            progressBar_VPNState.Step = 1;
-            progressBar_VPNState.Value = 0;
             this.FormClosed += Vpn_Login_FormClosed; //폼 종료되는 것 연결
+            pictureBox_Login.Click += Vpn_Login_Button_Click;
+            pictureBox_Exit.Click += EXIT_button_Click;
+            pictureBox_ConnectingExit.Click += VPNConnectingExitbutton_Click;
             if (VpnLoginCheck == true)//로그인 성공시 폼을 숨기고 다시 show 하는것이기때문에 로그인 성공했으면 결과값 남아있음.
                 Vpn_EventTimer.Start();
         }
@@ -105,5 +108,7 @@ namespace Blind_Client
             if (e.KeyChar == (char)Keys.Enter)
                 Vpn_Login_Button_Click(sender, e);
         }
+
+
     }
 }
