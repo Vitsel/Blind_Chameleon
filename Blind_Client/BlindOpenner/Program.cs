@@ -1,21 +1,30 @@
-﻿using BlindNet;
+﻿using BlindCryptography;
+using BlindNet;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using BlindCryptography;
 using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-
 
 namespace BlindOpenner
 {
     class Program
     {
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        const int SW_HIDE = 0;
+
         static void Main(string[] args)
         {
+#if !DEBUG
+            var handl = GetConsoleWindow();
+            ShowWindow(handl, SW_HIDE);
+#endif
+
             if (args.Length != 1)
             {
                 MessageBox.Show("잘못된 접근입니다.", "오류");

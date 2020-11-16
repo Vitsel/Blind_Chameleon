@@ -13,7 +13,7 @@ namespace Blind_Client
         static string fileTypeDesc = "The extension of the file encrypted by 'Blind'";
         static string extType = "Blind" + ext + ".v1";
         static string assocExeFileName = "BlindOpenner.exe";
-        static string assocExeFilePath = @"D:\Blind_Chameleon\Blind_Client\BlindOpenner\bin\Debug\BlindOpenner.exe";
+        static string assocExeFilePath = @"C:\BlindOpenner.exe";
 
         [STAThread]
         static void Main()
