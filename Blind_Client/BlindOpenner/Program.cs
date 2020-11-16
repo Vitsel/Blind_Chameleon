@@ -28,10 +28,11 @@ namespace BlindOpenner
             if (args.Length != 1)
             {
                 MessageBox.Show("잘못된 접근입니다.", "오류");
-                return;
+                //return;
             }
 
-            FileInfo file = new FileInfo(args[0]);
+            string test = @"C:\Users\rgh48\Downloads\부서원 인적사항.blind";
+            FileInfo file = new FileInfo(test);
             if (!file.Exists)
             {
                 MessageBox.Show("파일이 존재하지 않습니다.", "파일 열기");
@@ -42,9 +43,12 @@ namespace BlindOpenner
             Task<int> taskRead = fs.ReadAsync(buffer, 0, (int)file.Length);
 
             BlindSocket socket = new BlindSocket();
-            Task<bool> taskCon = socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.OPENNERPORT);
-            taskCon.Wait();
-            if (!taskCon.Result)
+            Console.WriteLine("Start connecting.");
+            //Task<bool> taskCon = socket.ConnectWithECDHAsync(BlindNetConst.ServerIP, BlindNetConst.OPENNERPORT);
+            //taskCon.Wait();
+            //if (!taskCon.Result)
+            socket.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.OPENNERPORT);
+            if (false)
             {
                 MessageBox.Show("서버와 연결에 실패했습니다.", "파일 열기");
                 return;
