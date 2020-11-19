@@ -104,11 +104,20 @@ namespace Blind_Client.BlindChatUI.RoomUI
             }
 
             string message = tb_Message.Text;
-            if (SendChatMessage != null)
-            {
-                SendChatMessage(message, _userID, _room.ID);
-            }
+            message.Replace('\'', ' ');
+
             tb_Message.Clear();
+
+            Task t = Task.Run(delegate
+            {
+                if (SendChatMessage != null)
+                {
+                    Console.WriteLine("clicked!!");
+                    SendChatMessage(message, _userID, _room.ID);
+
+                    //SendChatMessage(message, _userID, _room.ID);
+                }
+            });
         }
 
         private void MessageRoom_Load(object sender, EventArgs e)

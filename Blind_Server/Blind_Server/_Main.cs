@@ -44,6 +44,7 @@ namespace Blind_Server
 
             chatRecvSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
             chatRecvSock.BindListen(); 
+
             chatSendSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT+1);
             chatSendSock.BindListen();
 

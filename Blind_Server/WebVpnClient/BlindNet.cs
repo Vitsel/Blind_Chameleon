@@ -541,22 +541,22 @@ namespace BlindNet
 
     static class BlindNetConst
     {
-        public const string ServerIP = "127.0.0.1";
-        //public const string ServerIP = "10.0.1.6";
+        //public const string ServerIP = "127.0.0.1";
+        public const string ServerIP = "10.0.1.6";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
+        public const int CHATSENDPORT = 55558;
         public const int LOCKPORT = 55559;
         public const int WebDevicePort = 55560;
         public const int WebInterlockPort = 55561;
+        public const int OPENNERPORT = 55590;
         public const int WebTcpPort = 55562;
         public const int MAXQ = 100;
         public const int MINIPACKSIZE = 528;
         public const int MINIDATASIZE = 512;
-        //public const int PACKSIZE = 1048592;
         public const int PACKSIZE = 524304;
-        //public const int DATASIZE = 1048576;
         public const int DATASIZE = 524288;
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;

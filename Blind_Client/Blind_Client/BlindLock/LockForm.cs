@@ -18,16 +18,18 @@ namespace Blind_Client.BlindLock
     {
         private BlindSocket lockSock;
         private bool isInner;
+        private string UserID;
 
         [DllImport("advapi32.dll", EntryPoint = "LogonUser", SetLastError = true)]
         private static extern bool LogonUser(string userName, string domain, string password, int logonType, int logonProvider, out int token);
 
-        public LockForm(bool isInner)
+        public LockForm(bool isInner, string UserID)
         {
             InitializeComponent();
 
+            this.UserID = UserID;
             this.isInner = isInner;
-            BlindLockPic.Image = Properties.Resources.BlindLockBack;
+            BlindLockPic.Image = Properties.Resources.blindChamel;
             
 
             int scrW = SystemInformation.VirtualScreen.Width;
@@ -37,16 +39,11 @@ namespace Blind_Client.BlindLock
             this.Location = new Point(0, 0);
             this.TopMost = true;
 
-            BlindNetUtil.SetEllipse(btn_Unlock, 10);
-            tbl_InfoLayout.BackColor = BlindColor.Gray;
-            btn_Unlock.ForeColor = BlindColor.Light;
-            btn_Unlock.BackColor = tableLayoutPanel1.BackColor = BlindColor.Primary;
 
-            if (!isInner)
-            {
-                lockSock = new BlindSocket();
-                lockSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.LOCKPORT);
-            }
+            tb_Password.BackColor = BlindColor.LockGray;
+            this.BackColor = BlindColor.LockGray;
+
+
         }
         ~LockForm()
         {
@@ -65,10 +62,21 @@ namespace Blind_Client.BlindLock
             EnableTask();
         }
 
-
+        public void connect()
+        {
+            if (!isInner)
+            {
+                lockSock = new BlindSocket();
+                lockSock.ConnectWithECDH(BlindNetConst.ServerIP, BlindNetConst.LOCKPORT);
+                MessageBox.Show("락 포트 연결!");
+            }
+        }
         private void screenLock_Control1_Load(object sender, EventArgs e)
         {
-            tb_Password.Focus();
+
+
+
+            tb_Password.Focus(); 
         }
 
         private void btn_Escape_Click(object sender, EventArgs e)
@@ -80,35 +88,39 @@ namespace Blind_Client.BlindLock
         {
             if (!isInner)//vpn으로 연결되어 있는 경우
             {
-                //서버로 정보 전송
-                LockInfo info = new LockInfo();
-                info.userName = Environment.UserName;
-                info.password = tb_Password.Text;
+                MessageBox.Show("VPN용 락");
+                    //서버로 정보 전송
+                    LockInfo info = new LockInfo();
+                    info.userName = UserID;
+                    info.password = tb_Password.Text;
+                    
+                    byte[] data = BlindNetUtil.StructToByte(info);
+                    LockPacket packet = new LockPacket();
+                    packet.Type = lockType.INFO;
+                    packet.data = data;
+                    MessageBox.Show("패킷 생성");
 
-                byte[] data = BlindNetUtil.StructToByte(info);
-                LockPacket packet = new LockPacket();
-                packet.Type = lockType.INFO;
-                packet.data = data;
+                    byte[] packetData = BlindNetUtil.StructToByte(packet);
+                    lockSock.CryptoSend(packetData, PacketType.Info);
+                    MessageBox.Show("send msg");
 
-                byte[] packetData = BlindNetUtil.StructToByte(packet);
-                lockSock.CryptoSend(packetData, PacketType.MSG);
+                    //서버로부터 받은 성공여부로 스크린락 해제
+                    data = lockSock.CryptoReceiveMsg();
+                    MessageBox.Show("received msg");
+                    packet = BlindNetUtil.ByteToStruct<LockPacket>(data);
+                    if (packet.Type == lockType.SUCCESS)
+                    {
+                        tb_Password.Text = "";
+                        ActivateWhenUnlock();
+                    }
+                    else
+                    {
+                        MessageBox.Show("서버로부터의 인증에 실패하셨습니다.");
+                        tb_Password.Text = "";
+                        tb_Password.Focus();
 
-                //서버로부터 받은 성공여부로 스크린락 해제
-                data = lockSock.CryptoReceiveMsg();
-                packet = BlindNetUtil.ByteToStruct<LockPacket>(data);
-                if (packet.Type == lockType.SUCCESS)
-                {
-                    tb_Password.Text = "";
-                    ActivateWhenUnlock();
-                }
-                else
-                {
-                    MessageBox.Show("서버로부터의 인증에 실패하셨습니다.");
-                    tb_Password.Text = "";
-                    tb_Password.Focus();
-
-                    return;
-                }
+                        return;
+                    }
             }
             else//로컬에서 인증하는 경우
             {

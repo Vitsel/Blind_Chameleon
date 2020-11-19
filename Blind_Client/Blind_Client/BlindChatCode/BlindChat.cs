@@ -39,7 +39,9 @@ namespace Blind_Client.BlindChatCode
         ~BlindChat()
         {
             recvSock.Close();
+            recvSock.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
             sendSock.Close();
+            sendSock.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
         }
 
         private bool Start = false;

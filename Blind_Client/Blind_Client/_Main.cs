@@ -43,7 +43,7 @@ namespace Blind_Client
             }
 
             bool isInner = VPN.Network_Position;
-            isInner = true;
+            //isInner = true;
             Application.Run(new MainForm(isInner,VPN.IsInnerClient_Id));//인자값 | 첫번째 : 내부 | 두번째 : 내부(사용자계정명) 외부(VPN 사용자 입력값)
         }
         

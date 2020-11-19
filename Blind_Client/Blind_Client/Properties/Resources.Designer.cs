@@ -83,9 +83,9 @@ namespace Blind_Client.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static System.Drawing.Bitmap BlindLockBack {
+        internal static System.Drawing.Bitmap blindChamel {
             get {
-                object obj = ResourceManager.GetObject("BlindLockBack", resourceCulture);
+                object obj = ResourceManager.GetObject("blindChamel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -426,6 +426,16 @@ namespace Blind_Client.Properties {
         internal static System.Drawing.Bitmap titleBack {
             get {
                 object obj = ResourceManager.GetObject("titleBack", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap unlock {
+            get {
+                object obj = ResourceManager.GetObject("unlock", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

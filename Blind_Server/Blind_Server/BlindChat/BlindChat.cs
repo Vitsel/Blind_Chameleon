@@ -44,43 +44,45 @@ namespace Blind_Server
 
 
             SetOnline((int)UserStat.Online);
+
+            byte[] data;
             while (true)
             {
-                byte[] data = recvSock.CryptoReceiveMsg();
-                if (data == null)
-                {
-                    recvSock.Close();
-                    sendSock.Close();
-                    SetOnline((int)UserStat.Offline);
-                    global.ListBlindChat.Remove(this);
-                    logger.Log(LogRank.INFO, "BlindChat Disconnected");
-                    return;
-                }
+                    data = recvSock.CryptoReceiveMsg();
 
-                ChatPacket chatPacket = BlindNetUtil.ByteToStruct<ChatPacket>(data);
-                if(chatPacket.Type == ChatType.Time)
-                {
-                    ClientUpdateData(chatPacket);
-                    logger.Log(LogRank.INFO, "Chat Data Synchronized");
-                }
-                else if(chatPacket.Type == ChatType.NewRoom)
-                {
-                    ExecuteNewRoom(chatPacket);
-                    logger.Log(LogRank.INFO, "Created New Chat Room");
-                }
-                else if(chatPacket.Type == ChatType.Message)
-                {
-                    MessageToParticipants(chatPacket);
-                }
-                else if(chatPacket.Type == ChatType.RoomJoined)
-                {
-                    ExecuteInvitation(chatPacket);
-                }
-                else if(chatPacket.Type == ChatType.Exit)
-                {
-                    ExecuteExit(chatPacket);
-                }
+                    if (data == null)
+                    {
+                        recvSock.Close();
+                        sendSock.Close();
+                        SetOnline((int)UserStat.Offline);
+                        global.ListBlindChat.Remove(this);
+                        logger.Log(LogRank.INFO, "BlindChat Disconnected");
+                        return;
+                    }
 
+                    ChatPacket chatPacket = BlindNetUtil.ByteToStruct<ChatPacket>(data);
+                    if (chatPacket.Type == ChatType.Time)
+                    {
+                        ClientUpdateData(chatPacket);
+                        logger.Log(LogRank.INFO, "Chat Data Synchronized");
+                    }
+                    else if (chatPacket.Type == ChatType.NewRoom)
+                    {
+                        ExecuteNewRoom(chatPacket);
+                        logger.Log(LogRank.INFO, "Created New Chat Room");
+                    }
+                    else if (chatPacket.Type == ChatType.Message)
+                    {
+                        MessageToParticipants(chatPacket);
+                    }
+                    else if (chatPacket.Type == ChatType.RoomJoined)
+                    {
+                        ExecuteInvitation(chatPacket);
+                    }
+                    else if (chatPacket.Type == ChatType.Exit)
+                    {
+                        ExecuteExit(chatPacket);
+                    }
             }
         }
 
