@@ -1,4 +1,4 @@
-#define PROGRAMMING
+#define PROGRAMMING1
 
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ namespace Blind_Client
         public string  IsInnerClient_Id = ""; // 내/외부에 따라 가져올 아이디
         private string IsInnerClientVPN_Pw = "";//외부일 시 VPN 사용자 입력 비밀번호값 들어옴.
         private string VPN_Connection_IP = ""; // 인터넷 위치에따라 아이피 설정 (공인ip (Public))
-        private string VPN_Create_VirtualIP = "10.0.5.7"; // dns 서버를 vpn서버로 설정.(설정안하면 속도 씹창남) (사설ip (Private))
+        private string VPN_Create_VirtualIP = "10.0.1.7"; // dns 서버를 vpn서버로 설정.(설정안하면 속도 씹창남) (사설ip (Private))
 
 
         public bool Network_Position = true; //true = 내부 false = 외부       

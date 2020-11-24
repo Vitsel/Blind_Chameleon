@@ -539,7 +539,7 @@ namespace BlindNet
 
     static class BlindNetConst
     {
-        public const string ServerIP = "127.0.0.1";
+        public const string ServerIP = "10.0.1.6";
         //public const string ServerIP = "3.92.252.3";
         public const string DatabaseIP = "54.84.228.2";
 
