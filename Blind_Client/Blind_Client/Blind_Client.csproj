@@ -341,11 +341,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="drapes.ico" />
+    <None Include="Resources\blindChamel.gif" />
     <Content Include="Resources\BlindLockBack.gif" />
     <Content Include="Resources\icon_exit.png" />
     <Content Include="Resources\icon_send.png" />
     <Content Include="Resources\icon_wait.png" />
     <Content Include="Resources\Loading.gif" />
+    <None Include="Resources\unlock.png" />
     <EmbeddedResource Include="Resources\adduser1.png" />
     <EmbeddedResource Include="Resources\BlindLockBack.gif" />
   </ItemGroup>

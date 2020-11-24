@@ -85,19 +85,65 @@ namespace Blind_Server
         {
             ChatRoomJoined roomJoined = BlindChatUtil.ChatPacketToStruct<ChatRoomJoined>(chatPack);
 
+            //사용자 등록
             string timeNow = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
             string sql = $"insert into ChatRoomJoined (UserID, RoomID, Time) values ({roomJoined.UserID},{roomJoined.RoomID},\'{timeNow}\');";
             ExecuteQuery(sql);
 
+            //새로 추가한 사용자 검색
             sql = $"select * from ChatRoomJoined where Time = \'{timeNow}\' and UserID={ roomJoined.UserID }";
             MySqlDataReader rdr = ExecuteSelect(sql);
-            
+
+            byte[] data;
             if (rdr.Read())
             {
                 roomJoined = (ChatRoomJoined)GetStructFromDB<ChatRoomJoined>(rdr);
                 rdr.Close();
-                byte[] data = BlindNetUtil.StructToByte(roomJoined);
 
+                {
+                    sql = $"select * from ChatRoom where ID = {roomJoined.RoomID}";
+
+                    rdr = ExecuteSelect(sql);
+                    if (rdr.Read())
+                    {
+                        ChatRoom room = (ChatRoom)GetStructFromDB<ChatRoom>(rdr);
+
+                        rdr.Close();
+                        data = BlindNetUtil.StructToByte(room);
+
+                        ChatPacket chatPacket = BlindChatUtil.ByteToChatPacket(data, ChatType.Room);
+                        SendChatPacketToUser(chatPacket, roomJoined.UserID);
+                    }
+                }
+
+                //방 인원 전송
+                {
+                    sql = $"select * from ChatRoomJoined " +
+                $"where RoomID = {roomJoined.RoomID} order by Time asc";
+
+                    MySqlDataAdapter adptr = new MySqlDataAdapter(sql, hDB);
+                    DataSet dst = new DataSet();
+                    adptr.Fill(dst);
+
+                    foreach(DataRow dr in dst.Tables[0].Rows)
+                    {
+                        ChatRoomJoined chatRoomJoined = (ChatRoomJoined)GetStructFromDB<ChatRoomJoined>(dr);
+
+                        if (chatRoomJoined.UserID != roomJoined.UserID)
+                        {
+                            data = BlindNetUtil.StructToByte(chatRoomJoined);
+
+                            ChatPacket chatPacket = BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
+                            SendChatPacketToUser(chatPacket, roomJoined.UserID);
+                        }
+                    }
+                    rdr.Close();
+                }
+
+
+
+                data = BlindNetUtil.StructToByte(roomJoined);
+                //방 사용자들에게 전송
                 ChatPacket packet = BlindChatUtil.ByteToChatPacket(data, ChatType.RoomJoined);
                 SendChatPacketToParticipants(packet, roomJoined.RoomID);
 
@@ -120,6 +166,11 @@ namespace Blind_Server
 
                 //시간을 수정한 메시지를 DB에 등록
                 AddToDBTimeNow<ChatMessage>(_packet);
+                Console.WriteLine("invite successed");
+            }
+            else
+            {
+                Console.WriteLine("cant find the user");
             }
             
         }
@@ -131,7 +182,7 @@ namespace Blind_Server
 
             ChatMessage message = BlindChatUtil.ChatPacketToStruct<ChatMessage>(chatPack);
             message.Time = timeNow;
-
+                                                       
             byte[] data = BlindNetUtil.StructToByte(message);
             ChatPacket pack = BlindChatUtil.ByteToChatPacket(data, ChatType.Message);
 
@@ -203,6 +254,27 @@ namespace Blind_Server
             }
             rdr.Close();
         }
+        public void SendChatPacketToUser(ChatPacket chatPack, int UserID)
+        {
+            string sql = $"select ID from User where ID = {UserID} " +
+                       $"and isOnline = true;";
+            MySqlDataReader rdr = ExecuteSelect(sql);
+
+            while (rdr.Read())
+            {
+                int userID_DB = int.Parse(rdr["ID"].ToString());
+                foreach (BlindChat chat in global.ListBlindChat)
+                {
+                    if (chat.UserID == userID_DB)
+                    {
+                        chat.ChatPacketSend(chatPack);
+                        //chat.SendReset();
+
+                    }
+                }
+            }
+            rdr.Close();
+        }
 
 
 
@@ -237,8 +309,13 @@ namespace Blind_Server
                 for(int i =0; newroom.UserID[i] != 0; i++)
                 {
                     sql = $"insert into ChatRoomJoined (UserID, RoomID, Time) values ({newroom.UserID[i]}, {RoomID}, \'{timeNow}\');";
-                    ExecuteQuery(sql); 
-                    
+                    ExecuteQuery(sql);
+                }
+                //방에 속한 사용자들에게 전송
+                ClientUpdateNewRoom(RoomID);
+
+                for (int i =0; newroom.UserID[i] != 0; i++)
+                {
                     ChatMessage message = new ChatMessage();
                     message.RoomID = RoomID;
                     message.UserID = 0;
@@ -261,8 +338,6 @@ namespace Blind_Server
                     AddToDBTimeNow<ChatMessage>(_packet);
                 }
 
-                //방에 속한 사용자들에게 전송
-                ClientUpdateNewRoom(RoomID);
             }
         }
 
@@ -320,7 +395,7 @@ namespace Blind_Server
             else
             {
                 byte[] packData = BlindNetUtil.StructToByte(chatPacket);
-                sendSock.CryptoSend(packData, PacketType.MSG);
+                sendSock.CryptoSend(packData, PacketType.Info);
             }
         }
 
@@ -399,7 +474,7 @@ namespace Blind_Server
                 else if (typeof(T) == typeof(ChatMessage))
                 {
                     ChatMessage message = new ChatMessage();
-                    message.UserID = int.Parse(row["UserID"].ToString());
+                    message.UserID = uint.Parse(row["UserID"].ToString());
                     message.RoomID = int.Parse(row["RoomID"].ToString());
                     message.Time = row["Time"].ToString();
                     message.Message = row["Message"].ToString();
@@ -463,7 +538,7 @@ namespace Blind_Server
                 else if (typeof(T) == typeof(ChatMessage))
                 {
                     ChatMessage message = new ChatMessage();
-                    message.UserID = int.Parse(rdr["UserID"].ToString());
+                    message.UserID = uint.Parse(rdr["UserID"].ToString());
                     message.RoomID = int.Parse(rdr["RoomID"].ToString());
                     message.Time = rdr["Time"].ToString();
                     message.Message = rdr["Message"].ToString();
@@ -618,9 +693,9 @@ namespace Blind_Server
 
     public static class BlindChatConst
     {
-        public const int CHATDATASIZE = 2048;
-        public const int MESSAGESIZE = 512;
-        public const int SMALLSIZE = 32;
+        public const int CHATDATASIZE = 508;
+        public const int MESSAGESIZE = 256;
+        public const int SMALLSIZE = 20;
         public const string ZERO_TIME = "0000-00-00 00:00:00";
     }
     public enum ChatType
@@ -707,7 +782,7 @@ namespace Blind_Server
     public struct ChatMessage
     {
         public int ID;
-        public int UserID;
+        public uint UserID;
         public int RoomID;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BlindChatConst.MESSAGESIZE)]

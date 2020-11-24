@@ -154,12 +154,17 @@ namespace BlindNet
             }
             if (isRecieving || miniPacket.header == PacketType.MSG)
             {
-                data = null;
+                data = new byte[0];
                 while (true)
                 {
                     byte[] tmp = new byte[BlindNetConst.PACKSIZE];
-                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE, SocketFlags.None);
-                    new NetworkStream(socket).Flush();
+                    rcvNum = socket.Receive(tmp, BlindNetConst.PACKSIZE - data.Length, SocketFlags.None);
+                    using (NetworkStream stream = new NetworkStream(socket))
+                        stream.Flush();
+#if DEBUG
+                    if (tmp[tmp.Length - 1] == 0)
+                        Console.WriteLine("Received less bytes");
+#endif
                     if (rcvNum == 0)
                     {
                         BlindPacket end;
@@ -167,13 +172,17 @@ namespace BlindNet
                         end.header = PacketType.Disconnect;
                         return end;
                     }
-                    byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
-                    temp[0] = (byte)PacketType.OK;
-                    socket.Send(tmp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
 
                     data = BlindNetUtil.MergeArray<byte>(data, BlindNetUtil.ByteTrimEndNull(tmp));
                     if (data.Length == BlindNetConst.PACKSIZE)
+                    {
+                        byte[] temp = new byte[BlindNetConst.MINIPACKSIZE];
+                        temp[0] = (byte)PacketType.OK;
+                        socket.Send(temp, BlindNetConst.MINIPACKSIZE, SocketFlags.None);
+                        using (NetworkStream stream = new NetworkStream(socket))
+                            stream.Flush();
                         break;
+                    }
                 }
 
                 decrypted = aes.Decryption(data);
@@ -518,26 +527,26 @@ namespace BlindNet
         DocMoveFile = 22,   //문서중앙화 파일 이동
         DocMoveDir = 23,    //문서중앙화 폴더 이동
         DocCopyFile = 24,   //문서중앙화 파일 복사
-        DocCopyDir = 25,     //문서중앙화 폴더 복사
+        DocCopyDir = 25     //문서중앙화 폴더 복사
     }
 
     static class BlindNetConst
     {
-        public const string ServerIP = "127.0.0.1";
-        //public const string ServerIP = "3.92.252.3";
+        //public const string ServerIP = "127.0.0.1";
+        public const string ServerIP = "3.92.252.3";
         public const string DatabaseIP = "54.84.228.2";
         public const int MAINPORT = 55555;
         public const int DocCenterPort = 55556;
         public const int CHATPORT = 55557;
+        public const int OPENNERPORT = 55590;
         public const int LOCKPORT = 55559;
         public const int WebDevicePort = 55560;
-        public const int OPENNERPORT = 55561;
+        public const int WebInterlockPort = 55561;
+        public const int WebTcpPort = 55562;
         public const int MAXQ = 100;
         public const int MINIPACKSIZE = 528;
         public const int MINIDATASIZE = 512;
-        //public const int PACKSIZE = 1048592;
         public const int PACKSIZE = 524304;
-        //public const int DATASIZE = 1048576;
         public const int DATASIZE = 524288;
         public const int MAXRNDTXT = 100;
         public const int MINRNDTXT = 50;

@@ -20,6 +20,7 @@ namespace Blind_Client.BlindChatCode
 
         public static Color Gray = Color.FromArgb(244, 243, 242);
         public static Color DarkGray = Color.FromArgb(234, 233, 232);
+        public static Color LockGray = Color.FromArgb(236, 235, 236);
 
         public static Color BrightGreen = Color.FromArgb(183, 230, 222);
         public static Color LightGreen = Color.FromArgb(163, 210, 202);
@@ -111,9 +112,9 @@ namespace Blind_Client.BlindChatCode
 
     public static class BlindChatConst
     {
-        public const int CHATDATASIZE = 1023;
-        public const int MESSAGESIZE = 512;
-        public const int SMALLSIZE = 32;
+        public const int CHATDATASIZE = 508;
+        public const int MESSAGESIZE = 256;
+        public const int SMALLSIZE = 20;
         public const string ZERO_TIME = "0000-00-00 00:00:00";
     }
     public enum ChatType

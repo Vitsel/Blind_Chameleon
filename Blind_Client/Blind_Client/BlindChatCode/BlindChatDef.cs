@@ -122,19 +122,22 @@ namespace Blind_Client.BlindChatCode
 
 
 
-
         public static void ChatPacketSend(ChatPacket chatPack)
         {
-            if (chatPack.Data.Length > BlindChatConst.CHATDATASIZE)
-            {
-                Console.WriteLine("data size must be 2048 bytes!");
-                return;
-            }
-            else
-            {
-                byte[] packData = BlindNetUtil.StructToByte(chatPack);
-                sendSock.CryptoSend(packData, PacketType.MSG);
-            }
+                if (chatPack.Data.Length > BlindChatConst.CHATDATASIZE)
+                {
+                    Console.WriteLine("data size must be 2048 bytes!");
+                    return;
+                }
+                else
+                {
+                    byte[] packData = BlindNetUtil.StructToByte(chatPack);
+
+
+                    sendSock.CryptoSend(packData, PacketType.Info);
+                    Console.WriteLine("sent!!");
+                    //sendSock.CryptoSend(packData, PacketType.MSG);
+                }
         }
         public ChatPacket ChatPacketReceive()
         {

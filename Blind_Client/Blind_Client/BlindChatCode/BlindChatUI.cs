@@ -95,7 +95,7 @@ namespace Blind_Client.BlindChatCode
                 {
                     if (item.ID == roomJoined.RoomID)
                     {
-                        item.UserCount = BlindChat.GetUserList(roomJoined.RoomID).Count().ToString();
+                        item.UserCount = BlindChat.GetUserList(roomJoined.RoomID).Count().ToString()+"    |";
                         UI._RoomControl.RoomItem_LayoutPanel.Controls.SetChildIndex((Control)item, 0);
                         UI._RoomControl.RoomItem_LayoutPanel.Invalidate();
                     }
@@ -173,15 +173,15 @@ namespace Blind_Client.BlindChatCode
                 string sql = $"delete from ChatRoomJoined where UserID = {roomJoined.UserID} and RoomID = {roomJoined.RoomID}";
                 DB.ExecuteNonQuery(sql);
 
-                ChatMessage message = new ChatMessage();
-                message.RoomID = roomJoined.RoomID;
-                message.UserID = 0;
-                message.Time = roomJoined.Time;
+                //ChatMessage message = new ChatMessage();
+                //message.RoomID = roomJoined.RoomID;
+                //message.UserID = 0;
+                //message.Time = roomJoined.Time;
 
-                User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
-                message.Message = $"{user.Name}님이 나갔습니다.";
+                //User user = BlindChat.userList.Find(x => x.ID == roomJoined.UserID);
+                //message.Message = $"{user.Name}님이 나갔습니다.";
 
-                AddMessage(message);
+                //AddMessage(message);
             }
 
 

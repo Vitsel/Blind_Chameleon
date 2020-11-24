@@ -1,15 +1,14 @@
-﻿using BlindNet;
+﻿using BlindLogger;
+using BlindNet;
+using MySql.Data.MySqlClient;
 using System;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BlindLogger;
-using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Asn1;
 
 namespace Blind_Server
 {
@@ -37,7 +36,6 @@ namespace Blind_Server
             BlindOpenner openner = new BlindOpenner();
             Task.Run(() => openner.Run());
 
-            //DataBase MySql Connection
             connection = DataBaseConnection();
 
             //ShowWindow(handl, SW_HIDE); //Console 창 숨기기
@@ -46,6 +44,7 @@ namespace Blind_Server
 
             chatRecvSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT);
             chatRecvSock.BindListen(); 
+
             chatSendSock = new BlindServerScoket(BlindNetConst.ServerIP, BlindNetConst.CHATPORT+1);
             chatSendSock.BindListen();
 

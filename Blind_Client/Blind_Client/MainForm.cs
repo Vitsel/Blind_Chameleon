@@ -147,7 +147,9 @@ namespace Blind_Client
             tChat = Task.Factory.StartNew(() => chat.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);
 
             //ScreenLocking
-            lockForm = new LockForm(isInner);
+            lockForm = new LockForm(isInner, ClientID);
+            lockForm.connect();
+            MessageBox.Show("락 연결!");
 
             deviceDriver = new DeviceDriverHelper();
             tDeviceDriver = Task.Factory.StartNew(() => deviceDriver.Run(), token.Token, TaskCreationOptions.LongRunning, scheduler);

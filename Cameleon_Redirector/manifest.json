@@ -1,0 +1,10 @@
+{
+  "name": "Cameleon_Redirector",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "Redirect url",
+  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>" , "tabs"],
+  "background": {
+    "scripts": ["background.js"]
+  }
+}
